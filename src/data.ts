@@ -55,7 +55,7 @@ export const profile: Profile = {
   highlights: [
     { label: "Accuracy (Moderation)", value: "93%" },
     { label: "Exposure Growth (AEEC)", value: "+20%" },
-    { label: "IoT Monitoring Improvement", value: "+60%" },
+    { label: "IoT Monitoring (Aria Agri)", value: "+60%" },
   ],
 };
 
