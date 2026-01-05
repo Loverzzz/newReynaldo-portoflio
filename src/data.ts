@@ -47,7 +47,7 @@ export const profile: Profile = {
   location: "Tuban, Jawa Timur",
   email: "reynaldstar@gmail.com",
   phone: "+62 81915967694",
-  linkedin: "https://www.linkedin.com/in/reynaldo-arya-budi-trisna/",
+  linkedin: "https://www.linkedin.com/in/reynaldoabt/",
   headline:
     "Content Moderator | Robotics & AI Graduate | Data & Dashboard Enthusiast",
   summary:
