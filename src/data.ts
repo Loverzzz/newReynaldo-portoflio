@@ -44,12 +44,12 @@ export type ProjectItem = {
 
 export const profile: Profile = {
   name: "Reynaldo Arya Budi Trisna",
-  location: "Tuban, Jawa Timur",
+  location: "Denpasar, Bali, Indonesia",
   email: "reynaldstar@gmail.com",
   phone: "+62 81915967694",
   linkedin: "https://www.linkedin.com/in/reynaldoabt/",
   headline:
-    "Content Moderator | Robotics & AI Graduate | Data & Dashboard Enthusiast",
+    "Content Moderator | Robotics & AI Graduate | AI/ML & Data Enthusiast",
   summary:
     "Passionate and results-driven Content Moderator with a background in Robotics & AI. Experienced in policy enforcement, trend analysis, and building data-driven solutions (ML, dashboards, IoT).",
   highlights: [
