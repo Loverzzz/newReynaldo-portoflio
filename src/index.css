@@ -1,0 +1,747 @@
+/* Import Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+
+/* Root variables warna dan radius */
+:root {
+  --bg: #0b1020;
+  --panel: rgba(28, 27, 47, 0.8);
+  --panel2: rgba(28, 27, 47, 0.6);
+  --text: #f0f0f3;
+  --muted: #bbbfc9;
+  --line: rgba(124, 92, 255, 0.4);
+  --shadow: 0 12px 44px rgba(124, 92, 255, 0.45);
+  --radius: 12px;
+  --brand: #7c5cff;
+  --brandHover: #6249d8;
+  --btnBg: #6249d8;
+  --btnHover: #7c5cff;
+}
+
+/* Reset dasar */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  background: radial-gradient(circle at top left, #7c5cff44, transparent 75%),
+    radial-gradient(circle at bottom right, #19d3ff44, transparent 85%),
+    var(--bg);
+  color: var(--text);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--brand);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+a:hover,
+a:focus {
+  color: var(--btnHover);
+  outline: none;
+}
+
+/* Container tengah dan responsive */
+.container {
+  width: min(1200px, 90vw);
+  margin-inline: auto;
+  padding: 0 1rem;
+}
+
+/* Navbar */
+.navWrap {
+  position: sticky;
+  top: 0;
+  background: var(--panel2);
+  backdrop-filter: blur(14px);
+  z-index: 100;
+  box-shadow: inset 0 -1px 0 #6249d840, 0 0.25rem 1rem -0.25rem var(--shadow);
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+}
+.brand {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--brand);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+}
+.brandDot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: var(--brand);
+  border-radius: 50%;
+}
+.navLinks {
+  display: flex;
+  gap: 1.25rem;
+}
+.navLink {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius);
+  transition: background-color 0.3s, color 0.3s;
+}
+.navLink:hover,
+.navLink:focus,
+.navLink.active {
+  background: var(--brand);
+  color: white;
+  outline: none;
+}
+
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+.burger span {
+  display: block;
+  height: 2.8px;
+  background: var(--muted);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* =========================
+   HERO / ABOUT
+========================= */
+.hero {
+  min-height: 90vh;
+  padding: 4rem 0 2rem;
+  text-align: left;
+}
+
+/* Grid utama: kiri (text) - kanan (foto+card) */
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 3rem;
+  align-items: start;
+}
+
+.heroText {
+  max-width: 640px;
+}
+
+/* Kolom kanan */
+.heroRight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Foto */
+.heroImageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.heroImage {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 999px;
+  border: 4px solid rgba(124, 92, 255, 0.9);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease;
+}
+.heroImage:hover,
+.heroImage:focus {
+  transform: scale(1.04);
+  outline: none;
+}
+
+.projectImage {
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+/* Text styles */
+.kicker {
+  color: var(--brand);
+  font-weight: 600;
+  letter-spacing: 3px;
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.h1 {
+  font-weight: 900;
+  font-size: 3.2rem;
+  line-height: 1.1;
+  margin: 0 0 1rem 0;
+  color: var(--text);
+}
+
+.lead {
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.muted {
+  color: var(--muted);
+}
+.muted.small {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+a.btn {
+  background-color: var(--btnBg);
+  color: white;
+  border: none;
+  padding: 0.65rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+}
+a.btn:hover,
+a.btn:focus {
+  background-color: var(--btnHover);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+a.btn.primary {
+  background-color: var(--brand);
+}
+a.btn.primary:hover,
+a.btn.primary:focus {
+  background-color: var(--brandHover);
+}
+
+/* FIX: text ghost button hilang saat hover */
+.btn.ghost {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+}
+
+.btn.ghost:hover,
+.btn.ghost:focus {
+  background-color: rgba(124, 92, 255, 0.35);
+  border-color: rgba(124, 92, 255, 0.9);
+  color: #ffffff; /* <-- INI KUNCI */
+  outline: none;
+}
+
+/* Stats */
+.stats {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stat {
+  text-align: left;
+  user-select: none;
+}
+.statValue {
+  color: var(--brand);
+  font-weight: 800;
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+/* Card */
+.heroCard {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+  text-align: left;
+}
+
+.heroCardInner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Pills khusus di About card */
+.heroMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.heroMeta .pill {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: rgba(124, 92, 255, 0.22);
+  border: 1px solid rgba(124, 92, 255, 0.35);
+  color: #fff;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Divider */
+.divider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0.4rem 0 0.6rem;
+}
+
+/* Achievements list */
+.list.compact {
+  margin: 0.25rem 0 0;
+  padding-left: 1.2rem;
+  border-left: 2px solid var(--line);
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+/* =========================
+   SECTION
+========================= */
+.section {
+  padding-block: 5rem;
+  background: transparent;
+}
+
+.section#skills {
+  background-color: #1e213a;
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+}
+
+.sectionHead {
+  margin-bottom: 2rem;
+  max-width: 720px;
+  margin-inline: auto;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: var(--brand);
+  margin-bottom: 0.6rem;
+}
+
+/* Skills chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 1.1rem;
+  justify-content: center;
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.chip {
+  background-color: #2c2f59;
+  color: #d4d7ff;
+  padding: 0.55rem 1.3rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1rem;
+  white-space: nowrap;
+  cursor: default;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  box-shadow: 0 2px 7px rgba(124, 92, 255, 0.35);
+}
+.chip:hover,
+.chip:focus {
+  background-color: var(--brand);
+  color: white;
+  outline: none;
+}
+
+.section#skills .muted {
+  max-width: 720px;
+  margin-inline: auto;
+  font-size: 1.08rem;
+  color: #a3a9d6;
+  line-height: 1.5;
+  padding-bottom: 1.75rem;
+}
+
+/* =========================
+   EXPERIENCE
+========================= */
+.timeline {
+  position: relative;
+  margin-left: 1.4rem;
+  border-left: 2px solid var(--line);
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.3rem;
+}
+.tItem {
+  position: relative;
+}
+.tDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--brand);
+  position: absolute;
+  left: -8.6px;
+  top: 4px;
+  box-shadow: 0 0 8px var(--brand);
+}
+.tCard {
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem 1.25rem 1.25rem;
+  box-shadow: var(--shadow);
+  user-select: none;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+}
+.tCard:hover {
+  background-color: rgba(124, 92, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.tTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+.tTop > div > h3 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Pill khusus experience */
+.tTop .pill {
+  font-size: 0.8rem;
+  font-weight: 700;
+  background-color: var(--brand);
+  color: white;
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  user-select: none;
+}
+
+/* =========================
+   PROJECTS
+========================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.6rem;
+}
+
+.card {
+  background-color: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.3rem 1.4rem 1.4rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  user-select: none;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+  cursor: default;
+}
+.card:hover {
+  background-color: rgba(124, 92, 255, 0.22);
+  transform: translateY(-2px);
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.tags {
+  margin-top: 1.25rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  user-select: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.7rem;
+  border-radius: 100px;
+  background-color: var(--brand);
+  color: white;
+  cursor: default;
+  transition: background-color 0.25s ease;
+}
+.tag:hover,
+.tag:focus {
+  background-color: var(--btnHover);
+  outline: none;
+}
+
+/* =========================
+   CONTACT
+========================= */
+.contact {
+  display: flex;
+  flex-wrap: wrap; /* Membungkus tombol yang tidak muat dalam satu baris */
+  justify-content: center; /* Menyusun tombol agar di tengah */
+  gap: 1.5rem; /* Menambahkan jarak antar tombol */
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 0;
+}
+
+.contactCard {
+  background-color: var(--panel);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 320px; /* Membatasi lebar card tombol */
+  text-align: center;
+  user-select: none;
+  transition: background-color 0.25s ease;
+  cursor: pointer;
+}
+
+/* Agar hanya ada dua tombol di atas dan satu tombol di bawah */
+.contactCard:nth-child(odd) {
+  margin-right: 1.5rem; /* Memberikan jarak antar tombol baris atas */
+}
+
+.contactCard .link {
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: inline-block;
+  margin-top: 0.25rem; /* smaller spacing so it aligns with button */
+}
+
+.contactCard:hover {
+  background-color: var(--brand);
+  color: white;
+}
+
+/* Keep link and muted text readable when card is hovered */
+.contactCard:hover .link {
+  color: white;
+}
+.contactCard:hover .muted {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Copy button inside contact row */
+.contactRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+}
+.copyBtn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--brand);
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease,
+    transform 0.08s ease;
+}
+.copyBtn svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.copyBtn:hover,
+.copyBtn:focus {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--btnHover);
+  outline: none;
+  transform: translateY(-1px);
+}
+.contactCard:hover .copyBtn {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.contact .muted {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.contactCard .link,
+.contactCard .muted {
+  text-decoration: none;
+}
+
+/* Jika perangkat lebih kecil, memastikan tombol tetap rapi */
+@media (max-width: 600px) {
+  .contact {
+    gap: 1rem;
+  }
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+  padding: 2rem 1rem;
+  background: var(--panel2);
+  text-align: center;
+  user-select: none;
+}
+.footerInner {
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 950px) {
+  .navLinks {
+    display: none;
+  }
+  .navLinks.open {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: var(--panel2);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    position: absolute;
+    top: 56px;
+    right: 1rem;
+    padding: 1rem 1.5rem;
+  }
+  .burger {
+    display: flex;
+  }
+}
+
+.navLink {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.navLink.active {
+  background-color: var(--brand);
+  color: white;
+}
+
+@media (max-width: 960px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .heroText {
+    margin-inline: auto;
+  }
+
+  .heroRight {
+    margin-top: 1.5rem;
+  }
+
+  .heroCard {
+    max-width: 560px;
+    margin-inline: auto;
+    text-align: left;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stat {
+    text-align: center;
+  }
+}
+
+@media (max-width: 620px) {
+  .h1 {
+    font-size: 2.35rem;
+  }
+  .heroImage {
+    width: 220px;
+    height: 220px;
+  }
+  .chips {
+    justify-content: flex-start;
+    gap: 0.6rem 0.8rem;
+  }
+  .chip {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+}

@@ -1,0 +1,211 @@
+import { useState } from "react";
+import Navbar from "./components/Navbar";
+import Section from "./components/Section";
+import Skills from "./components/Skills";
+import Experience from "./components/Experience";
+import Projects from "./components/Projects";
+import Footer from "./components/Footer";
+
+import { achievements, experiences, profile, projects, skills } from "./data";
+import profileImg from "./assets/profile.jpg";
+
+export default function App() {
+  const phoneDigits = profile.phone.replace(/\D/g, "");
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } catch (e) {
+      // ignore
+    }
+  };
+
+  return (
+    <div className="app">
+      <Navbar />
+
+      <section id="about" className="hero">
+        <div className="container heroGrid">
+          {/* LEFT */}
+          <div className="heroText">
+            <div className="kicker">PORTFOLIO</div>
+            <h1 className="h1">{profile.name}</h1>
+            <p className="lead">{profile.headline}</p>
+            <p className="muted">{profile.summary}</p>
+
+            <div className="actions">
+              <a
+                className="btn primary"
+                href={profile.linkedin}
+                target="_blank"
+                rel="noreferrer"
+              >
+                LinkedIn
+              </a>
+              <a className="btn" href={`mailto:${profile.email}`}>
+                Email
+              </a>
+              <a
+                className="btn  "
+                href={`https://wa.me/${phoneDigits}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                WhatsApp
+              </a>
+            </div>
+
+            <div className="stats">
+              {profile.highlights.map((h) => (
+                <div className="stat" key={h.label}>
+                  <div className="statValue">{h.value}</div>
+                  <div className="muted small">{h.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT: Image + Card */}
+          <div className="heroRight">
+            <div className="heroImageWrapper">
+              <img
+                src={profileImg}
+                alt={profile.name}
+                className="heroImage"
+                loading="lazy"
+              />
+            </div>
+
+            <aside className="heroCard">
+              <div className="heroCardInner">
+                <div className="heroMeta">
+                  <div className="pill">Location: {profile.location}</div>
+                  <div className="pill">Email: {profile.email}</div>
+                  <div className="pill">Phone: {profile.phone}</div>
+                </div>
+
+                <hr className="divider" />
+
+                <div>
+                  <div className="muted small">Achievements</div>
+                  <ul className="list compact">
+                    {achievements.map((a) => (
+                      <li key={a}>{a}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <Section
+        id="skills"
+        eyebrow="What I use"
+        title="Skills"
+        subtitle="A blend of content operations, data, ML, and creative production."
+      >
+        <Skills items={skills} />
+      </Section>
+
+      <Section
+        id="experience"
+        eyebrow="Timeline"
+        title="Experience"
+        subtitle="Roles and impact-focused contributions."
+      >
+        <Experience items={experiences} />
+      </Section>
+
+      <Section
+        id="projects"
+        eyebrow="Selected work"
+        title="Projects"
+        subtitle="Flying Higher and Infinity — the rocket is ready."
+      >
+        <Projects items={projects} />
+      </Section>
+
+      <Section
+        id="contact"
+        eyebrow="Let’s talk"
+        title="Contact"
+        subtitle="Open for opportunities and collaborations."
+      >
+        <div className="contact">
+          <div className="contactCard" role="region" aria-label="Email contact">
+            <div className="muted small">Email</div>
+            <div className="contactRow">
+              <a className="h3 link" href={`mailto:${profile.email}`}>
+                {profile.email}
+              </a>
+              <button
+                type="button"
+                className="copyBtn"
+                onClick={copyEmail}
+                aria-label="Copy email"
+                title={copiedEmail ? "Copied" : "Copy email"}
+              >
+                {copiedEmail ? (
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M9.29 16.29a1 1 0 0 1 1.42 0L15 20.59l5.29-5.3a1 1 0 1 1 1.42 1.42l-6 6a1 1 0 0 1-1.42 0l-5-5a1 1 0 0 1 0-1.41z"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M16 1H4a1 1 0 0 0-1 1v14h2V3h11V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+
+          <div className="contactCard">
+            <div className="muted small">LinkedIn</div>
+            <a
+              className="h3 link"
+              href={profile.linkedin}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Visit profile
+            </a>
+          </div>
+
+          <div className="contactCard">
+            <div className="muted small">WhatsApp</div>
+            <a
+              className="h3 link"
+              href={`https://wa.me/${6281915967694}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Chat
+            </a>
+          </div>
+        </div>
+      </Section>
+
+      <Footer />
+    </div>
+  );
+}
