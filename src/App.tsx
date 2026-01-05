@@ -7,7 +7,7 @@ import Projects from "./components/Projects";
 import Footer from "./components/Footer";
 
 import { achievements, experiences, profile, projects, skills } from "./data";
-import profileImg from "./assets/profile.jpg";
+import profileImg from "./assets/Profile.jpg";
 
 export default function App() {
   const phoneDigits = profile.phone.replace(/\D/g, "");
