@@ -259,6 +259,7 @@ export const projects: ProjectItem[] = [
 ];
 
 export const achievements: string[] = [
-  "1st Place — Driyarkara Film Festival (Editor, Sinematografi UNAIR)",
-  "Best Performance Moderator — July & September (Gear Inc)",
+  "1. 1st Place — Driyarkara Film Festival (Editor, Sinematografi UNAIR)",
+  "2. Best Performance Moderator — July (Gear Inc)",
+  "3. Best Performance Moderator — September (Gear Inc)",
 ];
