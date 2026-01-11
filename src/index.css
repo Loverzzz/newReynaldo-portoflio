@@ -807,4 +807,29 @@ a.btn.primary:focus {
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
   }
+  /* Clickable Contact Card */
+  .contactCardLink {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .contactCardLink:hover,
+  .contactCardLink:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .contactCardLink:focus {
+    outline: 2px solid var(--primary, #3b82f6);
+    outline-offset: 2px;
+  }
+
+  /* Pastikan tombol copy tetap terlihat dan berfungsi */
+  .contactCardLink .copyBtn {
+    position: relative;
+    z-index: 2;
+  }
 }

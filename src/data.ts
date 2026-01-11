@@ -46,7 +46,7 @@ export const profile: Profile = {
   name: "Reynaldo Arya Budi Trisna",
   location: "Denpasar, Bali, Indonesia",
   email: "reynaldstar@gmail.com",
-  phone: "+62 81915967694",
+  phone: "+6281915967694",
   linkedin: "https://www.linkedin.com/in/reynaldoabt/",
   headline:
     "Content Moderator | Robotics & AI Graduate | AI/ML & Data Enthusiast",

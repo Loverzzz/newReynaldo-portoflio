@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import Navbar from "./components/Navbar";
 import Section from "./components/Section";
 import Skills from "./components/Skills";
@@ -7,6 +8,7 @@ import Projects from "./components/Projects";
 import Footer from "./components/Footer";
 
 import { achievements, experiences, profile, projects, skills } from "./data";
+
 import profileImg from "./assets/Profile.jpg";
 import envelopeIcon from "./assets/envelope.svg";
 import linkedinIcon from "./assets/linkedin.svg";
@@ -16,13 +18,15 @@ export default function App() {
   const phoneDigits = profile.phone.replace(/\D/g, "");
   const [copiedEmail, setCopiedEmail] = useState(false);
 
-  const copyEmail = async () => {
+  const copyEmail = async (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent mailto trigger
+    e.stopPropagation(); // Prevent card click
     try {
       await navigator.clipboard.writeText(profile.email);
       setCopiedEmail(true);
       setTimeout(() => setCopiedEmail(false), 2000);
-    } catch (e) {
-      // ignore
+    } catch (err) {
+      console.error("Failed to copy email:", err);
     }
   };
 
@@ -38,7 +42,6 @@ export default function App() {
             <h1 className="h1">{profile.name}</h1>
             <p className="lead">{profile.headline}</p>
             <p className="muted">{profile.summary}</p>
-
             <div className="actions">
               <a
                 className="btn primary"
@@ -52,7 +55,7 @@ export default function App() {
                 Email
               </a>
               <a
-                className="btn  "
+                className="btn"
                 href={`https://wa.me/${phoneDigits}`}
                 target="_blank"
                 rel="noreferrer"
@@ -60,7 +63,6 @@ export default function App() {
                 WhatsApp
               </a>
             </div>
-
             <div className="stats">
               {profile.highlights.map((h) => (
                 <div className="stat" key={h.label}>
@@ -81,7 +83,6 @@ export default function App() {
                 loading="lazy"
               />
             </div>
-
             <aside className="heroCard">
               <div className="heroCardInner">
                 <div className="heroMeta">
@@ -89,9 +90,7 @@ export default function App() {
                   <div className="pill">Email: {profile.email}</div>
                   <div className="pill">Phone: {profile.phone}</div>
                 </div>
-
                 <hr className="divider" />
-
                 <div>
                   <div className="muted small">Achievements</div>
                   <ul className="list compact">
@@ -135,22 +134,27 @@ export default function App() {
 
       <Section
         id="contact"
-        eyebrow="Let’s talk"
+        eyebrow="Let's talk"
         title="Contact"
         subtitle="Open for opportunities and collaborations."
       >
         <div className="contact">
-          <div className="contactCard" role="region" aria-label="Email contact">
+          {/* Email Card - Seluruh card bisa diklik */}
+          <a
+            className="contactCard contactCardLink"
+            href={`mailto:${profile.email}`}
+            aria-label="Email contact"
+          >
             <div className="muted small">Email</div>
             <div className="contactRow">
-              <a className="h3 link" href={`mailto:${profile.email}`}>
+              <span className="h3 link">
                 <img
                   src={envelopeIcon}
                   alt="Email icon"
                   className="contactIcon"
                 />
                 {profile.email}
-              </a>
+              </span>
               <button
                 type="button"
                 className="copyBtn"
@@ -167,7 +171,7 @@ export default function App() {
                   >
                     <path
                       fill="currentColor"
-                      d="M9.29 16.29a1 1 0 0 1 1.42 0L15 20.59l5.29-5.3a1 1 0 1 1 1.42 1.42l-6 6a1 1 0 0 1-1.42 0l-5-5a1 1 0 0 1 0-1.41z"
+                      d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
                     />
                   </svg>
                 ) : (
@@ -185,41 +189,45 @@ export default function App() {
                 )}
               </button>
             </div>
-          </div>
+          </a>
 
-          <div className="contactCard">
+          {/* LinkedIn Card - Seluruh card bisa diklik */}
+          <a
+            className="contactCard contactCardLink"
+            href={profile.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn contact"
+          >
             <div className="muted small">LinkedIn</div>
-            <a
-              className="h3 link"
-              href={profile.linkedin}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <span className="h3 link">
               <img
                 src={linkedinIcon}
                 alt="LinkedIn icon"
                 className="contactIcon"
               />
               Visit profile
-            </a>
-          </div>
+            </span>
+          </a>
 
-          <div className="contactCard">
+          {/* WhatsApp Card - Seluruh card bisa diklik */}
+          <a
+            className="contactCard contactCardLink"
+            href={`https://wa.me/${phoneDigits}`}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="WhatsApp contact"
+          >
             <div className="muted small">WhatsApp</div>
-            <a
-              className="h3 link"
-              href={`https://wa.me/${6281915967694}`}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <span className="h3 link">
               <img
                 src={whatsappIcon}
                 alt="WhatsApp icon"
                 className="contactIcon"
               />
               Chat
-            </a>
-          </div>
+            </span>
+          </a>
         </div>
       </Section>
 
