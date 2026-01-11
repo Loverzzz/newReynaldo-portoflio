@@ -8,6 +8,9 @@ import Footer from "./components/Footer";
 
 import { achievements, experiences, profile, projects, skills } from "./data";
 import profileImg from "./assets/Profile.jpg";
+import envelopeIcon from "./assets/envelope.svg";
+import linkedinIcon from "./assets/linkedin.svg";
+import whatsappIcon from "./assets/whatsapp.svg";
 
 export default function App() {
   const phoneDigits = profile.phone.replace(/\D/g, "");
@@ -141,6 +144,11 @@ export default function App() {
             <div className="muted small">Email</div>
             <div className="contactRow">
               <a className="h3 link" href={`mailto:${profile.email}`}>
+                <img
+                  src={envelopeIcon}
+                  alt="Email icon"
+                  className="contactIcon"
+                />
                 {profile.email}
               </a>
               <button
@@ -187,6 +195,11 @@ export default function App() {
               target="_blank"
               rel="noreferrer"
             >
+              <img
+                src={linkedinIcon}
+                alt="LinkedIn icon"
+                className="contactIcon"
+              />
               Visit profile
             </a>
           </div>
@@ -199,6 +212,11 @@ export default function App() {
               target="_blank"
               rel="noreferrer"
             >
+              <img
+                src={whatsappIcon}
+                alt="WhatsApp icon"
+                className="contactIcon"
+              />
               Chat
             </a>
           </div>

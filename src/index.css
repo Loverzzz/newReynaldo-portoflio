@@ -544,38 +544,80 @@ a.btn.primary:focus {
    CONTACT
 ========================= */
 .contact {
-  display: flex;
-  flex-wrap: wrap; /* Membungkus tombol yang tidak muat dalam satu baris */
-  justify-content: center; /* Menyusun tombol agar di tengah */
-  gap: 1.5rem; /* Menambahkan jarak antar tombol */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 1.75rem; /* consistent gap between cards */
   max-width: 900px;
   margin: 0 auto;
   padding: 3rem 0;
+  align-items: start;
+  justify-items: center; /* keep cards centered in each grid cell */
+}
+
+/* Single column on narrow screens */
+@media (max-width: 760px) {
+  .contact {
+    grid-template-columns: 1fr;
+  }
 }
 
 .contactCard {
   background-color: var(--panel);
   border-radius: var(--radius);
-  padding: 1rem 1.25rem;
+  padding: 1.5rem 1.75rem;
   box-shadow: var(--shadow);
   width: 100%;
-  max-width: 320px; /* Membatasi lebar card tombol */
   text-align: center;
   user-select: none;
   transition: background-color 0.25s ease;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* center content vertically for proportional look */
+  align-items: center;
+  min-height: 140px; /* ensure consistent card height */
+  box-sizing: border-box;
+}
+
+/* Make the third card span both columns and center it */
+.contactCard:nth-child(3) {
+  grid-column: 1 / -1;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Slight spacing tweak for the muted label inside cards */
+.contactCard .muted.small {
+  margin-bottom: 0.5rem;
 }
 
 /* Agar hanya ada dua tombol di atas dan satu tombol di bawah */
-.contactCard:nth-child(odd) {
-  margin-right: 1.5rem; /* Memberikan jarak antar tombol baris atas */
-}
 
 .contactCard .link {
   font-weight: 700;
   font-size: 1.1rem;
-  display: inline-block;
+  display: inline-flex; /* ensure icon + text are on one line */
+  align-items: center;
+  gap: 0.6rem;
   margin-top: 0.25rem; /* smaller spacing so it aligns with button */
+  white-space: nowrap; /* keep icon and label together */
+}
+
+/* Allow wrap on narrow screens so content doesn't overflow */
+@media (max-width: 480px) {
+  .contactCard .link {
+    white-space: normal;
+    justify-content: center;
+  }
+
+  .contactRow {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .copyBtn {
+    margin-top: 0.25rem; /* make copy button drop under the link a little on very small screens */
+  }
 }
 
 .contactCard:hover {
@@ -596,8 +638,9 @@ a.btn.primary:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 1rem;
   margin-top: 0.35rem;
+  flex-wrap: nowrap; /* keep icon, text, and copy button on a single line on most widths */
 }
 .copyBtn {
   background: transparent;
@@ -631,6 +674,26 @@ a.btn.primary:focus {
 .contactCard:hover .copyBtn {
   color: white;
   background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Icon shown next to contact links (use SVG files' native colors) */
+.contactIcon {
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.6rem;
+  flex-shrink: 0;
+  object-fit: contain; /* preserve SVG aspect and native colors */
+}
+
+/* Slight spacing tweaks for small screens */
+@media (max-width: 640px) {
+  .contactIcon {
+    width: 22px;
+    height: 22px;
+    margin-right: 0.5rem;
+  }
 }
 
 .contact .muted {
