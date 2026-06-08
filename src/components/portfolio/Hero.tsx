@@ -123,7 +123,7 @@ export default function Hero() {
                 variant="outline"
                 className="px-3 py-1 text-xs font-semibold tracking-wider uppercase border-brand/30 text-brand"
               >
-                Portfolio 2025
+                Portfolio 2026
               </Badge>
             </motion.div>
 

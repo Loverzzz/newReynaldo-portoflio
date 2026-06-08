@@ -46,9 +46,9 @@ export const profile: Profile = {
   phone: "+6281915967694",
   linkedin: "https://www.linkedin.com/in/reynaldoabt/",
   headline:
-    "Content Moderator | Robotics & AI Graduate | AI/ML & Data Enthusiast",
+    "AI Video Editor | Robotics & AI Graduate | AI/ML & Data Enthusiast",
   summary:
-    "Passionate and results-driven Content Moderator with a background in Robotics & AI. Experienced in policy enforcement, trend analysis, and building data-driven solutions (ML, dashboards, IoT).",
+    "Versatile professional with a Bachelor's degree in Robotics and Artificial Intelligence Engineering, combining expertise in AI-driven content production, social media analytics, data science, and content moderation. Proven track record across high-volume content review, AI-assisted visual production, and data-driven social media strategy. Seeking a role where technical depth and creative capability can drive measurable impact in digital and AI-powered environments.",
   highlights: [
     { label: "Accuracy (Moderation)", value: "93%" },
     { label: "Exposure Growth (AEEC)", value: "+20%" },
