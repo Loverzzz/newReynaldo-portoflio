@@ -84,9 +84,27 @@ export const skills: string[] = [
 // ─── Experience ────────────────────────────────────────
 export const experiences: ExperienceItem[] = [
   {
+    company: "Dygtal Marketing Solutions",
+    role: "AI Content Creator & Social Media Data Analyst",
+    period: "May 2026 – Present",
+
+    location: "Denpasar, Bali",
+    logo: "/images/companies/dygtal-marketing-solutions.png",
+    bullets: [
+      "Produced AI-assisted photo and video content using generative AI platforms, Adobe Premiere Pro, and After Effects, creating high-quality visual assets tailored for brand campaigns and social media channels.",
+      "Applied AI image and video enhancement tools to accelerate post-production workflows, reducing editing turnaround time while maintaining consistent visual quality across client deliverables.",
+      "Designed and edited short-form video content (Reels, TikTok, YouTube Shorts) optimized for platform-specific algorithms, contributing to increased organic reach and engagement rates.",
+      "Analyzed social media engagement data across platforms (Instagram, TikTok, Facebook) using analytics dashboards, extracting insights on reach, impressions, click-through rates, and audience behavior to inform content strategy.",
+      "Developed data-driven performance reports, identifying content trends and optimization opportunities to increase follower growth, post engagement, and overall brand visibility.",
+      "Built and maintained engagement tracking spreadsheets and dashboards to monitor KPIs across multiple client accounts, enabling real-time campaign performance evaluation.",
+      "Supported A/B testing of content formats and captions, leveraging engagement data to recommend the most effective approaches for target audiences.",
+    ],
+  },
+  {
     company: "Telus Digital",
     role: "Content Moderator",
-    period: "Mar 2026 – Present",
+    period: "Mar 2026 – May 2026",
+
     location: "Denpasar, Bali",
     logo: "/images/companies/telus-digital.png",
     bullets: [
@@ -100,6 +118,7 @@ export const experiences: ExperienceItem[] = [
     company: "Gear Inc",
     role: "Content Moderator",
     period: "Apr 2025 – Feb 2026",
+
     location: "Denpasar, Bali",
     logo: "/images/companies/gear-inc.png",
     bullets: [

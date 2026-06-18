@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} Reynaldo Arya Budi Trisna</p>
-          <p>Built with Next.js &amp; TypeScript</p>
+          <p>Built with love {'<3'}</p>
         </div>
       </div>
     </footer>
