@@ -94,9 +94,23 @@ export default function ParticleBackground() {
         p.vy += (dy / dist) * force * 0.4;
       }
 
-      // Higher damping → smoother, more fluid drift (less jittery)
-      p.vx *= 0.985;
-      p.vy *= 0.985;
+      // CRITICAL FIX: particles were decelerating to a halt because of heavy
+      // damping. Instead we keep a gentle baseline speed so the field always
+      // drifts, and softly re-inject any lost velocity along the original
+      // direction. This keeps continuous motion without ever stopping.
+      const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+      const minSpeed = 0.12; // floor — particles never fully stop
+      const maxSpeed = 0.9;  // ceiling — repulsion bursts don't escalate
+      if (speed < minSpeed) {
+        // restore toward a calm drift
+        const scale = minSpeed / (speed || 0.0001);
+        p.vx *= scale;
+        p.vy *= scale;
+      } else if (speed > maxSpeed) {
+        const scale = maxSpeed / speed;
+        p.vx *= scale;
+        p.vy *= scale;
+      }
 
       // Frame-rate-independent integration
       p.x += p.vx * dt;

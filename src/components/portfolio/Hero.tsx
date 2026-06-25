@@ -558,22 +558,35 @@ export default function Hero() {
                       style={{
                         left: "50%",
                         top: "50%",
-                        x: cx - 22,
-                        y: cy - 22,
                       }}
+                      // Always visible — NO fade in/out. Only floating motion + entrance scale.
+                      initial={{ opacity: 1, scale: 0 }}
                       animate={{
-                        y: [cy - 22, cy - 28, cy - 22],
+                        opacity: 1,
+                        scale: 1,
                         x: [cx - 22, cx - 18, cx - 22],
+                        y: [cy - 22, cy - 28, cy - 22],
                       }}
                       transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay,
+                        opacity: { duration: 0 },
+                        scale: {
+                          duration: 0.6,
+                          ease: [0.22, 1, 0.36, 1],
+                          delay,
+                        },
+                        x: {
+                          duration: 8,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay,
+                        },
+                        y: {
+                          duration: 8,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay,
+                        },
                       }}
-                      initial={{ opacity: 0, scale: 0 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
                       whileHover={{ scale: 1.3, zIndex: 10 }}
                     >
                       <div className="p-2.5 rounded-xl bg-card/90 backdrop-blur-md border border-brand/30 shadow-lg shadow-brand/10 cursor-default">
