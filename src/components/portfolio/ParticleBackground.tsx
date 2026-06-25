@@ -46,8 +46,9 @@ export default function ParticleBackground() {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.45 * (0.3 + z * 0.7),
-        vy: (Math.random() - 0.5) * 0.45 * (0.3 + z * 0.7),
+        // LIVELY baseline drift — clearly visible motion, not a static field.
+        vx: (Math.random() - 0.5) * 0.9 * (0.4 + z * 0.8),
+        vy: (Math.random() - 0.5) * 0.9 * (0.4 + z * 0.8),
         size: 1.0 + z * 3.0, // larger → fuller, not thin
         opacity: 0.25 + z * 0.55, // brighter → clearer
         z,
@@ -110,8 +111,8 @@ export default function ParticleBackground() {
       // drifts, and softly re-inject any lost velocity along the original
       // direction. This keeps continuous motion without ever stopping.
       const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-      const minSpeed = 0.12; // floor — particles never fully stop
-      const maxSpeed = 0.9;  // ceiling — repulsion bursts don't escalate
+      const minSpeed = 0.4;  // floor — clearly visible drift, never static
+      const maxSpeed = 1.8;  // ceiling — repulsion/scroll bursts stay energetic but bounded
       if (speed < minSpeed) {
         // restore toward a calm drift
         const scale = minSpeed / (speed || 0.0001);
