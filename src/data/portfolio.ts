@@ -46,9 +46,9 @@ export const profile: Profile = {
   phone: "+6281915967694",
   linkedin: "https://www.linkedin.com/in/reynaldoabt/",
   headline:
-    "AI Video Editor | Robotics & AI Graduate | AI/ML & Data Enthusiast",
+    "AI Video Editor | B.Eng Robotics & AI | AI/ML & Data Enthusiast | ex-Content Moderator",
   summary:
-    "Versatile professional with a Bachelor's degree in Robotics and Artificial Intelligence Engineering, combining expertise in AI-driven content production, social media analytics, data science, and content moderation. Proven track record across high-volume content review, AI-assisted visual production, and data-driven social media strategy. Seeking a role where technical depth and creative capability can drive measurable impact in digital and AI-powered environments.",
+    "Versatile professional with a Bachelor's degree in Robotics and AI Engineering. Combining expertise in AI-driven content production, social media analytics, data science, and content moderation — with a proven track record across high-volume content review, AI-assisted visual production, and data-driven social media strategy. Seeking roles where technical depth and creative capability drive measurable impact.",
   highlights: [
     { label: "Accuracy (Moderation)", value: "93%" },
     { label: "Exposure Growth (AEEC)", value: "+20%" },
@@ -61,6 +61,7 @@ export const achievements: string[] = [
   "1st Place — Driyarkara Film Festival (Editor, Sinematografi UNAIR)",
   "Best Performance Moderator — July (Gear Inc)",
   "Best Performance Moderator — September (Gear Inc)",
+  "Best Performance Moderator — February 2026 (Gear Inc)",
 ];
 
 // ─── Skills ────────────────────────────────────────────
@@ -159,7 +160,13 @@ export const projects: ProjectItem[] = [
     title: "Smart Greenhouse Monitoring",
     description:
       "IoT monitoring improvement for greenhouse with data insights for operations in PT Aria Agri Indonesia.",
-    tags: ["IoT Sensors", "Arduino", "Electrical and PCB", "Dashboards", "Agritech"],
+    tags: [
+      "IoT Sensors",
+      "Arduino",
+      "Electrical and PCB",
+      "Dashboards",
+      "Agritech",
+    ],
     link: "https://github.com/Loverzzz/smartgreenhouse",
     image: "/images/projects/smart-greenhouse.png",
     category: "IoT & Engineering",
@@ -168,7 +175,14 @@ export const projects: ProjectItem[] = [
     title: "Predictive Dashboards (Streamlit, Metabase)",
     description:
       "Machine Learning-Based Student Dropout Prediction System with Interactive Dashboards to Identify At-Risk Students and Improve Retention Rates.",
-    tags: ["Streamlit", "Metabase", "SQL", "Analytics", "Data Visualization", "Machine Learning"],
+    tags: [
+      "Streamlit",
+      "Metabase",
+      "SQL",
+      "Analytics",
+      "Data Visualization",
+      "Machine Learning",
+    ],
     link: "https://github.com/Loverzzz/DropoutPredictive",
     image: "/images/projects/streamlit-metabase.png",
     category: "Data & Visualization",
@@ -177,7 +191,12 @@ export const projects: ProjectItem[] = [
     title: "Plant Disease Detection Using Deep Learning and Computer Vision",
     description:
       "A deep learning-based system that accurately detects plant diseases using image classification and convolutional neural networks (CNNs).",
-    tags: ["Keras", "TensorFlow", "Python", "Convolutional Neural Networks (CNN)"],
+    tags: [
+      "Keras",
+      "TensorFlow",
+      "Python",
+      "Convolutional Neural Networks (CNN)",
+    ],
     link: "https://github.com/Loverzzz/PlantDiseaseDetection",
     image: "/images/projects/plant-disease-detection.png",
     category: "AI & Machine Learning",
@@ -186,7 +205,13 @@ export const projects: ProjectItem[] = [
     title: "Object Detection Palm Tree (Computer Vision)",
     description:
       "Palm Tree Detection and Counting with YOLOv8 Object Detection.",
-    tags: ["YOLOv8", "Ultralytics", "Deep Learning", "Bounding Box Detection", "Custom Dataset"],
+    tags: [
+      "YOLOv8",
+      "Ultralytics",
+      "Deep Learning",
+      "Bounding Box Detection",
+      "Custom Dataset",
+    ],
     link: "https://github.com/Loverzzz/PalmTreeCount",
     image: "/images/projects/object-detection-palm.jpg",
     category: "AI & Machine Learning",
@@ -195,7 +220,13 @@ export const projects: ProjectItem[] = [
     title: "Stress Prediction Using Text Based ML Models",
     description:
       "Text-Based Stress Level Prediction Using Machine Learning and NLP.",
-    tags: ["NLP", "Machine Learning Pipeline", "TensorFlow Extended", "Docker", "Model Deployment"],
+    tags: [
+      "NLP",
+      "Machine Learning Pipeline",
+      "TensorFlow Extended",
+      "Docker",
+      "Model Deployment",
+    ],
     link: "https://github.com/Loverzzz/StressPredictionTextBased",
     image: "/images/projects/stress-predictive.png",
     category: "AI & Machine Learning",
@@ -204,25 +235,48 @@ export const projects: ProjectItem[] = [
     title: "Beijing Air Quality Data Visualization & Analysis Dashboard",
     description:
       "An interactive dashboard for visualizing and analyzing air quality data in Beijing, showcasing pollutants like PM2.5, PM10, SO2, NO2, CO, and O3.",
-    tags: ["Streamlit", "Pandas", "Data Visualization", "Interactive Dashboard Development", "Time Series Analysis"],
+    tags: [
+      "Streamlit",
+      "Pandas",
+      "Data Visualization",
+      "Interactive Dashboard Development",
+      "Time Series Analysis",
+    ],
     link: "https://github.com/Loverzzz/AirQAnalysisBeijing",
     image: "/images/projects/air-quality.png",
     category: "Data & Visualization",
   },
   {
-    title: "Diabetes Prediction with TFX for Deployment & Monitoring with Prometheus",
+    title:
+      "Diabetes Prediction with TFX for Deployment & Monitoring with Prometheus",
     description:
       "A machine learning-powered models using TensorFlow Extended (TFX) that predicts diabetes risk using health metrics and interactive visualization.",
-    tags: ["scikit-learn", "TensorFlow Extended (TFX)", "Streamlit", "Prometheus", "Grafana", "Matplotlib", "Seaborn"],
+    tags: [
+      "scikit-learn",
+      "TensorFlow Extended (TFX)",
+      "Streamlit",
+      "Prometheus",
+      "Grafana",
+      "Matplotlib",
+      "Seaborn",
+    ],
     link: "https://github.com/Loverzzz/diabetes-prediction-app",
     image: "/images/projects/diabetes-monitoring.png",
     category: "AI & Machine Learning",
   },
   {
-    title: "Apple Color Detection & Classification with YOLOv8 & HSV Color Analysis",
+    title:
+      "Apple Color Detection & Classification with YOLOv8 & HSV Color Analysis",
     description:
       "Automated detection and classification of apples by color using YOLOv8 for object detection and HSV color analysis for categorizing red, yellow, and green apples.",
-    tags: ["Ultralytics YOLOv8", "OpenCV", "Python", "NumPy", "Color Classification", "Bounding Box Processing"],
+    tags: [
+      "Ultralytics YOLOv8",
+      "OpenCV",
+      "Python",
+      "NumPy",
+      "Color Classification",
+      "Bounding Box Processing",
+    ],
     link: "https://github.com/Loverzzz/AppleColorClassifier",
     image: "/images/projects/apple-color-classified.jpg",
     category: "AI & Machine Learning",
@@ -231,7 +285,15 @@ export const projects: ProjectItem[] = [
     title: "Music Recommendation System with Content & Collaborative Filtering",
     description:
       "A music recommendation engine leveraging feature-based content similarity and collaborative filtering (SVD) to suggest songs.",
-    tags: ["Python", "Feature Engineering", "Pandas", "NumPy", "Cosine Similarity", "Collaborative Filtering", "SVD"],
+    tags: [
+      "Python",
+      "Feature Engineering",
+      "Pandas",
+      "NumPy",
+      "Cosine Similarity",
+      "Collaborative Filtering",
+      "SVD",
+    ],
     link: "https://github.com/Loverzzz/MusicRecommendation",
     image: "/images/projects/music-recommendation.png",
     category: "AI & Machine Learning",
@@ -354,14 +416,17 @@ export const certifications: CertificationItem[] = [
   {
     title: "Complete Guide to Power BI for Data Analysts",
     provider: "Microsoft Press",
-    credentialId: "9ebfbd54aaf744b9c154c2629af76a6d68d93d04e8a4fdb8991245a7c26787e7",
+    credentialId:
+      "9ebfbd54aaf744b9c154c2629af76a6d68d93d04e8a4fdb8991245a7c26787e7",
     issued: "Jan 2024",
     link: "https://www.linkedin.com/learning/certificates/9ebfbd54aaf744b9c154c2629af76a6d68d93d04e8a4fdb8991245a7c26787e7",
   },
   {
-    title: "Learning Data Analytics Part 2: Extending and Applying Core Knowledge",
+    title:
+      "Learning Data Analytics Part 2: Extending and Applying Core Knowledge",
     provider: "LinkedIn",
-    credentialId: "0f655e9c0584fea4461c39c5d7291a94ab4ec710adbbfb8cf2e921d9da0056ac",
+    credentialId:
+      "0f655e9c0584fea4461c39c5d7291a94ab4ec710adbbfb8cf2e921d9da0056ac",
     issued: "Jan 2025",
     link: "https://www.linkedin.com/learning/certificates/0f655e9c0584fea4461c39c5d7291a94ab4ec710adbbfb8cf2e921d9da0056ac",
   },

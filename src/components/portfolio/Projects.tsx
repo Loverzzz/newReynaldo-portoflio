@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTilt } from '@/hooks/use-tilt';
 import { useTheme } from 'next-themes';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ExternalLink, Sparkles, ArrowUpRight, Github } from 'lucide-react';
+import { ExternalLink, ArrowUpRight, Sparkles, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { ProjectItem } from '@/data/portfolio';
 import { projectCategories } from '@/data/portfolio';
@@ -14,52 +15,155 @@ interface ProjectsProps {
   items: ProjectItem[];
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      ease: [0.22, 1, 0.36, 1] as const,
-    },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.9,
-    y: -20,
-    transition: {
-      duration: 0.3,
-    },
-  },
-};
-
-export default function Projects({ items }: ProjectsProps) {
+/* 3D tilt card */
+function ProjectCard({ project, index }: { project: ProjectItem; index: number }) {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
-
-  const filteredProjects = useMemo(() => {
-    if (activeCategory === 'All') return items;
-    return items.filter((p) => p.category === activeCategory);
-  }, [items, activeCategory]);
+  const tilt = useTilt({ strength: 6, stiffness: 250, damping: 28 });
 
   return (
-    <div className="space-y-8">
-      {/* Category filter tabs with enhanced styling */}
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+      transition={{ duration: 0.35, delay: index * 0.03, ease: [0.22, 1, 0.36, 1] }}
+      ref={tilt.ref}
+      onMouseMove={tilt.handleMouse}
+      onMouseLeave={tilt.handleLeave}
+      style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformStyle: 'preserve-3d' }}
+      className="relative group will-change-transform"
+    >
+      {/* Glow behind card */}
+      <div
+        className="absolute -inset-0.5 rounded-2xl opacity-0 group-hover:opacity-50 blur-lg transition-opacity duration-500 pointer-events-none"
+        style={{ background: 'linear-gradient(135deg, oklch(0.65 0.17 160 / 0.4), oklch(0.60 0.20 200 / 0.3))' }}
+      />
+
+      <Card
+        className={`relative h-full overflow-hidden border transition-all duration-500 holographic
+          ${isDark
+            ? 'bg-card/80 border-border/50 hover:border-brand/40'
+            : 'bg-card/90 border-border/50 hover:border-brand/40'}
+          hover:shadow-2xl hover:shadow-brand/10`}
+        style={{ transformStyle: 'preserve-3d' }}
+      >
+        {/* Top gradient accent line */}
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-brand/40 via-brand to-brand/40 opacity-30 group-hover:opacity-100 transition-opacity duration-500" />
+
+        {/* Image / thumbnail */}
+        {project.image && (
+          <div className="relative overflow-hidden h-44" style={{ transform: 'translateZ(4px)' }}>
+            <motion.img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover"
+              whileHover={{ scale: 1.08 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+
+            {/* Category chip — fixed dark scrim + white text (theme-independent)
+                so it stays legible over white/light images like "Music Recommendation". */}
+            <div className="absolute top-3 right-3">
+              <span
+                className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full
+                           bg-black/55 text-white backdrop-blur-md border border-white/20 shadow-sm"
+              >
+                {project.category}
+              </span>
+            </div>
+
+            {/* Sparkle icon on hover */}
+            <motion.div
+              className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+            >
+              <Sparkles className="size-4 text-brand" />
+            </motion.div>
+          </div>
+        )}
+
+        <CardContent className="p-5 space-y-4" style={{ transformStyle: 'preserve-3d' }}>
+          {/* Category badge when no image */}
+          {!project.image && (
+            <Badge variant="secondary" className="text-[10px] font-bold bg-brand/10 text-brand border-brand/20">
+              {project.category}
+            </Badge>
+          )}
+
+          {/* Title */}
+          <h3
+            className="font-bold text-base md:text-lg text-foreground group-hover:text-brand transition-colors duration-300 leading-tight"
+            style={{ transform: 'translateZ(6px)' }}
+          >
+            {project.title}
+          </h3>
+
+          {/* Description */}
+          <p
+            className="text-sm text-muted-foreground leading-relaxed line-clamp-3"
+            style={{ transform: 'translateZ(4px)' }}
+          >
+            {project.description}
+          </p>
+
+          {/* Tags / tech stack */}
+          <div className="flex flex-wrap gap-1.5" style={{ transform: 'translateZ(3px)' }}>
+            {project.tags.slice(0, 5).map((tag) => (
+              <motion.span
+                key={tag}
+                whileHover={{ scale: 1.08, y: -1 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                className="px-2 py-0.5 text-[10px] font-semibold rounded-full border border-brand/20 bg-brand/5 text-brand hover:bg-brand/15 transition-colors duration-300 cursor-default"
+              >
+                {tag}
+              </motion.span>
+            ))}
+            {project.tags.length > 5 && (
+              <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full border border-border/50 bg-muted text-muted-foreground cursor-default">
+                +{project.tags.length - 5}
+              </span>
+            )}
+          </div>
+
+          {/* Link */}
+          {project.link && (
+            <div style={{ transform: 'translateZ(8px)' }}>
+              <motion.a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand/80 transition-colors duration-300 group/link"
+                whileHover={{ x: 2 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+              >
+                <ExternalLink className="size-3.5 group-hover/link:scale-110 transition-transform" />
+                View Project
+                <ArrowUpRight className="size-3 opacity-0 group-hover/link:opacity-100 transition-opacity" />
+              </motion.a>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+}
+
+export default function Projects({ items }: ProjectsProps) {
+  const [activeCategory, setActiveCategory] = useState<string>('All');
+
+  const filtered = activeCategory === 'All'
+    ? items
+    : items.filter((p) => p.category === activeCategory);
+
+  const categories = ['All', ...projectCategories];
+
+  return (
+    <div className="space-y-10">
+      {/* ── Filter pills ── */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -67,198 +171,65 @@ export default function Projects({ items }: ProjectsProps) {
         transition={{ duration: 0.5 }}
         className="flex flex-wrap justify-center gap-2"
       >
-        {projectCategories.map((category, idx) => {
-          const isActive = activeCategory === category;
+        <Filter className="size-4 text-muted-foreground self-center mr-1" />
+        {categories.map((cat, idx) => {
+          const isActive = cat === activeCategory;
           return (
             <motion.div
-              key={category}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.05 }}
+              key={cat}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.04, duration: 0.3 }}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
             >
               <Button
+                variant={isActive ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setActiveCategory(category)}
-                className={`
-                  relative rounded-full text-sm font-medium transition-all duration-300
-                  ${isActive
-                    ? 'bg-brand text-brand-foreground shadow-lg shadow-brand/25'
-                    : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
-                  }
-                `}
+                onClick={() => setActiveCategory(cat)}
+                className={`text-xs font-semibold transition-all duration-300 ${
+                  isActive
+                    ? 'bg-brand text-brand-foreground shadow-md shadow-brand/25 glow-hover'
+                    : 'border-border/60 hover:border-brand/50 hover:text-brand hover:bg-brand/5'
+                }`}
               >
+                {cat}
                 {isActive && (
                   <motion.span
-                    layoutId="activeTab"
-                    className="absolute inset-0 bg-brand rounded-full"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    layoutId="filter-active-dot"
+                    className="ml-1.5 w-1.5 h-1.5 rounded-full bg-brand-foreground/70 inline-block"
                   />
                 )}
-                <span className="relative z-10 flex items-center gap-1.5">
-                  {isActive && <Sparkles className="size-3.5" />}
-                  {category}
-                </span>
               </Button>
             </motion.div>
           );
         })}
       </motion.div>
 
-      {/* Projects grid */}
-      <AnimatePresence mode="popLayout">
-        {filteredProjects.length > 0 ? (
-          <motion.div
-            key={activeCategory}
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={`${project.title}-${index}`}
-                variants={cardVariants}
-                exit="exit"
-                onHoverStart={() => setHoveredProject(project.title)}
-                onHoverEnd={() => setHoveredProject(null)}
-              >
-                <a
-                  href={project.link || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block h-full"
-                >
-                  <Card className={`
-                    group h-full relative overflow-hidden cursor-pointer
-                    transition-all duration-500
-                    ${isDark 
-                      ? 'bg-card/40 border-border/50 hover:border-brand/50' 
-                      : 'bg-card/60 border-border/50 hover:border-brand/50'
-                    }
-                    ${hoveredProject === project.title ? 'shadow-2xl shadow-brand/10' : 'shadow-lg'}
-                  `}>
-                    {/* Animated gradient border on hover */}
-                    <motion.div
-                      className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                      style={{
-                        background: 'linear-gradient(135deg, oklch(0.65 0.17 160 / 0.2), oklch(0.70 0.15 140 / 0.2))',
-                        padding: '2px',
-                        WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                        WebkitMaskComposite: 'xor',
-                        maskComposite: 'exclude',
-                      }}
-                    />
+      {/* ── Project grid ── */}
+      <div
+        className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        style={{ perspective: '1200px' }}
+      >
+        <AnimatePresence mode="popLayout">
+          {filtered.map((project, index) => (
+            <ProjectCard key={project.title} project={project} index={index} />
+          ))}
+        </AnimatePresence>
+      </div>
 
-                    {/* Project Image with enhanced effects */}
-                    {project.image && (
-                      <div className="relative h-48 overflow-hidden">
-                        <motion.img
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-full object-cover"
-                          whileHover={{ scale: 1.1 }}
-                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                        />
-                        
-                        {/* Gradient overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                        
-                        {/* Hover overlay with icon */}
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          whileHover={{ opacity: 1 }}
-                          className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-                        >
-                          <motion.div
-                            initial={{ scale: 0, rotate: -45 }}
-                            whileHover={{ scale: 1, rotate: 0 }}
-                            transition={{ type: 'spring', stiffness: 200 }}
-                            className="p-3 rounded-full bg-white/20 backdrop-blur-md"
-                          >
-                            <ArrowUpRight className="w-6 h-6 text-white" />
-                          </motion.div>
-                        </motion.div>
-
-                        {/* Category badge */}
-                        <div className="absolute top-3 left-3">
-                          <Badge
-                            variant="secondary"
-                            className="bg-black/50 text-white border-0 backdrop-blur-sm"
-                          >
-                            {project.category}
-                          </Badge>
-                        </div>
-                      </div>
-                    )}
-
-                    <CardContent className="p-5 flex flex-col h-full space-y-4 relative">
-                      {/* Title with hover effect */}
-                      <motion.h3
-                        className="font-bold text-lg leading-tight pr-6 text-foreground group-hover:text-brand transition-colors duration-300"
-                      >
-                        {project.title}
-                      </motion.h3>
-
-                      {/* Description */}
-                      <p className="text-sm text-foreground/80 line-clamp-3 leading-relaxed">
-                        {project.description}
-                      </p>
-
-                      {/* Tags with enhanced styling */}
-                      <div className="flex flex-wrap gap-2 mt-auto pt-2">
-                        {project.tags.slice(0, 4).map((tag, tIndex) => (
-                          <motion.div
-                            key={tIndex}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: tIndex * 0.05 }}
-                          >
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-medium bg-brand/10 border-brand/30 text-foreground hover:bg-brand/20 transition-colors"
-                            >
-                              {tag}
-                            </Badge>
-                          </motion.div>
-                        ))}
-                        {project.tags.length > 4 && (
-                          <Badge variant="outline" className="text-xs font-medium bg-muted/50">
-                            +{project.tags.length - 4}
-                          </Badge>
-                        )}
-                      </div>
-
-                      {/* Link indicator */}
-                      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                        <ExternalLink className="w-4 h-4 text-brand" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </a>
-              </motion.div>
-            ))}
-          </motion.div>
-        ) : (
-          <motion.div
-            key="empty"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="text-center py-16"
-          >
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="inline-block mb-4"
-            >
-              <Sparkles className="w-12 h-12 text-muted-foreground/50" />
-            </motion.div>
-            <p className="text-lg text-muted-foreground">
-              No projects found in this category
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Empty state */}
+      {filtered.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center py-16 text-muted-foreground"
+        >
+          <Sparkles className="size-8 mx-auto mb-3 opacity-30" />
+          <p className="text-sm">No projects in this category yet.</p>
+        </motion.div>
+      )}
     </div>
   );
 }
