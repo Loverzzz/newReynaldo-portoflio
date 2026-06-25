@@ -27,6 +27,9 @@ export default function ParticleBackground() {
   // CSS-pixel dimensions (canvas backing store uses device px + DPR transform)
   const dimsRef = useRef({ w: 0, h: 0 });
   const lastTimeRef = useRef(0);
+  // Scroll-velocity field — particles drift with scroll momentum (parallax physics)
+  const scrollYRef = useRef(0);
+  const scrollVelRef = useRef(0);
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
 
@@ -70,6 +73,10 @@ export default function ParticleBackground() {
 
     const baseColor = isDark ? '100, 200, 150' : '20, 180, 120';
 
+    // Read & decay scroll momentum for this frame (frame-rate-independent decay)
+    const scrollVel = scrollVelRef.current;
+    scrollVelRef.current *= Math.pow(0.85, dt);
+
     // --- Spatial hashing grid so connections are O(n) instead of O(n²) ---
     const maxDist = 155;
     const maxDistSq = maxDist * maxDist;
@@ -82,17 +89,21 @@ export default function ParticleBackground() {
     for (let i = 0; i < count; i++) {
       const p = particles[i];
 
-      // Mouse repulsion (kept as an interactive feature)
+      // Mouse repulsion (interactive hover — wider, more noticeable push)
       const dx = p.x - mouse.x;
       const dy = p.y - mouse.y;
       const distSq = dx * dx + dy * dy;
-      if (distSq < 10000) {
-        // 100px radius
+      if (distSq < 16900) {
+        // 130px radius
         const dist = Math.sqrt(distSq) || 0.0001;
-        const force = (100 - dist) / 100;
-        p.vx += (dx / dist) * force * 0.4;
-        p.vy += (dy / dist) * force * 0.4;
+        const force = (130 - dist) / 130;
+        p.vx += (dx / dist) * force * 0.5;
+        p.vy += (dy / dist) * force * 0.5;
       }
+
+      // Scroll momentum — particles drift with page scroll (parallax depth).
+      // Far particles (low z) react more, near particles less → 3D depth illusion.
+      p.vy += scrollVel * 0.018 * dt * (0.4 + (1 - p.z) * 0.9);
 
       // CRITICAL FIX: particles were decelerating to a halt because of heavy
       // damping. Instead we keep a gentle baseline speed so the field always
@@ -138,6 +149,36 @@ export default function ParticleBackground() {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(${baseColor}, ${p.opacity})`;
+      ctx.fill();
+    }
+
+    // 2b) Interactive mouse "web" — lines from cursor to nearby particles + a
+    //     cursor node. This is the classic, satisfying hover interaction.
+    if (mouse.x > -1000) {
+      const mDist = 170;
+      const mDistSq = mDist * mDist;
+      const mpath = new Path2D();
+      let hasLine = false;
+      for (let i = 0; i < count; i++) {
+        const p = particles[i];
+        const mdx = p.x - mouse.x;
+        const mdy = p.y - mouse.y;
+        const dSq = mdx * mdx + mdy * mdy;
+        if (dSq < mDistSq) {
+          mpath.moveTo(p.x, p.y);
+          mpath.lineTo(mouse.x, mouse.y);
+          hasLine = true;
+        }
+      }
+      if (hasLine) {
+        ctx.strokeStyle = `rgba(${baseColor}, 0.45)`;
+        ctx.lineWidth = 1.0;
+        ctx.stroke(mpath);
+      }
+      // Cursor node — a bright dot that follows the pointer
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${baseColor}, 0.85)`;
       ctx.fill();
     }
 
@@ -251,6 +292,16 @@ export default function ParticleBackground() {
       mouseRef.current = { x: -9999, y: -9999 };
     };
 
+    // Scroll → accumulate vertical momentum (applied to particles each frame).
+    // Creates a parallax "the background is physical" feel while scrolling.
+    const handleScroll = () => {
+      const cur = window.scrollY;
+      const delta = cur - scrollYRef.current;
+      scrollYRef.current = cur;
+      scrollVelRef.current += delta;
+    };
+    scrollYRef.current = window.scrollY;
+
     // Pause rAF when tab is hidden — avoids burning CPU/GPU in background.
     const handleVisibility = () => {
       if (document.hidden) {
@@ -268,6 +319,7 @@ export default function ParticleBackground() {
     window.addEventListener('resize', handleResize, { passive: true });
     window.addEventListener('mousemove', handleMouse, { passive: true });
     window.addEventListener('mouseleave', handleLeave, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('visibilitychange', handleVisibility);
 
     if (prefersReducedMotion.current) {
@@ -281,6 +333,7 @@ export default function ParticleBackground() {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouse);
       window.removeEventListener('mouseleave', handleLeave);
+      window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('visibilitychange', handleVisibility);
       mq.removeEventListener('change', handleMotionChange);
       if (animationRef.current !== null) {
