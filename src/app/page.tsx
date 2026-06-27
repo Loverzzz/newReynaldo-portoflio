@@ -8,6 +8,7 @@ import Skills from "@/components/portfolio/Skills";
 import Certifications from "@/components/portfolio/Certifications";
 import Experience from "@/components/portfolio/Experience";
 import Projects from "@/components/portfolio/Projects";
+import CreativeVideos from "@/components/portfolio/CreativeVideos";
 import Contact from "@/components/portfolio/Contact";
 import Footer from "@/components/portfolio/Footer";
 import ScrollToTop from "@/components/portfolio/ScrollToTop";
@@ -16,6 +17,7 @@ import {
   certifications,
   experiences,
   projects,
+  videos,
 } from "@/data/portfolio";
 
 export default function Home() {
@@ -64,6 +66,8 @@ export default function Home() {
           >
             <Projects items={projects} />
           </SectionWrapper>
+
+          <CreativeVideos items={videos} />
 
           <SectionWrapper
             id="contact"

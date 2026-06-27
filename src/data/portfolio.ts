@@ -58,7 +58,9 @@ export const profile: Profile = {
 
 // ─── Achievements ──────────────────────────────────────
 export const achievements: string[] = [
-  "1st Place — Driyarkara Film Festival (Editor, Sinematografi UNAIR)",
+  "1st Place — Driyakarya Film Festival 2021 · Di Balik Kemudi (Editor)",
+  "Official Selection — Lampung Film Festival 2022 · Di Balik Kemudi (Editor)",
+  "Featured Film — Jelajah Sinema Indonesia 2023 · Di Balik Kemudi (Editor)",
   "Best Performance Moderator — July (Gear Inc)",
   "Best Performance Moderator — September (Gear Inc)",
   "Best Performance Moderator — February 2026 (Gear Inc)",
@@ -439,6 +441,7 @@ export const navItems = [
   { id: "certifications", label: "Certifications" },
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
+  { id: "creative", label: "Creative" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -448,4 +451,284 @@ export const projectCategories = [
   "AI & Machine Learning",
   "Data & Visualization",
   "IoT & Engineering",
+];
+
+// ─── Video Types ────────────────────────────────────────
+export type VideoItem = {
+  title: string;
+  description: string;
+  category: string;
+  tags: string[];
+  thumbnail?: string | null;
+  videoUrl: string;
+  duration?: string;
+  year?: string;
+  featured?: boolean;
+  award?: string;
+  awards?: { label: string; icon?: string }[];
+  role?: string;
+  platform?: string;
+  galleryImages?: string[];
+};
+
+// ─── Videos ─────────────────────────────────────────────
+export const videos: VideoItem[] = [
+  {
+    title: "Di Balik Kemudi",
+    description:
+      "Award-winning short film that received multiple prestigious festival recognitions. Worked as Editor — handling full editing, color grading, and audio design from start to finish. Available on Bioskop Online.",
+    category: "Cinematic",
+    tags: [
+      "Short Film",
+      "Color Grading",
+      "Audio Design",
+      "Premiere Pro",
+      "After Effects",
+    ],
+    thumbnail: null,
+    videoUrl: "https://youtu.be/T9x1gljnHE4",
+    duration: "0:00",
+    year: "2021",
+    featured: true,
+    role: "Editor",
+    platform: "Short-Film",
+    award: "🏆 1st Place — Driyakarya Film Festival 2021",
+    awards: [
+      { label: "1st Place — Driyakarya Film Festival 2021", icon: "🏆" },
+      { label: "Official Selection — Lampung Film Festival 2022", icon: "🎖️" },
+      { label: "Featured Film — Jelajah Sinema Indonesia 2023", icon: "⭐" },
+      { label: "Short-Film", icon: "🎬" },
+    ],
+    galleryImages: [
+      "/images/videos/dibalik-kemudi-1.png",
+      "/images/videos/dibalik-kemudi-2.png",
+      "/images/videos/dibalik-kemudi-3.png",
+    ],
+  },
+  {
+    title:
+      "Knowledge Discovery Ep. 1 - Disruptive Innovation: a chance or a challenge?",
+    description:
+      "Podcast video for Knowledge Discovery Episode 1 at Airlangga Executive Education Center. Discussing Disruptive Innovation — opportunity or challenge? Handled editing, color grading, and audio design.",
+    category: "Corporate",
+    tags: [
+      "Podcast",
+      "Video Editing",
+      "Color Grading",
+      "Corporate",
+      "Premiere Pro",
+    ],
+    thumbnail: null,
+    videoUrl: "https://www.youtube.com/watch?v=VgtTa_HbKM4&t=67s",
+    duration: "0:00",
+    year: "2022",
+    featured: false,
+  },
+  {
+    title: "Knowledge Discovery Ep. 2 - Penerapan BLUD Puskesmas",
+    description:
+      "Podcast video for Knowledge Discovery Episode 2 at Airlangga Executive Education Center. Discussing the Implementation of BLUD Puskesmas. Curated by Dr. Zaenal Fanani SE., MSA., Ak., CA., ACPA. from Universitas Airlangga. Handled editing, color grading, and audio design.",
+    category: "Corporate",
+    tags: [
+      "Podcast",
+      "Video Editing",
+      "Color Grading",
+      "Corporate",
+      "Premiere Pro",
+    ],
+    thumbnail: null,
+    videoUrl: "https://www.youtube.com/watch?v=LDzg5sSzWmY&t=125s",
+    duration: "0:00",
+    year: "2022",
+    featured: false,
+  },
+  {
+    title: "MEI HIGHLIGHT — AEEC Unair",
+    description:
+      "Monthly highlight video for May at Airlangga Executive Education Center (AEEC) Universitas Airlangga. Included video editing, color grading, and audio design for social media content.",
+    category: "Short-form",
+    tags: ["Reels", "Highlight", "Social Media", "AEEC", "Premiere Pro"],
+    thumbnail: "/thumbnail mei highlight.jpg",
+    videoUrl: "https://www.instagram.com/reel/CePz6XnpyqP/",
+    duration: "0:00",
+    year: "2022",
+    featured: false,
+    platform: "Instagram Reels",
+  },
+  {
+    title: "AI Generated Content (Beam and Bare) — Dygtal",
+    description:
+      "AI-generated visual content for Beam and Bare brand campaign at Dygtal Marketing Solutions. Produced using generative AI platforms combined with Adobe Premiere Pro and After Effects.",
+    category: "AI Creative",
+    tags: [
+      "AI Video",
+      "Generative AI",
+      "After Effects",
+      "Brand Campaign",
+      "Dygtal",
+    ],
+    thumbnail: "/thumbnail beam and bare.png",
+    videoUrl: "https://www.youtube.com/watch?v=8-jxbGppTRU",
+    duration: "0:00",
+    year: "2026",
+    featured: false,
+  },
+  {
+    title: "Gusto AI Transition Creation — Dygtal",
+    description:
+      "AI-generated transition video content created for Gusto brand at Dygtal Marketing Solutions. Produced using generative AI platforms combined with Adobe Premiere Pro and After Effects.",
+    category: "AI Creative",
+    tags: [
+      "AI Video",
+      "Generative AI",
+      "Transitions",
+      "Brand Campaign",
+      "Dygtal",
+    ],
+    thumbnail: null,
+    videoUrl: "https://www.youtube.com/watch?v=rRYL0Bo-c48",
+    duration: "0:00",
+    year: "2026",
+    featured: false,
+  },
+  {
+    title: "The Cube and The Wing by Bonum Living Villas — Dygtal",
+    description:
+      "The Cube and The Wing by Bonum Living Villas bring together quiet architecture, open space, and the slower rhythm of Ubud. AI-generated visual content produced at Dygtal Marketing Solutions.",
+    category: "AI Creative",
+    tags: [
+      "AI Video",
+      "Generative AI",
+      "Real Estate",
+      "Brand Campaign",
+      "Dygtal",
+    ],
+    thumbnail: "/thumbnail bonum.png",
+    videoUrl: "https://www.instagram.com/p/DYOWvX5xnYD/",
+    duration: "0:00",
+    year: "2026",
+    featured: false,
+    platform: "Instagram",
+  },
+  {
+    title: "The Wing Villa by Bonum Living Villas — Dygtal",
+    description:
+      "The Wing Villa by Bonum Living Villas feels intimate in a way that's hard to explain, soft mornings, quiet corners, and a space that naturally slows everything down. A different side of staying in Ubud. AI-generated visual content produced at Dygtal Marketing Solutions.",
+    category: "AI Creative",
+    tags: [
+      "AI Video",
+      "Generative AI",
+      "Real Estate",
+      "Brand Campaign",
+      "Dygtal",
+    ],
+    thumbnail: "/thumbnail bonum 2.png",
+    videoUrl: "https://www.instagram.com/p/DYYV2yGDbDb/",
+    duration: "0:00",
+    year: "2026",
+    featured: false,
+    platform: "Instagram",
+  },
+  {
+    title: "Island Of Durian — AI Creation",
+    description:
+      "AI-generated visual content for Island Of Durian. Produced using generative AI platforms combined with Adobe Premiere Pro and After Effects at Dygtal Marketing Solutions.",
+    category: "AI Creative",
+    tags: [
+      "AI Video",
+      "Generative AI",
+      "After Effects",
+      "Brand Campaign",
+      "Dygtal",
+    ],
+    thumbnail: null,
+    videoUrl: "https://youtu.be/PbU7NeCXZJA",
+    duration: "0:00",
+    year: "2026",
+    featured: false,
+  },
+  {
+    title: "Finance and Accounting 101 - Eps. 5: Perencanaan dan Pengendalian",
+    description:
+      "Planning is the process of designing goals and determining the best way to achieve them. The goal is to identify specific outcomes that individuals or organizations want to achieve. Educational content for Airlangga Executive Education Center.",
+    category: "Corporate",
+    tags: ["Reels", "Video Editing", "Corporate", "Education", "AEEC"],
+    thumbnail: "/thumbnail finance and accounting.jpg",
+    videoUrl: "https://www.instagram.com/airlangga_executive_edu/reel/CbeIrf1J_q6/",
+    duration: "0:00",
+    year: "2022",
+    featured: false,
+    platform: "Instagram Reels",
+  },
+  {
+    title: "Finance and Accounting 101 - Eps. 6: Valuasi",
+    description:
+      "Valuation is the process of estimating the economic value of an asset or company. Educational content for Airlangga Executive Education Center.",
+    category: "Corporate",
+    tags: ["Reels", "Video Editing", "Corporate", "Education", "AEEC"],
+    thumbnail: "/thumbnail valuation.jpg",
+    videoUrl: "https://www.instagram.com/reel/CbhY0CspEgu/",
+    duration: "0:00",
+    year: "2022",
+    featured: false,
+    platform: "Instagram Reels",
+  },
+  {
+    title: "Export Import & Kepabeanan 101 - Ep. 1: Kepabeanan",
+    description:
+      "Educational content on Export Import & Customs (Kepabeanan) Episode 1 for Airlangga Executive Education Center. Handled video editing, color grading, and audio design for social media content.",
+    category: "Corporate",
+    tags: ["Reels", "Video Editing", "Corporate", "Education", "AEEC"],
+    thumbnail: "/thumbnail keapabeanan.jpg",
+    videoUrl: "https://www.instagram.com/p/CcSOWpbjrv0/",
+    duration: "0:00",
+    year: "2022",
+    featured: false,
+    platform: "Instagram Reels",
+  },
+  {
+    title: "Export Import 101 - Episode 2: International Payment Method",
+    description:
+      "Educational content on Export Import Episode 2 — International Payment Methods. Produced for Airlangga Executive Education Center. Handled video editing, color grading, and audio design.",
+    category: "Corporate",
+    tags: ["Podcast", "Video Editing", "Corporate", "Education", "AEEC"],
+    thumbnail: null,
+    videoUrl: "https://www.youtube.com/watch?v=I0DyaNrsrw8",
+    duration: "0:00",
+    year: "2022",
+    featured: false,
+  },
+  {
+    title: "Export Import 101 - Episode 3: Persiapan Opening Letter of Credit",
+    description:
+      "Educational content on Export Import Episode 3 — Preparation of Opening Letter of Credit. Produced for Airlangga Executive Education Center. Handled video editing, color grading, and audio design.",
+    category: "Corporate",
+    tags: ["Podcast", "Video Editing", "Corporate", "Education", "AEEC"],
+    thumbnail: null,
+    videoUrl: "https://www.youtube.com/watch?v=I0DyaNrsrw8",
+    duration: "0:00",
+    year: "2022",
+    featured: false,
+  },
+  {
+    title: "Podcast Video Production — AEEC",
+    description:
+      "Directing and editing video podcast for Airlangga Executive Education Center. Includes multi-cam setup, audio mixing, and full post-production.",
+    category: "Corporate",
+    tags: ["Podcast", "Multi-cam", "Audio Mixing", "Directing", "AEEC"],
+    thumbnail: null,
+    videoUrl: "https://www.youtube.com/watch?v=Mqol31CDHHI&t=140s",
+    duration: "0:00",
+    year: "2022",
+    featured: false,
+  },
+];
+
+// ─── Video Categories ──────────────────────────────────
+export const videoCategories = [
+  "All",
+  "Cinematic",
+  "Short-form",
+  "Corporate",
+  "AI Creative",
 ];
