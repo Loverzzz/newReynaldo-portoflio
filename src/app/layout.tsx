@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Reynaldo Arya | Data Scientist & ML Engineer",
+  title: "Reynaldo Arya | AI VIDEO CREATOR @dygtalmarketing",
   description:
     "Portfolio of Reynaldo Arya Budi Trisna — Content Moderator, Robotics & AI Graduate, AI/ML & Data Enthusiast. Explore projects, skills, and experience.",
   keywords: [
