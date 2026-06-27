@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     icon: "/favicon.svg",
   },
   openGraph: {
-    title: "Reynaldo Arya | Data Scientist & ML Engineer",
+    title: "Reynaldo Arya | AI VIDEO CREATOR @dygtalmarketing",
     description:
       "Portfolio of Reynaldo — Content Moderator, Robotics & AI Graduate, AI/ML & Data Enthusiast.",
     type: "website",
