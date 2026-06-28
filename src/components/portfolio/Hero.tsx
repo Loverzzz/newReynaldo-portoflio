@@ -282,7 +282,6 @@ export default function Hero() {
   });
 
   const yParallax = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
-  const opacityOut = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
   const scaleOut = useTransform(scrollYProgress, [0, 0.65], [1, 0.92]);
 
   const typed = useTypewriter(
@@ -307,7 +306,7 @@ export default function Hero() {
     >
       {/* ── Deep 3D Background ─────────────────────────── */}
       <motion.div
-        style={{ y: yParallax, opacity: opacityOut }}
+        style={{ y: yParallax }}
         className="absolute inset-0 pointer-events-none will-change-transform"
       >
         {/* Radial glow */}
@@ -374,7 +373,7 @@ export default function Hero() {
 
       {/* ── Main Content ───────────────────────────────── */}
       <motion.div
-        style={{ scale: scaleOut, opacity: opacityOut }}
+        style={{ scale: scaleOut }}
         className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full"
       >
         {/* ── HERO LAYOUT: Stacked with photo centered ── */}
