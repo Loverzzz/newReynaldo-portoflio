@@ -86,57 +86,53 @@ export default function Navbar() {
           {/* Brand */}
           <motion.button
             onClick={() => handleScrollTo('about')}
-            className="flex items-center gap-2 text-lg font-black text-foreground hover:opacity-80 transition-opacity group"
+            className="flex items-center gap-2.5 text-lg font-black text-foreground hover:opacity-85 transition-opacity group cursor-pointer"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 400, damping: 20 }}
           >
-            <motion.span
-              className="relative"
-              animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-            >
-              <span className="gradient-text-animated">Reynaldo</span>
+            <motion.span className="relative">
+              <span className="gradient-text-animated font-display tracking-tight">Reynaldo</span>
             </motion.span>
             <motion.div
-              className="w-2 h-2 rounded-full bg-brand"
-              animate={{ scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-1.5 h-1.5 rounded-full bg-brand particle-glow"
+              animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
             />
           </motion.button>
 
           {/* Desktop Navigation */}
-          <ul className="hidden md:flex items-center gap-1">
+          <ul className="hidden md:flex items-center gap-0.5">
             {navItems.map((item, idx) => {
               const isActive = activeSection === item.id;
               return (
                 <motion.li
                   key={item.id}
-                  initial={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0, y: -16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.06 + 0.2, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ delay: idx * 0.06 + 0.2, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <button
                     onClick={() => handleScrollTo(item.id)}
-                    className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
+                    className={`relative px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-250 cursor-pointer ${
                       isActive
                         ? 'text-foreground'
                         : 'text-muted-foreground hover:text-foreground hover:bg-brand/5'
                     }`}
                   >
-                    {item.label}
-                    {isActive && (
-                      <motion.span
-                        layoutId="navbar-active"
-                        className="absolute bottom-1 left-4 right-4 h-0.5 bg-gradient-to-r from-brand to-brand/60 rounded-full"
-                        transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-                      />
-                    )}
                     {isActive && (
                       <motion.span
                         layoutId="navbar-bg"
                         className="absolute inset-0 rounded-lg bg-brand/8"
-                        transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{item.label}</span>
+                    {isActive && (
+                      <motion.span
+                        layoutId="navbar-active"
+                        className="absolute bottom-1 left-3.5 right-3.5 h-[1.5px] bg-gradient-to-r from-brand/60 via-brand to-brand/60 rounded-full"
+                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                       />
                     )}
                   </button>
@@ -146,21 +142,21 @@ export default function Navbar() {
           </ul>
 
           {/* Right: Theme toggle + Mobile menu */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             {mounted && (
-              <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.94 }}>
+              <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.93 }}>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                   aria-label="Toggle theme"
-                  className="rounded-full hover:bg-brand/10 hover:text-brand transition-colors duration-300"
+                  className="rounded-full w-9 h-9 hover:bg-brand/10 hover:text-brand transition-colors duration-200 cursor-pointer"
                 >
                   <motion.div
                     key={theme}
-                    initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                    initial={{ rotate: -90, opacity: 0, scale: 0.4 }}
                     animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   >
                     {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
                   </motion.div>
@@ -174,46 +170,50 @@ export default function Navbar() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="md:hidden rounded-full hover:bg-brand/10"
+                  className="md:hidden rounded-full w-9 h-9 hover:bg-brand/10 cursor-pointer"
                   aria-label="Open menu"
                 >
-                  <Menu className="size-5" />
+                  <Menu className="size-4.5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-72 pt-12 bg-background/95 backdrop-blur-xl">
+              <SheetContent side="right" className="w-72 pt-10 bg-background/96 backdrop-blur-2xl border-l border-border/40">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 {/* Brand in mobile sheet */}
-                <div className="flex items-center gap-2 mb-8 px-4">
-                  <span className="text-lg font-black gradient-text">Reynaldo</span>
-                  <div className="w-2 h-2 rounded-full bg-brand animate-pulse" />
+                <div className="flex items-center gap-2.5 mb-8 px-4">
+                  <span className="text-xl font-black gradient-text font-display tracking-tight">Reynaldo</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-brand particle-glow" />
                 </div>
-                <div className="section-divider mb-6" />
+                <div className="section-divider mb-5 mx-4" />
                 <nav className="flex flex-col gap-1 px-2">
                   {navItems.map((item, idx) => {
                     const isActive = activeSection === item.id;
                     return (
                       <SheetClose asChild key={item.id}>
                         <motion.button
-                          initial={{ opacity: 0, x: 20 }}
+                          initial={{ opacity: 0, x: 18 }}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.05 }}
+                          transition={{ delay: idx * 0.045, ease: [0.22, 1, 0.36, 1] }}
                           onClick={() => handleScrollTo(item.id)}
-                          className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                          className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
                             isActive
-                              ? 'bg-brand/12 text-foreground border border-brand/20'
-                              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                              ? 'bg-brand/10 text-foreground border border-brand/20'
+                              : 'text-muted-foreground hover:text-foreground hover:bg-brand/5'
                           }`}
                         >
+                          <motion.span
+                            className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-200 ${isActive ? 'bg-brand particle-glow' : 'bg-muted-foreground/30'}`}
+                            animate={isActive ? { scale: [1, 1.3, 1] } : {}}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          />
+                          <span className="font-body">{item.label}</span>
                           {isActive && (
-                            <motion.span
-                              layoutId="mobile-active"
-                              className="w-2 h-2 rounded-full bg-brand shrink-0"
-                            />
-                          )}
-                          {!isActive && <span className="w-2 h-2 shrink-0" />}
-                          {item.label}
-                          {isActive && (
-                            <Sparkles className="size-3 text-brand ml-auto" />
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.5 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              className="ml-auto"
+                            >
+                              <Sparkles className="size-3 text-brand" />
+                            </motion.div>
                           )}
                         </motion.button>
                       </SheetClose>

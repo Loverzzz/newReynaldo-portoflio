@@ -61,38 +61,40 @@ export default function Contact() {
     >
       {/* ── Top: Email Hero Card ── */}
       <motion.div variants={fadeUp}>
-        <div className="relative overflow-hidden rounded-3xl border border-brand/30 bg-gradient-to-br from-brand/8 via-card/60 to-brand/5 backdrop-blur-xl p-8 shadow-xl shadow-brand/10">
-          {/* Background glow */}
+        <div className="relative overflow-hidden rounded-3xl border border-brand/25 bg-gradient-to-br from-brand/8 via-card/65 to-brand/4 backdrop-blur-xl p-8 shadow-xl shadow-brand/8">
+          {/* Inset top highlight */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand/40 to-transparent pointer-events-none" />
+          {/* Background glow orbs */}
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-brand/10 blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-brand/8 blur-2xl translate-y-1/2 -translate-x-1/4" />
+            <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-brand/8 blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-52 h-52 rounded-full bg-brand/6 blur-2xl translate-y-1/2 -translate-x-1/4" />
           </div>
 
           <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               {/* Big mail icon */}
               <motion.div
-                className="p-4 rounded-2xl bg-brand/15 border border-brand/30 shadow-lg shadow-brand/20"
-                whileHover={{ scale: 1.08, rotate: -6 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+                className="p-4 rounded-2xl bg-brand/12 border border-brand/25 shadow-lg shadow-brand/15"
+                whileHover={{ scale: 1.1, rotate: -8 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 18 }}
               >
                 <Mail className="size-7 text-brand" />
               </motion.div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Primary Email</p>
-                <p className="text-lg font-bold text-foreground break-all">{profile.email}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Click to open email client or copy below</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground mb-1">Primary Email</p>
+                <p className="text-lg font-bold text-foreground break-all tracking-tight">{profile.email}</p>
+                <p className="text-xs text-muted-foreground/80 mt-0.5">Click to open email client or copy below</p>
               </div>
             </div>
 
             {/* Action buttons */}
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-2.5 shrink-0">
               <motion.button
                 onClick={handleCopy}
-                whileHover={{ scale: 1.06, y: -1 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border/70 bg-card/80 backdrop-blur-sm
-                           hover:border-brand/50 hover:bg-brand/8 transition-all duration-300 text-sm font-semibold"
+                whileHover={{ scale: 1.06, y: -2 }}
+                whileTap={{ scale: 0.94 }}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border/60 bg-card/80 backdrop-blur-sm
+                           hover:border-brand/45 hover:bg-brand/6 transition-all duration-300 text-sm font-semibold"
               >
                 <AnimatePresence mode="wait" initial={false}>
                   {copied ? (

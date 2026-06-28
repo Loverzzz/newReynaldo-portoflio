@@ -58,94 +58,98 @@ export default function SectionWrapper({
     >
       {/* ── 3D depth background ─────────────────────── */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Subtle radial glow center */}
+        {/* Radial brand glow — layer 1 */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 70% 50% at 50% 60%, oklch(0.65 0.17 160 / 0.04) 0%, transparent 70%)',
+              'radial-gradient(ellipse 80% 55% at 50% 55%, oklch(0.65 0.17 160 / 0.045) 0%, transparent 68%)',
           }}
         />
-        {/* Grid lines — very subtle so the particle field is the visual focus */}
+        {/* Grid lines — visual depth layer 2 */}
         <div
-          className="absolute inset-0 opacity-[0.012]"
+          className="absolute inset-0 opacity-[0.015]"
           style={{
             backgroundImage: `linear-gradient(oklch(0.65 0.17 160) 1px, transparent 1px),
                               linear-gradient(90deg, oklch(0.65 0.17 160) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px',
+            backgroundSize: '64px 64px',
+          }}
+        />
+        {/* Dot field — visual depth layer 3 */}
+        <div
+          className="absolute inset-0 opacity-[0.018]"
+          style={{
+            backgroundImage: 'radial-gradient(oklch(0.65 0.17 160) 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+            backgroundPosition: '16px 16px',
           }}
         />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
         {/* ── Section Header ────────────────────────── */}
-        <div className="mb-16 text-center">
-          {/* Eyebrow with animated lines */}
+        <div className="mb-16 md:mb-20 text-center">
+
+          {/* Eyebrow pill */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={headerInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.05 }}
-            className="flex items-center justify-center gap-4 mb-5"
+            transition={{ duration: 0.45, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-center justify-center gap-3 mb-5"
           >
             <motion.div
-              initial={{ width: 0, opacity: 0 }}
-              animate={headerInView ? { width: 48, opacity: 1 } : {}}
-              transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="h-px bg-gradient-to-r from-transparent to-brand"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={headerInView ? { scaleX: 1, opacity: 1 } : {}}
+              transition={{ duration: 0.55, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              style={{ originX: 1 }}
+              className="h-px w-12 bg-gradient-to-r from-transparent to-brand/70"
             />
-            <motion.span
-              initial={{ opacity: 0, letterSpacing: '0.05em' }}
-              animate={headerInView ? { opacity: 1, letterSpacing: '0.15em' } : {}}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-xs font-bold uppercase tracking-widest text-brand"
-            >
+            <span className="eyebrow-pill">
               {eyebrow}
-            </motion.span>
+            </span>
             <motion.div
-              initial={{ width: 0, opacity: 0 }}
-              animate={headerInView ? { width: 48, opacity: 1 } : {}}
-              transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="h-px bg-gradient-to-l from-transparent to-brand"
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={headerInView ? { scaleX: 1, opacity: 1 } : {}}
+              transition={{ duration: 0.55, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              style={{ originX: 0 }}
+              className="h-px w-12 bg-gradient-to-l from-transparent to-brand/70"
             />
           </motion.div>
 
-          {/* Title with letter animation */}
+          {/* Title — Archivo display typeface */}
           <AnimatedTitle text={title} />
 
-          {/* Subtitle with fade */}
+          {/* Subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={headerInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="mx-auto mt-4 max-w-2xl text-muted-foreground text-base sm:text-lg leading-relaxed"
+            transition={{ duration: 0.5, delay: 0.33, ease: [0.22, 1, 0.36, 1] }}
+            className="mx-auto mt-5 max-w-2xl text-muted-foreground text-base sm:text-lg leading-relaxed font-body"
           >
             {subtitle}
           </motion.p>
 
-          {/* Decorative dot separator */}
+          {/* Section divider */}
           <motion.div
             initial={{ opacity: 0, scaleX: 0 }}
             animate={headerInView ? { opacity: 1, scaleX: 1 } : {}}
-            transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 section-divider"
+            transition={{ duration: 0.65, delay: 0.43, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-7 section-divider"
           />
         </div>
 
-        {/* ── Section Content ─────────────────────────
-            NOTE: Children (Skills/Certs/Projects/etc.) already animate
-            themselves via whileInView. Wrapping them in another y/opacity
-            transform causes a janky "double animation" — so we just fade. */}
+        {/* Content */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={headerInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          transition={{ duration: 0.38, delay: 0.08 }}
         >
           {children}
         </motion.div>
       </div>
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none bg-gradient-to-t from-background to-transparent" />
     </section>
   );
 }

@@ -30,7 +30,7 @@ const skillCategories: Record<string, { icon: typeof Code2; color: string; glow:
 
 /* 3D tilt card component */
 function SkillCard({ skill, index }: { skill: string; index: number }) {
-  const tilt = useTilt({ strength: 8, stiffness: 300, damping: 30 });
+  const tilt = useTilt({ strength: 9, stiffness: 280, damping: 28 });
 
   const category = skillCategories[skill] ?? { icon: Sparkles, color: 'from-brand to-brand-muted', glow: '100,200,150' };
   const Icon = category.icon;
@@ -41,44 +41,50 @@ function SkillCard({ skill, index }: { skill: string; index: number }) {
       onMouseMove={tilt.handleMouse}
       onMouseLeave={tilt.handleLeave}
       style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformStyle: 'preserve-3d' }}
-      initial={{ opacity: 0, y: 20, scale: 0.9 }}
+      initial={{ opacity: 0, y: 22, scale: 0.88 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.35, delay: index * 0.015, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, margin: '-36px' }}
+      transition={{ duration: 0.38, delay: index * 0.018, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -3 }}
       className="relative group will-change-transform cursor-default"
     >
-      {/* Glow behind card on hover */}
+      {/* Glow halo behind card */}
       <div
-        className="absolute -inset-1 rounded-xl opacity-0 group-hover:opacity-60 blur-md transition-opacity duration-500 pointer-events-none"
-        style={{ background: `radial-gradient(circle, rgba(${category.glow},0.4) 0%, transparent 70%)` }}
+        className="absolute -inset-1.5 rounded-2xl opacity-0 group-hover:opacity-70 blur-lg transition-all duration-400 pointer-events-none"
+        style={{ background: `radial-gradient(circle, rgba(${category.glow},0.35) 0%, transparent 70%)` }}
       />
 
       <motion.div
-        className="relative px-3.5 py-2.5 rounded-xl border border-border bg-card backdrop-blur-sm
-                   hover:border-brand/60 hover:bg-card/95 transition-all duration-300
-                   shadow-sm hover:shadow-lg dark:border-border/50 dark:bg-card/70"
+        className="relative px-4 py-3 rounded-xl border border-border/70 bg-card/90 backdrop-blur-sm
+                   hover:border-brand/50 hover:bg-card transition-all duration-300
+                   shadow-sm hover:shadow-md dark:border-border/40 dark:bg-card/75"
         style={{ transformStyle: 'preserve-3d' }}
       >
-        <div className="flex items-center gap-2.5">
-          {/* Icon with gradient bg */}
-          <div
+        {/* Inset top highlight — depth layer */}
+        <div className="absolute inset-x-0 top-0 h-px rounded-t-xl bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+
+        <div className="flex items-center gap-3">
+          {/* Icon badge */}
+          <motion.div
             className={`p-1.5 rounded-lg bg-gradient-to-br ${category.color} shadow-sm shrink-0`}
-            style={{ transform: 'translateZ(6px)' }}
+            style={{ transform: 'translateZ(7px)' }}
+            whileHover={{ rotate: [0, -8, 8, 0], scale: 1.12 }}
+            transition={{ duration: 0.38, type: 'tween' }}
           >
             <Icon className="size-3.5 text-white" />
-          </div>
+          </motion.div>
 
           {/* Skill name */}
           <span
-            className="text-sm font-semibold text-foreground group-hover:text-brand transition-colors duration-300 leading-tight"
+            className="text-sm font-semibold text-foreground group-hover:text-brand transition-colors duration-250 leading-tight tracking-tight"
             style={{ transform: 'translateZ(4px)' }}
           >
             {skill}
           </span>
         </div>
 
-        {/* Bottom shimmer line on hover */}
-        <div className="absolute bottom-0 left-0 right-0 h-px rounded-b-xl overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        {/* Bottom shimmer reveal */}
+        <div className="absolute bottom-0 left-3 right-3 h-px rounded-full overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-400">
           <div className="shimmer h-full" />
         </div>
       </motion.div>

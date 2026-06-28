@@ -281,17 +281,18 @@ export default function Certifications({ items }: CertificationsProps) {
       {/* Show more / less */}
       {hiddenCount > 0 && (
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
           className="flex justify-center pt-4"
         >
-          <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
+          <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.95 }}>
             <Button
               variant="outline"
               size="sm"
               onClick={() => setExpanded(!expanded)}
-              className="gap-2 border-brand/30 text-brand hover:bg-brand/5 hover:border-brand/60 font-semibold text-sm transition-all duration-300"
+              className="gap-2 border-brand/30 text-brand hover:bg-brand/8 hover:border-brand/55 font-bold text-sm transition-all duration-300 rounded-xl px-5"
             >
               {expanded ? (
                 <>
