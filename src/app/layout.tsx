@@ -14,30 +14,30 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Reynaldo Arya | AI VIDEO CREATOR @dygtalmarketing",
-  description:
-    "Portfolio of Reynaldo Arya Budi Trisna — Content Moderator, Robotics & AI Graduate, AI/ML & Data Enthusiast. Explore projects, skills, and experience.",
-  keywords: [
-    "Reynaldo",
-    "Data Scientist",
-    "ML Engineer",
-    "Portfolio",
-    "AI",
-    "Machine Learning",
-    "IoT",
-  ],
-  authors: [{ name: "Reynaldo Arya Budi Trisna" }],
-  icons: {
-    icon: "/favicon.svg",
-  },
-  openGraph: {
+  export const metadata: Metadata = {
     title: "Reynaldo Arya | AI VIDEO CREATOR @dygtalmarketing",
     description:
-      "Portfolio of Reynaldo — Content Moderator, Robotics & AI Graduate, AI/ML & Data Enthusiast.",
-    type: "website",
-  },
-};
+      "Portfolio of Reynaldo Arya Budi Trisna — Content Moderator, Robotics & AI Graduate, AI/ML & Data Enthusiast. Explore projects, skills, and experience.",
+    keywords: [
+      "Reynaldo",
+      "Data Scientist",
+      "ML Engineer",
+      "Portfolio",
+      "AI",
+      "Machine Learning",
+      "IoT",
+    ],
+    authors: [{ name: "Reynaldo Arya Budi Trisna" }],
+    icons: {
+      icon: "/favicon.svg",
+    },
+    openGraph: {
+      title: "Reynaldo Arya | AI VIDEO CREATOR @dygtalmarketing",
+      description:
+        "Portfolio of Reynaldo — Content Moderator, Robotics & AI Graduate, AI/ML & Data Enthusiast.",
+      type: "website",
+    },
+  };
 
 export default function RootLayout({
   children,
