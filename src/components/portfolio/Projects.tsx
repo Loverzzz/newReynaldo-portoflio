@@ -159,7 +159,7 @@ export default function Projects({ items }: ProjectsProps) {
     ? items
     : items.filter((p) => p.category === activeCategory);
 
-  const categories = ['All', ...projectCategories];
+  const categories = projectCategories;
 
   return (
     <div className="space-y-10">
