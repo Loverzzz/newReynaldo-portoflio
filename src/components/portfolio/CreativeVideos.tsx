@@ -831,8 +831,7 @@ export default function CreativeVideos({ items }: CreativeVideosProps) {
             </span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Karya kreatif — dari short film pemenang festival hingga
-            AI-generated content. Setiap frame adalah cerita.
+            Creative works — from award-winning short films at film festivals to AI-generated content. Every frame is a story.
           </p>
         </motion.div>
 
