@@ -497,7 +497,7 @@ export const videos: VideoItem[] = [
       { label: "1st Place — Driyakarya Film Festival 2021", icon: "🏆" },
       { label: "Official Selection — Lampung Film Festival 2022", icon: "🎖️" },
       { label: "Featured Film — Jelajah Sinema Indonesia 2023", icon: "⭐" },
-      { label: "Short-Film", icon: "🎬" },
+      { label: "Bioskop Online", icon: "🎬" },
     ],
     galleryImages: [
       "/images/videos/dibalik-kemudi-1.png",
