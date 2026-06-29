@@ -778,12 +778,12 @@ export default function CreativeVideos({ items }: CreativeVideosProps) {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
 
+  const featuredVideo = items.find((v) => v.featured) ?? items[0];
+
   const filtered =
     activeCategory === "All"
-      ? items
-      : items.filter((v) => v.category === activeCategory);
-
-  const featuredVideo = items.find((v) => v.featured) ?? items[0];
+      ? items.filter((v) => v !== featuredVideo)
+      : items.filter((v) => v.category === activeCategory && v !== featuredVideo);
 
   const handleOpen = useCallback((video: VideoItem) => {
     setSelectedVideo(video);
