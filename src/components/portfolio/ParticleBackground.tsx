@@ -13,8 +13,12 @@ interface Particle {
   z: number; // depth for 3D effect
 }
 
-const ALPHA_BUCKETS = 6;
-const MAX_LINE_ALPHA = 0.35;
+const ALPHA_BUCKETS = 4; // Reduced from 6 for performance
+const MAX_LINE_ALPHA = 0.25; // Reduced from 0.35 for performance
+const MAX_PARTICLES = 200; // Reduced from 380
+const MIN_PARTICLES = 80; // Reduced from 150
+const CONNECTION_DISTANCE = 120; // Reduced from 155
+const CONNECTION_DISTANCE_SQ = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
 
 export default function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -25,6 +29,7 @@ export default function ParticleBackground() {
   const lastTimeRef = useRef(0);
   const scrollYRef = useRef(0);
   const scrollVelRef = useRef(0);
+  const frameCountRef = useRef(0); // For frame skipping
 
   // Refs for values that change WITHOUT re-creating the animation loop.
   // This is the KEY fix: theme changes update a ref, not state, so the
@@ -40,21 +45,22 @@ export default function ParticleBackground() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false }); // alpha: false for performance
     if (!ctx) return;
 
     const initParticles = (width: number, height: number) => {
-      const particleCount = Math.min(380, Math.max(150, Math.floor((width * height) / 6500)));
+      // Reduced particle count for better performance
+      const particleCount = Math.min(MAX_PARTICLES, Math.max(MIN_PARTICLES, Math.floor((width * height) / 10000)));
       const particles: Particle[] = [];
       for (let i = 0; i < particleCount; i++) {
         const z = Math.random();
         particles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.9 * (0.4 + z * 0.8),
-          vy: (Math.random() - 0.5) * 0.9 * (0.4 + z * 0.8),
-          size: 1.0 + z * 3.0,
-          opacity: 0.25 + z * 0.55,
+          vx: (Math.random() - 0.5) * 0.7 * (0.4 + z * 0.6), // Reduced velocity
+          vy: (Math.random() - 0.5) * 0.7 * (0.4 + z * 0.6),
+          size: 0.8 + z * 2.5, // Smaller particles
+          opacity: 0.2 + z * 0.4,
           z,
         });
       }

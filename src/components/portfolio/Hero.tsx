@@ -26,26 +26,26 @@ const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.2 },
+    transition: { staggerChildren: 0.06, delayChildren: 0.15 },
   },
 };
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
 const scaleIn = {
-  hidden: { opacity: 0, scale: 0.8, rotateY: -15 },
+  hidden: { opacity: 0, scale: 0.85, rotateY: -10 },
   show: {
     opacity: 1,
     scale: 1,
     rotateY: 0,
-    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -387,16 +387,9 @@ export default function Hero() {
           >
             {/* Badge */}
             <motion.div variants={fadeUp} className="flex items-center gap-2">
-              <motion.div
-                animate={{ rotate: [0, 20, -20, 0] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
+              <div className="animate-sparkle-rotate" style={{ animationDuration: '3s' }}>
                 <Sparkles className="size-4 text-brand" />
-              </motion.div>
+              </div>
               <Badge
                 variant="outline"
                 className="px-4 py-1.5 text-xs font-bold tracking-widest uppercase border-brand/40 text-brand animated-border"
@@ -461,7 +454,7 @@ export default function Hero() {
                   >
                     {/* Base BW image — full body, no circle clip */}
                     <img
-                      src="/images/profile.jpg"
+                      src="/images/profile.avif"
                       alt={profile.name}
                       className="w-full h-full object-cover photo-bw"
                       style={{
@@ -473,7 +466,7 @@ export default function Hero() {
                     {/* Hidden color source image — drawn onto the canvas during paint */}
                     <img
                       ref={spotlight.colorImgRef}
-                      src="/images/profile.jpg"
+                      src="/images/profile.avif"
                       alt=""
                       aria-hidden="true"
                       crossOrigin="anonymous"
@@ -543,6 +536,8 @@ export default function Hero() {
                 </div>
 
                 {/* Floating icon badges — positioned around the card */}
+                {/* PERFORMANCE: Uses CSS animation for the gentle drift instead of
+                    framer-motion infinite loops (which block the JS thread). */}
                 {floatingIcons.map(({ Icon, delay, label }, idx) => {
                   const angles = [-30, 30, 150, 210];
                   const angle = (angles[idx] ?? 0) * (Math.PI / 180);
@@ -553,42 +548,27 @@ export default function Hero() {
                   return (
                     <motion.div
                       key={label}
-                      className="absolute will-change-transform"
+                      className="absolute"
                       style={{
-                        left: "50%",
-                        top: "50%",
+                        left: `calc(50% + ${cx - 22}px)`,
+                        top: `calc(50% + ${cy - 22}px)`,
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 5,
                       }}
-                      // Always visible — NO fade in/out. Only floating motion + entrance scale.
-                      initial={{ opacity: 1, scale: 0 }}
-                      animate={{
-                        opacity: 1,
-                        scale: 1,
-                        x: [cx - 22, cx - 18, cx - 22],
-                        y: [cy - 22, cy - 28, cy - 22],
-                      }}
+                      // Entrance: scale in once. No infinite JS animation.
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
                       transition={{
-                        opacity: { duration: 0 },
-                        scale: {
-                          duration: 0.6,
-                          ease: [0.22, 1, 0.36, 1],
-                          delay,
-                        },
-                        x: {
-                          duration: 8,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                          delay,
-                        },
-                        y: {
-                          duration: 8,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                          delay,
-                        },
+                        duration: 0.5,
+                        ease: [0.22, 1, 0.36, 1],
+                        delay,
                       }}
                       whileHover={{ scale: 1.3, zIndex: 10 }}
                     >
-                      <div className="p-2.5 rounded-xl bg-card/90 backdrop-blur-md border border-brand/30 shadow-lg shadow-brand/10 cursor-default">
+                      <div
+                        className="p-2.5 rounded-xl bg-card/90 backdrop-blur-md border border-brand/30 shadow-lg shadow-brand/10 cursor-default animate-float-icon"
+                        style={{ animationDelay: `${delay}s`, animationDuration: '6s' }}
+                      >
                         <Icon className="size-4 text-brand" />
                       </div>
                     </motion.div>
@@ -695,9 +675,9 @@ export default function Hero() {
                       size="sm"
                       className={`gap-2 relative overflow-hidden group ${
                         btn.primary
-                          ? "bg-brand hover:bg-brand/90 text-brand-foreground shadow-lg shadow-brand/25 glow-hover"
-                          : "border-border/60 hover:border-brand/60 hover:bg-brand/5"
-                      }`}
+                          ? "bg-gradient-to-r from-brand to-brand/80 hover:from-brand/90 hover:to-brand text-white shadow-[0_0_15px_rgba(var(--brand),0.3)] hover:shadow-[0_0_25px_rgba(var(--brand),0.5)] border-none"
+                          : "border-border/60 hover:border-brand/60 hover:bg-brand/5 shadow-sm hover:shadow-md"
+                      } transition-all duration-300`}
                       asChild
                     >
                       <a
@@ -706,10 +686,10 @@ export default function Hero() {
                         rel={btn.external ? "noopener noreferrer" : undefined}
                       >
                         {btn.primary && (
-                          <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <span className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
                         )}
                         <span className="relative z-10 flex items-center gap-2">
-                          <btn.icon className="size-4 transition-transform group-hover:scale-110 group-hover:rotate-6" />
+                          <btn.icon className={`size-4 transition-transform duration-300 ${btn.primary ? 'group-hover:scale-110 group-hover:-rotate-6' : 'group-hover:text-brand'}`} />
                           {btn.label}
                         </span>
                       </a>
@@ -739,14 +719,16 @@ export default function Hero() {
                       },
                     }}
                     className="rounded-2xl border border-border/60 bg-card/70 p-3 text-center backdrop-blur-sm
-                               hover:border-brand/40 hover:shadow-lg hover:shadow-brand/10
-                               transition-colors duration-300 cursor-default holographic"
+                               hover:border-brand/40 hover:shadow-lg hover:shadow-brand/10 hover:bg-brand/5
+                               transition-all duration-300 cursor-default holographic group relative overflow-hidden"
                     style={{ transformStyle: "preserve-3d" }}
                   >
-                    <p className="text-xl sm:text-2xl font-black gradient-text">
+                    {/* Shimmer on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
+                    <p className="text-xl sm:text-2xl font-black bg-gradient-to-br from-brand to-brand/70 bg-clip-text text-transparent">
                       {stat.value}
                     </p>
-                    <p className="mt-1 text-[10px] sm:text-xs text-muted-foreground leading-tight">
+                    <p className="mt-1 text-[10px] sm:text-xs text-foreground/80 leading-tight">
                       {stat.label}
                     </p>
                   </motion.div>
@@ -761,8 +743,10 @@ export default function Hero() {
                 y: -4,
                 transition: { type: "spring", stiffness: 250, damping: 20 },
               }}
-              className="glass rounded-2xl p-6 space-y-5 border border-border/40 shadow-xl shadow-brand/5 holographic"
+              className="glass rounded-2xl p-6 space-y-5 border border-border/40 shadow-xl shadow-brand/5 holographic relative overflow-hidden group/card"
             >
+               {/* Hover scanline effect */}
+               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-brand/5 to-transparent -translate-y-full group-hover/card:translate-y-full transition-transform duration-1000 ease-in-out pointer-events-none" />
               {/* Contact info */}
               <div className="space-y-3">
                 {[
@@ -788,7 +772,7 @@ export default function Hero() {
                     >
                       <item.icon className="size-4 text-brand" />
                     </motion.div>
-                    <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300 truncate">
+                    <span className="text-foreground/80 group-hover:text-foreground transition-colors duration-300 truncate">
                       {item.text}
                     </span>
                   </motion.div>
@@ -799,27 +783,31 @@ export default function Hero() {
               <div className="section-divider" />
 
               {/* Achievements */}
-              <div>
-                <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
-                  <Award className="size-3.5 text-brand" />
+              <div className="relative z-10">
+                <h4 className="text-xs font-bold uppercase tracking-widest text-foreground/80 mb-3 flex items-center gap-2">
+                  <span className="p-1 rounded-md bg-brand/10 border border-brand/20">
+                    <Award className="size-3.5 text-brand" />
+                  </span>
                   Achievements
                 </h4>
-                <ul className="space-y-2.5">
+                <ul className="space-y-3">
                   {achievements.map((achievement, idx) => (
                     <motion.li
                       key={idx}
                       initial={{ opacity: 0, x: -15 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 1.1 + idx * 0.1, duration: 0.5 }}
-                      className="flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed group"
+                      className="flex items-start gap-2.5 text-xs text-foreground/80 leading-relaxed group"
                     >
                       <motion.div
                         whileHover={{ rotate: 20, scale: 1.2 }}
                         transition={{ type: "spring", stiffness: 300 }}
+                        className="relative mt-0.5"
                       >
-                        <Award className="size-3.5 text-brand shrink-0 mt-0.5" />
+                         <div className="absolute inset-0 bg-brand/30 blur-[4px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <Award className="size-3.5 text-brand shrink-0 relative z-10 drop-shadow-[0_0_2px_rgba(var(--brand),0.5)]" />
                       </motion.div>
-                      <span className="group-hover:text-foreground transition-colors duration-300">
+                      <span className="transition-colors duration-300 font-medium">
                         {achievement}
                       </span>
                     </motion.li>
@@ -838,10 +826,9 @@ export default function Hero() {
         transition={{ delay: 1.8, duration: 0.6 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2 text-muted-foreground cursor-pointer group"
+        {/* PERFORMANCE: CSS bounce animation replaces framer-motion infinite loop */}
+        <div
+          className="flex flex-col items-center gap-2 text-muted-foreground cursor-pointer group animate-bounce-down"
           onClick={() =>
             document
               .getElementById("skills")
@@ -851,15 +838,14 @@ export default function Hero() {
           <span className="text-xs font-semibold tracking-widest uppercase opacity-50 group-hover:opacity-100 transition-opacity">
             Explore
           </span>
-          <motion.div
+          <div
             className="p-2 rounded-full border border-border/60 bg-card/60 backdrop-blur-sm
                        group-hover:border-brand/60 group-hover:bg-brand/10 group-hover:shadow-lg group-hover:shadow-brand/20
-                       transition-all duration-300"
-            whileHover={{ scale: 1.15 }}
+                       transition-all duration-300 hover:scale-110"
           >
             <ChevronDown className="size-4 group-hover:text-brand transition-colors" />
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </motion.div>
     </section>
   );

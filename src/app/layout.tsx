@@ -37,6 +37,11 @@ const geistMono = Geist_Mono({
         "Portfolio of Reynaldo — Content Moderator, Robotics & AI Graduate, AI/ML & Data Enthusiast.",
       type: "website",
     },
+    twitter: {
+      card: "summary_large_image",
+      title: "Reynaldo Arya | AI VIDEO CREATOR @dygtalmarketing",
+      description: "Portfolio of Reynaldo Arya Budi Trisna - Content Moderator, Robotics & AI Graduate, AI/ML & Data Enthusiast.",
+    },
   };
 
 export default function RootLayout({

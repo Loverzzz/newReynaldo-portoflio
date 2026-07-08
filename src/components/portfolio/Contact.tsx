@@ -87,40 +87,44 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Action buttons */}
-            <div className="flex items-center gap-2.5 shrink-0">
-              <motion.button
-                onClick={handleCopy}
-                whileHover={{ scale: 1.06, y: -2 }}
-                whileTap={{ scale: 0.94 }}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border/60 bg-card/80 backdrop-blur-sm
-                           hover:border-brand/45 hover:bg-brand/6 transition-all duration-300 text-sm font-semibold"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  {copied ? (
-                    <motion.span key="check" initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} exit={{ scale: 0 }} className="flex items-center gap-1.5 text-brand">
-                      <Check className="size-4" /> Copied!
-                    </motion.span>
-                  ) : (
-                    <motion.span key="copy" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="flex items-center gap-1.5">
-                      <Copy className="size-4" /> Copy
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </motion.button>
-
-              <motion.a
-                href={`mailto:${profile.email}`}
-                whileHover={{ scale: 1.06, y: -1 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand text-white
-                           hover:bg-brand/90 shadow-lg shadow-brand/30 transition-all duration-300 text-sm font-semibold"
-              >
-                <Mail className="size-4" />
-                Send Email
-                <ArrowRight className="size-3.5" />
-              </motion.a>
-            </div>
+              {/* Action buttons */}
+              <div className="flex flex-col sm:flex-row items-center gap-2.5 shrink-0 w-full sm:w-auto mt-4 sm:mt-0">
+                <motion.button
+                  onClick={handleCopy}
+                  whileHover={{ scale: 1.06, y: -2 }}
+                  whileTap={{ scale: 0.94 }}
+                  className="flex items-center justify-center w-full sm:w-auto gap-2 px-4 py-2.5 rounded-xl border border-border/60 bg-card/80 backdrop-blur-sm
+                             hover:border-brand/45 hover:bg-brand/6 transition-all duration-300 text-sm font-semibold relative overflow-hidden group"
+                >
+                   {/* Shimmer effect */}
+                   <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+                  <AnimatePresence mode="wait" initial={false}>
+                    {copied ? (
+                      <motion.span key="check" initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} exit={{ scale: 0 }} className="flex items-center gap-1.5 text-brand relative z-10">
+                        <Check className="size-4" /> Copied!
+                      </motion.span>
+                    ) : (
+                      <motion.span key="copy" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} className="flex items-center gap-1.5 relative z-10">
+                        <Copy className="size-4" /> Copy
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+  
+                <motion.a
+                  href={`mailto:${profile.email}`}
+                  whileHover={{ scale: 1.06, y: -1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center justify-center w-full sm:w-auto gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand to-brand/80 text-white
+                             hover:from-brand/90 hover:to-brand shadow-[0_0_20px_rgba(var(--brand),0.3)] hover:shadow-[0_0_25px_rgba(var(--brand),0.5)] transition-all duration-300 text-sm font-semibold relative overflow-hidden group"
+                >
+                   {/* Shimmer effect */}
+                   <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+                  <Mail className="size-4 relative z-10" />
+                  <span className="relative z-10">Send Email</span>
+                  <ArrowRight className="size-3.5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                </motion.a>
+              </div>
           </div>
         </div>
       </motion.div>
@@ -161,9 +165,12 @@ export default function Contact() {
               className="absolute -inset-1 rounded-2xl opacity-0 group-hover:opacity-40 blur-xl transition-opacity duration-500 pointer-events-none"
               style={{ background: `radial-gradient(circle, rgba(${item.glow},0.4) 0%, transparent 70%)` }}
             />
+             {/* Subtle scanline effect on hover */}
+             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000 ease-in-out pointer-events-none" />
             <div className="relative flex items-center gap-4">
-              <div className={`p-3 rounded-xl bg-gradient-to-br ${item.color} shadow-md`}>
-                <item.icon className="size-5 text-white" />
+              <div className={`p-3 rounded-xl bg-gradient-to-br ${item.color} shadow-md relative overflow-hidden group-hover:shadow-lg transition-shadow`}>
+                 <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shimmer" />
+                <item.icon className="size-5 text-white relative z-10 drop-shadow-sm" />
               </div>
               <div className="flex-1">
                 <p className="font-bold text-foreground group-hover:text-brand transition-colors duration-300">{item.label}</p>
@@ -240,10 +247,12 @@ export default function Contact() {
               <Button
                 type="submit"
                 disabled={sending}
-                className="w-full rounded-xl bg-brand hover:bg-brand/90 text-white shadow-lg shadow-brand/25 font-semibold gap-2 transition-all duration-300"
+                className="w-full rounded-xl bg-gradient-to-r from-brand to-brand/80 hover:from-brand/90 hover:to-brand text-white shadow-[0_0_20px_rgba(var(--brand),0.3)] hover:shadow-[0_0_25px_rgba(var(--brand),0.5)] font-semibold gap-2 transition-all duration-300 relative overflow-hidden group"
               >
+                 {/* Shimmer effect */}
+                 <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none" />
                 {sending ? (
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2 relative z-10">
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
@@ -253,10 +262,10 @@ export default function Contact() {
                     Opening email client…
                   </span>
                 ) : (
-                  <span className="flex items-center gap-2">
-                    <Send className="size-4" />
+                  <span className="flex items-center gap-2 relative z-10">
+                    <Send className="size-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
                     Send Message via Email
-                    <ArrowRight className="size-3.5" />
+                    <ArrowRight className="size-3.5 group-hover:translate-x-1 transition-transform" />
                   </span>
                 )}
               </Button>

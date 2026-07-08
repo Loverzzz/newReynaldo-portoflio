@@ -1,5 +1,5 @@
 /* ── Google Fonts — Archivo + Space Grotesk ─────── */
-@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap&display=swap');
 
 @import "tailwindcss";
 
@@ -490,7 +490,77 @@
     background: oklch(0.65 0.17 160 / 0.12);
     border-color: oklch(0.65 0.17 160 / 0.45);
   }
+
+  /* ═══════════════════════════════════════════════════
+     AMBIENT LIGHT FIELD — UI/UX Pro Max · Modern Dark Cinema
+     Slow-drifting luminous orbs behind the particle canvas.
+     Purely additive atmosphere; never blocks interaction.
+     ═══════════════════════════════════════════════════ */
+  .ambient-field {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .blob {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    filter: blur(60px);
+    will-change: transform;
+    opacity: 0.40;
+  }
+
+  /* Dark mode — additive 'screen' blend makes the orbs glow like real light */
+  .dark .blob {
+    mix-blend-mode: screen;
+    opacity: 0.60;
+  }
+
+  .blob-1 {
+    width: 42vw; height: 42vw;
+    top: -10%; left: -8%;
+    background: radial-gradient(circle at 50% 50%, oklch(0.65 0.17 160 / 0.20), transparent 70%);
+    animation: blob-drift-1 22s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) infinite alternate;
+  }
+  .blob-2 {
+    width: 38vw; height: 38vw;
+    top: 28%; right: -10%;
+    background: radial-gradient(circle at 50% 50%, oklch(0.60 0.20 200 / 0.18), transparent 70%);
+    animation: blob-drift-2 28s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) infinite alternate;
+  }
+  .blob-3 {
+    width: 30vw; height: 30vw;
+    bottom: -8%; left: 22%;
+    background: radial-gradient(circle at 50% 50%, oklch(0.70 0.15 140 / 0.14), transparent 70%);
+    animation: blob-drift-3 25s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) infinite alternate;
+  }
+
+  /* Dark-mode intensity bump for richer glow */
+  .dark .blob-1 { background: radial-gradient(circle at 50% 50%, oklch(0.65 0.17 160 / 0.24), transparent 70%); }
+  .dark .blob-2 { background: radial-gradient(circle at 50% 50%, oklch(0.60 0.20 200 / 0.22), transparent 70%); }
+  .dark .blob-3 { background: radial-gradient(circle at 50% 50%, oklch(0.70 0.15 140 / 0.16), transparent 70%); }
+
+  /* Cinematic vignette — gentle edge falloff for focus & mood */
+  .cinema-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 42%, transparent 58%, oklch(0 0 0 / 0.04) 90%, oklch(0 0 0 / 0.08) 100%);
+  }
+  .dark .cinema-vignette {
+    background: radial-gradient(ellipse at 50% 42%, transparent 48%, oklch(0 0 0 / 0.20) 86%, oklch(0 0 0 / 0.45) 100%);
+  }
 }
+
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
 
 /* ═══════════════════════════════════════════════════
    KEYFRAME ANIMATIONS
@@ -552,22 +622,106 @@
   50%       { box-shadow: 0 0 14px oklch(0.65 0.17 160 / 0.6), 0 0 36px oklch(0.65 0.17 160 / 0.3); }
 }
 
+/* ── Ambient blob drift — slow cinematic oscillation ── */
+@keyframes blob-drift-1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(12vw, 18vh) scale(1.15); }
+}
+@keyframes blob-drift-2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-10vw, -14vh) scale(1.10); }
+}
+@keyframes blob-drift-3 {
+  0%   { transform: translate(0, 0) scale(0.95); }
+  100% { transform: translate(8vw, -20vh) scale(1.20); }
+}
+
+/* ── Floating icon badge — gentle CSS drift (replaces expensive framer-motion JS loop) ── */
+@keyframes float-icon {
+  0%, 100% { transform: translate(-50%, -50%) translate(0, 0); }
+  50%      { transform: translate(-50%, -50%) translate(4px, -8px); }
+}
+.animate-float-icon {
+  animation: float-icon 6s ease-in-out infinite;
+}
+
+/* ── Bounce down (scroll indicator, replaces framer-motion infinite loop) ── */
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(8px); }
+}
+.animate-bounce-down {
+  animation: bounce-down 2.5s ease-in-out infinite;
+}
+
+/* ── Sparkle rotate (CSS, not framer-motion) ── */
+@keyframes sparkle-rotate {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(20deg); }
+  75%      { transform: rotate(-20deg); }
+}
+.animate-sparkle-rotate {
+  animation: sparkle-rotate 3s ease-in-out infinite;
+}
+
 /* ═══════════════════════════════════════════════════
    COMPONENT OVERRIDES
 ═══════════════════════════════════════════════════ */
 
-/* ── Card base — elevated depth ── */
-.card {
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background-color: var(--card);
-  color: var(--card-foreground);
-  box-shadow: var(--shadow-sm);
-  transition:
-    box-shadow 0.3s var(--ease-spring, cubic-bezier(0.22, 1, 0.36, 1)),
-    border-color 0.25s ease,
-    transform 0.25s var(--ease-spring, cubic-bezier(0.22, 1, 0.36, 1));
-}
+  /* ═══════════════════════════════════════════════════
+     GPU ACCELERATION & RENDERING PERFORMANCE
+     These optimizations ensure smooth animations by
+     promoting elements to GPU layers and reducing paint work.
+  ══════════════════════════════════════════════════ */
+
+  /* ── GPU acceleration for animated elements ── */
+  .will-change-transform {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* ── Reduce paint on animated cards ── */
+  .reduce-paint {
+    contain: layout style paint;
+  }
+
+  /* ── Smooth scroll performance ── */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── Optimized backdrop blur ── */
+  .backdrop-optimized {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* ── Card base — elevated depth ── */
+  .card {
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background-color: var(--card);
+    color: var(--card-foreground);
+    box-shadow: var(--shadow-sm);
+    transition:
+      box-shadow 0.3s var(--ease-spring, cubic-bezier(0.22, 1, 0.36, 1)),
+      border-color 0.25s ease,
+      transform 0.25s var(--ease-spring, cubic-bezier(0.22, 1, 0.36, 1));
+    /* Performance hints */
+    will-change: transform;
+    transform: translateZ(0);
+  }
 
 .card:hover {
   box-shadow: var(--shadow-lg);

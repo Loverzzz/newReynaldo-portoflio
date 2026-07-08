@@ -49,7 +49,8 @@ function getThumbnailUrl(video: VideoItem): string {
   if (video.thumbnail) return video.thumbnail;
   const id = getYouTubeId(video.videoUrl);
   if (id && !video.videoUrl.includes("YOUR_VIDEO_ID_HERE")) {
-    return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+    // Use hqdefault instead of maxresdefault for faster loading
+    return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
   }
   return "";
 }
@@ -224,13 +225,13 @@ function VideoModal({
                   <Film className="w-8 h-8 text-white" />
                 </div>
                 <p className="text-white/60 text-sm text-center px-8">
-                  URL video belum diisi.
+                  Video URL not set.
                   <br />
-                  Ganti{" "}
+                  Replace{" "}
                   <code className="text-white/80 bg-white/10 px-1 rounded">
                     YOUR_VIDEO_ID_HERE
                   </code>{" "}
-                  dengan YouTube ID di{" "}
+                  with the YouTube ID in{" "}
                   <code className="text-white/80 bg-white/10 px-1 rounded">
                     src/data/portfolio.ts
                   </code>
@@ -645,22 +646,26 @@ function FeaturedVideo({
         )}
 
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Play button */}
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.div
-            whileHover={{ scale: 1.1 }}
-            className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border-2 border-white/40 flex items-center justify-center shadow-2xl transition-all group-hover:bg-white/30"
+            whileHover={{ scale: 1.15, rotate: 90 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+            className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl transition-all duration-300 group-hover:bg-brand/20 group-hover:border-brand/40 group-hover:shadow-brand/30 overflow-hidden relative"
           >
-            <Play className="w-9 h-9 text-white fill-white ml-1" />
+             {/* Ping animation on hover */}
+             <div className="absolute inset-0 rounded-full bg-brand/30 animate-ping opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ animationDuration: '2s' }} />
+            <Play className="w-8 h-8 text-white fill-white ml-1.5 relative z-10 group-hover:text-brand transition-colors duration-300 drop-shadow-md" />
           </motion.div>
         </div>
 
 
         {/* Info overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-8">
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
           {/* Mobile: emoji-only awards */}
           <div className="flex items-center gap-1 mb-1 md:hidden">
             <span
@@ -826,9 +831,7 @@ export default function CreativeVideos({ items }: CreativeVideosProps) {
           </div>
           <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
             Video{" "}
-            <span className="bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 bg-clip-text text-transparent">
-              Portfolio
-            </span>
+            <span className="gradient-text-animated">Portfolio</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Creative works — from award-winning short films at film festivals to AI-generated content. Every frame is a story.
@@ -852,29 +855,40 @@ export default function CreativeVideos({ items }: CreativeVideosProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1, duration: 0.4 }}
-          className="flex flex-wrap gap-2 mb-8 items-center"
+          className="flex flex-wrap gap-2 mb-10 items-center justify-center"
         >
-          <Filter className="w-4 h-4 text-muted-foreground mr-1" />
-          {videoCategories.map((cat) => (
-            <Button
-              key={cat}
-              variant={activeCategory === cat ? "default" : "outline"}
-              size="sm"
-              onClick={() => setActiveCategory(cat)}
-              className={`rounded-full text-xs transition-all duration-200 ${
-                activeCategory === cat
-                  ? "shadow-lg shadow-brand/20"
-                  : "hover:border-brand/40 hover:text-brand"
-              }`}
-            >
-              {cat}
-              {cat !== "All" && (
-                <span className="ml-1.5 opacity-60">
-                  {items.filter((v) => v.category === cat).length}
-                </span>
-              )}
-            </Button>
-          ))}
+          <div className="flex items-center gap-1.5 mr-2 px-3 py-1.5 rounded-full bg-secondary/50 border border-border/50 text-muted-foreground text-xs font-medium">
+             <Filter className="w-3.5 h-3.5" />
+             <span>Filter</span>
+          </div>
+          {videoCategories.map((cat) => {
+             const isActive = activeCategory === cat;
+             const count = items.filter((v) => v.category === cat).length;
+             return (
+               <Button
+                 key={cat}
+                 variant={isActive ? "default" : "outline"}
+                 size="sm"
+                 onClick={() => setActiveCategory(cat)}
+                 className={`rounded-full text-xs transition-all duration-300 relative overflow-hidden group ${
+                   isActive
+                     ? "shadow-[0_0_15px_rgba(var(--brand),0.3)] border-brand bg-brand text-brand-foreground"
+                     : "hover:border-brand/50 hover:bg-brand/5 hover:text-foreground hover:shadow-sm bg-background border-border/60 text-muted-foreground"
+                 }`}
+               >
+                  {/* Shimmer on active or hover */}
+                 {(isActive || true) && (
+                    <div className={`absolute inset-0 bg-white/20 translate-x-[-100%] transition-transform duration-700 ease-in-out pointer-events-none ${isActive ? 'translate-x-[100%]' : 'group-hover:translate-x-[100%]'}`} />
+                 )}
+                 <span className="relative z-10 font-semibold tracking-wide">{cat}</span>
+                 {cat !== "All" && (
+                   <span className={`relative z-10 ml-1.5 px-1.5 py-0.5 rounded-md text-[10px] font-bold transition-colors ${isActive ? 'bg-black/20 text-white' : 'bg-secondary text-muted-foreground group-hover:bg-brand/10 group-hover:text-brand'}`}>
+                     {count}
+                   </span>
+                 )}
+               </Button>
+             );
+          })}
         </motion.div>
 
         {/* Video grid */}
@@ -901,7 +915,7 @@ export default function CreativeVideos({ items }: CreativeVideosProps) {
             className="text-center py-20 text-muted-foreground"
           >
             <Film className="w-12 h-12 mx-auto mb-4 opacity-20" />
-            <p>Tidak ada video dalam kategori ini.</p>
+            <p>No videos in this category.</p>
           </motion.div>
         )}
 
@@ -911,19 +925,26 @@ export default function CreativeVideos({ items }: CreativeVideosProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="mt-12 text-center"
+          className="mt-16 flex flex-col items-center justify-center relative"
         >
-          <p className="text-muted-foreground text-sm mb-3">
+           {/* Subtle glow behind button */}
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-brand/10 blur-[40px] rounded-full pointer-events-none" />
+           
+          <p className="text-muted-foreground text-sm mb-4 font-medium tracking-wide uppercase">
             Excited to Collaborate?
           </p>
           <a href="#contact">
-            <Button
-              variant="outline"
-              className="rounded-full gap-2 hover:border-brand/50 hover:text-brand transition-all"
-            >
-              Let&apos;s Work Together
-              <ChevronRight className="w-4 h-4" />
-            </Button>
+             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+               <Button
+                 variant="outline"
+                 size="lg"
+                 className="rounded-full gap-2 border-brand/30 hover:border-brand/60 hover:bg-brand/10 hover:text-brand hover:shadow-[0_0_20px_rgba(var(--brand),0.15)] transition-all duration-300 font-bold px-8 group overflow-hidden relative"
+               >
+                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+                 <span className="relative z-10">Let&apos;s Work Together</span>
+                 <ChevronRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
+               </Button>
+             </motion.div>
           </a>
         </motion.div>
       </div>

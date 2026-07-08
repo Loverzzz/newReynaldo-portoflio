@@ -78,63 +78,67 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
           />
 
           <CardContent className="relative p-5 md:p-6 space-y-4" style={{ transformStyle: 'preserve-3d' }}>
-            {/* Top row */}
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-              <div className="flex items-start gap-4">
-                {/* Logo */}
-                {exp.logo && (
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 4 }}
-                    transition={{ type: 'spring', stiffness: 320, damping: 18 }}
-                    className="shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-2xl overflow-hidden bg-white border border-border/70 shadow-md flex items-center justify-center p-2"
-                    style={{ transform: 'translateZ(10px)' }}
-                  >
-                    <img src={exp.logo} alt={`${exp.company} logo`} className="w-full h-full object-contain" />
-                  </motion.div>
-                )}
-
-                <div className="pt-1" style={{ transform: 'translateZ(5px)' }}>
-                  <h3 className="font-bold text-lg md:text-xl text-foreground flex items-center gap-2 group-hover:text-brand transition-colors duration-300 font-display tracking-tight">
+              {/* Top row */}
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  {/* Logo */}
+                  {exp.logo && (
                     <motion.div
-                      whileHover={{ rotate: 18 }}
-                      transition={{ type: 'spring', stiffness: 320 }}
+                      whileHover={{ scale: 1.1, rotate: 4 }}
+                      transition={{ type: 'spring', stiffness: 320, damping: 18 }}
+                      className="shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-2xl overflow-hidden bg-white border border-border/70 shadow-md flex items-center justify-center p-2 relative"
+                      style={{ transform: 'translateZ(10px)' }}
                     >
-                      <Briefcase className="w-4.5 h-4.5 text-brand shrink-0" />
+                       {/* Subtle inner shadow on logo */}
+                       <div className="absolute inset-0 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.06)] pointer-events-none" />
+                      <img src={exp.logo} alt={`${exp.company} logo`} className="w-full h-full object-contain" />
                     </motion.div>
-                    {exp.role}
-                  </h3>
-                  <p className="text-sm font-medium text-foreground/75 mt-1.5 flex items-center gap-2 flex-wrap font-body">
-                    <span className="font-semibold">{exp.company}</span>
-                    <span className="text-muted-foreground/50">·</span>
-                    <span className="flex items-center gap-1 text-muted-foreground">
-                      <MapPin className="w-3.5 h-3.5 text-brand/60" />
-                      {exp.location}
-                    </span>
-                  </p>
-                </div>
-              </div>
+                  )}
 
-              {/* Period badge */}
-              <motion.div
-                whileHover={{ scale: 1.07, y: -2 }}
-                transition={{ type: 'spring', stiffness: 320 }}
-                style={{ transform: 'translateZ(7px)' }}
-              >
-                <Badge
-                  variant="secondary"
-                  className="shrink-0 text-xs font-bold bg-brand/10 text-brand border border-brand/25 hover:bg-brand/15 transition-colors duration-200"
+                  <div className="pt-1" style={{ transform: 'translateZ(5px)' }}>
+                    <h3 className="font-bold text-lg md:text-xl text-foreground flex items-center gap-2 group-hover:text-brand transition-colors duration-300 font-display tracking-tight">
+                      <motion.div
+                        whileHover={{ rotate: 18 }}
+                        transition={{ type: 'spring', stiffness: 320 }}
+                        className="bg-brand/10 p-1.5 rounded-md border border-brand/20"
+                      >
+                        <Briefcase className="w-4 h-4 text-brand shrink-0" />
+                      </motion.div>
+                      {exp.role}
+                    </h3>
+                    <p className="text-sm font-medium text-foreground/75 mt-2 flex items-center gap-2 flex-wrap font-body">
+                      <span className="font-bold text-foreground/90">{exp.company}</span>
+                      <span className="text-muted-foreground/40">·</span>
+                      <span className="flex items-center gap-1.5 text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-md border border-border/40 text-xs">
+                        <MapPin className="w-3 h-3 text-brand/70" />
+                        {exp.location}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Period badge */}
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  transition={{ type: 'spring', stiffness: 320 }}
+                  style={{ transform: 'translateZ(7px)' }}
+                  className="sm:ml-auto"
                 >
-                  <Calendar className="w-3 h-3 mr-1.5" />
-                  {exp.period}
-                </Badge>
-              </motion.div>
-            </div>
+                  <Badge
+                    variant="secondary"
+                    className="shrink-0 text-xs font-bold bg-gradient-to-r from-brand/10 to-brand/5 text-brand border border-brand/20 shadow-sm hover:shadow-md hover:from-brand/15 hover:to-brand/10 transition-all duration-300 backdrop-blur-sm px-3 py-1"
+                  >
+                    <Calendar className="w-3.5 h-3.5 mr-1.5 opacity-80" />
+                    {exp.period}
+                  </Badge>
+                </motion.div>
+              </div>
 
             {/* Micro divider */}
             <div className="h-px bg-gradient-to-r from-transparent via-border/60 to-transparent" />
 
             {/* Bullet points */}
-            <ul className="space-y-2.5 pt-0.5" style={{ transform: 'translateZ(2px)' }}>
+            <ul className="space-y-3 pt-1" style={{ transform: 'translateZ(2px)' }}>
               {exp.bullets.map((bullet, bIdx) => (
                 <motion.li
                   key={bIdx}
@@ -142,14 +146,18 @@ function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) 
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 + bIdx * 0.045, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex gap-3 text-sm text-foreground/80 leading-relaxed group/bullet"
+                  className="flex gap-3 text-sm text-muted-foreground leading-relaxed group/bullet items-start"
                 >
-                  <motion.span
-                    className="shrink-0 mt-[7px] w-1.5 h-1.5 rounded-full bg-gradient-to-r from-brand to-brand/60"
-                    whileHover={{ scale: 1.6 }}
-                    transition={{ type: 'spring', stiffness: 400 }}
-                  />
-                  <span className="group-hover/bullet:text-foreground transition-colors duration-250 font-body">{bullet}</span>
+                   <div className="shrink-0 mt-[6px] relative flex items-center justify-center">
+                     {/* Glow ring */}
+                     <div className="absolute inset-0 bg-brand/20 rounded-full scale-150 opacity-0 group-hover/bullet:opacity-100 transition-opacity duration-300 blur-[2px]" />
+                    <motion.span
+                      className="relative z-10 w-1.5 h-1.5 rounded-full bg-gradient-to-r from-brand to-brand/70 shadow-[0_0_4px_rgba(var(--brand),0.5)]"
+                      whileHover={{ scale: 1.5 }}
+                      transition={{ type: 'spring', stiffness: 400 }}
+                    />
+                  </div>
+                  <span className="group-hover/bullet:text-foreground transition-colors duration-300 font-body">{bullet}</span>
                 </motion.li>
               ))}
             </ul>

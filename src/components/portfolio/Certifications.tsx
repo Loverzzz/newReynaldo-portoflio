@@ -145,20 +145,20 @@ function CertCard({ cert, index }: { cert: CertificationItem; index: number }) {
         <div
           className="relative h-full rounded-2xl border border-border/50 bg-card/80 backdrop-blur-sm p-5
                    hover:border-brand/40 hover:bg-card/95 hover:shadow-xl hover:shadow-brand/8
-                   transition-all duration-400 overflow-hidden holographic cursor-default"
+                   transition-all duration-400 overflow-hidden holographic cursor-default group/card"
           style={{ transformStyle: "preserve-3d" }}
         >
+           {/* Scanline hover effect */}
+           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent -translate-y-full group-hover/card:translate-y-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+           
           {/* Top accent gradient bar */}
           <div
-            className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${meta.bg} opacity-40 group-hover:opacity-100 transition-opacity duration-500`}
+            className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${meta.bg} opacity-40 group-hover:opacity-100 transition-all duration-500 shadow-[0_0_8px_rgba(var(--brand),0.3)]`}
           />
 
           {/* Shimmer sweep on hover */}
-          <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden">
-            <div
-              className="absolute inset-0 shimmer"
-              style={{ opacity: 0.06 }}
-            />
+          <div className="absolute inset-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent -translate-x-full group-hover/card:translate-x-full transition-transform duration-700 ease-in-out" />
           </div>
 
           <div className="space-y-3" style={{ transformStyle: "preserve-3d" }}>
@@ -167,15 +167,16 @@ function CertCard({ cert, index }: { cert: CertificationItem; index: number }) {
               className="flex items-center justify-between"
               style={{ transform: "translateZ(6px)" }}
             >
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2.5 relative">
                 <motion.div
-                  className={`p-2 rounded-xl bg-gradient-to-br ${meta.bg} shadow-md`}
+                  className={`p-2 rounded-xl bg-gradient-to-br ${meta.bg} shadow-md relative group-hover/card:shadow-lg transition-shadow overflow-hidden`}
                   whileHover={{ rotate: 10, scale: 1.1 }}
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}
                 >
-                  <Icon className="size-3.5 text-white" />
+                   <div className="absolute inset-0 bg-white/20 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 shimmer" />
+                  <Icon className="size-3.5 text-white relative z-10 drop-shadow-sm" />
                 </motion.div>
-                <span className="text-xs font-bold text-muted-foreground tracking-wide uppercase">
+                <span className="text-xs font-bold text-foreground/80 tracking-wide uppercase group-hover/card:text-foreground transition-colors duration-300">
                   {cert.provider}
                 </span>
               </div>
@@ -190,7 +191,7 @@ function CertCard({ cert, index }: { cert: CertificationItem; index: number }) {
 
             {/* Title */}
             <h3
-              className="font-semibold text-sm text-foreground group-hover:text-brand transition-colors duration-300 leading-snug"
+              className="font-semibold text-sm text-foreground group-hover/card:text-brand transition-colors duration-300 leading-snug drop-shadow-sm"
               style={{ transform: "translateZ(4px)" }}
             >
               {cert.title}
@@ -246,18 +247,22 @@ export default function Certifications({ items }: CertificationsProps) {
             key={label}
             whileHover={{ scale: 1.06, y: -2 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="flex items-center gap-3 px-5 py-3 rounded-2xl border border-border bg-card backdrop-blur-sm
-                       hover:border-brand/40 hover:shadow-lg hover:shadow-brand/8 transition-all duration-300 dark:border-border/50 dark:bg-card/70"
+            className="group flex items-center gap-3 px-5 py-3 rounded-2xl border border-border bg-card backdrop-blur-sm
+                       hover:border-brand/40 hover:shadow-lg hover:shadow-brand/10 hover:bg-brand/5 transition-all duration-300 dark:border-border/50 dark:bg-card/70 relative overflow-hidden cursor-default"
           >
-            <div className="p-2 rounded-xl bg-brand/15 border border-brand/25">
-              <Icon className="size-4 text-brand" />
-            </div>
-            <div>
-              <div className="text-xl font-black gradient-text">{value}+</div>
-              <div className="text-xs text-muted-foreground font-medium">
-                {label}
+             {/* Shimmer sweep */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out pointer-events-none" />
+            
+            <div className="p-2 rounded-xl bg-brand/10 border border-brand/20 group-hover:bg-brand/20 transition-colors relative overflow-hidden">
+               <div className="absolute inset-0 bg-brand/30 blur-[4px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Icon className="size-4 text-brand relative z-10 drop-shadow-[0_0_2px_rgba(var(--brand),0.5)] group-hover:scale-110 transition-transform" />
               </div>
-            </div>
+              <div>
+                <div className="text-xl font-black bg-gradient-to-br from-brand to-brand/70 bg-clip-text text-transparent">{value}+</div>
+                <div className="text-xs text-foreground/80 font-medium">
+                  {label}
+                </div>
+              </div>
           </motion.div>
         ))}
       </motion.div>

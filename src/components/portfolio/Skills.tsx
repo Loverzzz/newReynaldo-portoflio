@@ -6,26 +6,30 @@ import { useTilt } from '@/hooks/use-tilt';
 import {
   Code2, Database, Brain, BarChart3, Cpu,
   Sparkles, Shield, LineChart, Monitor,
-  Palette, Video, Bot, Image,
+  Palette, Video, Bot, Image, Layers, Frame
 } from 'lucide-react';
 
 interface SkillsProps { items: string[] }
 
+/* Colorful skill icons — each skill has a unique vibrant color
+ * for a rainbow-like visual identity. */
 const skillCategories: Record<string, { icon: typeof Code2; color: string; glow: string }> = {
-  'Content Moderation & Policy':         { icon: Shield,    color: 'from-blue-500 to-cyan-500',       glow: '59,130,246' },
-  'Data Analysis (Python, Pandas)':      { icon: BarChart3, color: 'from-yellow-500 to-orange-500',   glow: '234,179,8' },
-  'Machine Learning (scikit-learn)':     { icon: Brain,     color: 'from-orange-500 to-red-500',      glow: '249,115,22' },
-  'Deep Learning (TensorFlow / PyTorch)':{ icon: Brain,     color: 'from-purple-500 to-pink-500',     glow: '168,85,247' },
-  'AI Automation':                       { icon: Bot,       color: 'from-violet-500 to-purple-500',   glow: '139,92,246' },
-  'AI Image and Video Creation':         { icon: Image,     color: 'from-pink-500 to-rose-500',       glow: '236,72,153' },
-  'SQL':                                 { icon: Database,  color: 'from-blue-500 to-indigo-500',     glow: '99,102,241' },
-  'Power BI':                            { icon: BarChart3, color: 'from-yellow-600 to-amber-600',    glow: '217,119,6' },
-  'Metabase':                            { icon: LineChart, color: 'from-green-500 to-teal-500',      glow: '20,184,166' },
-  'Streamlit':                           { icon: Monitor,   color: 'from-red-500 to-pink-500',        glow: '239,68,68' },
-  'React + TypeScript':                  { icon: Code2,     color: 'from-cyan-400 to-blue-500',       glow: '34,211,238' },
-  'IoT / Embedded (Arduino, C/C++)':     { icon: Cpu,       color: 'from-teal-500 to-cyan-500',       glow: '20,184,166' },
-  'Video Editing (Premiere, After Effects)':{ icon: Video,  color: 'from-purple-600 to-indigo-600',   glow: '124,58,237' },
-  'Design (Photoshop, Illustrator)':     { icon: Palette,   color: 'from-blue-600 to-violet-600',    glow: '37,99,235' },
+  'Content Moderation & Policy':         { icon: Shield,    color: 'from-violet-500 to-purple-500',     glow: '139,92,246' },
+  'Data Analysis (Python, Pandas)':      { icon: BarChart3, color: 'from-blue-500 to-indigo-500',       glow: '59,130,246' },
+  'Machine Learning (scikit-learn)':     { icon: Brain,     color: 'from-cyan-500 to-teal-500',         glow: '6,182,212' },
+  'Deep Learning (TensorFlow / PyTorch)':{ icon: Brain,     color: 'from-emerald-500 to-green-500',    glow: '16,185,129' },
+  'AI Automation':                       { icon: Bot,       color: 'from-amber-500 to-orange-500',      glow: '245,158,11' },
+  'AI Image and Video Creation':         { icon: Image,     color: 'from-pink-500 to-rose-500',        glow: '236,72,153' },
+  'SQL':                                 { icon: Database,  color: 'from-sky-500 to-blue-500',         glow: '14,165,233' },
+  'Power BI':                            { icon: BarChart3, color: 'from-yellow-500 to-amber-500',      glow: '234,179,8' },
+  'Metabase':                            { icon: LineChart, color: 'from-teal-500 to-cyan-500',        glow: '20,184,166' },
+  'Streamlit':                           { icon: Monitor,   color: 'from-red-500 to-rose-500',         glow: '239,68,68' },
+  'React + TypeScript':                  { icon: Code2,     color: 'from-indigo-500 to-violet-500',     glow: '99,102,241' },
+  'IoT / Embedded (Arduino, C/C++)':     { icon: Cpu,       color: 'from-green-500 to-emerald-500',    glow: '34,197,94' },
+  'Video Editing (Premiere, After Effects)':{ icon: Video,  color: 'from-fuchsia-500 to-pink-500',     glow: '217,70,239' },
+  'Design (Photoshop, Illustrator)':     { icon: Palette,   color: 'from-orange-500 to-red-500',       glow: '249,115,22' },
+  'Figma':                               { icon: Frame,     color: 'from-purple-500 to-violet-500',    glow: '168,85,247' },
+  'UI/UX Design':                        { icon: Layers,    color: 'from-cyan-500 to-blue-500',        glow: '6,182,212' },
 };
 
 /* 3D tilt card component */
@@ -64,19 +68,22 @@ function SkillCard({ skill, index }: { skill: string; index: number }) {
         <div className="absolute inset-x-0 top-0 h-px rounded-t-xl bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
 
         <div className="flex items-center gap-3">
-          {/* Icon badge */}
+          {/* Icon badge - colorful gradient background with white icon */}
           <motion.div
-            className={`p-1.5 rounded-lg bg-gradient-to-br ${category.color} shadow-sm shrink-0`}
-            style={{ transform: 'translateZ(7px)' }}
+            className={`p-1.5 rounded-lg bg-gradient-to-br ${category.color} shadow-lg shrink-0 relative overflow-hidden`}
+            style={{ transform: 'translateZ(7px)', boxShadow: `0 2px 8px rgba(${category.glow}, 0.3)` }}
             whileHover={{ rotate: [0, -8, 8, 0], scale: 1.12 }}
             transition={{ duration: 0.38, type: 'tween' }}
           >
-            <Icon className="size-3.5 text-white" />
+            {/* Inner glow shimmer */}
+            <div className="absolute inset-0 bg-white/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shimmer" />
+            {/* White icon with text shadow for better contrast */}
+            <Icon className="size-3.5 text-white relative z-10" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))' }} />
           </motion.div>
 
           {/* Skill name */}
           <span
-            className="text-sm font-semibold text-foreground group-hover:text-brand transition-colors duration-250 leading-tight tracking-tight"
+            className="text-sm font-semibold text-foreground group-hover:text-brand transition-colors duration-250 leading-tight tracking-tight relative"
             style={{ transform: 'translateZ(4px)' }}
           >
             {skill}

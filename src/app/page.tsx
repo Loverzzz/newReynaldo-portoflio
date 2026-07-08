@@ -35,7 +35,7 @@ export default function Home() {
             id="skills"
             eyebrow="What I use"
             title="Skills"
-            subtitle="A blend of content operations, data, ML, and creative production."
+            subtitle="A versatile blend of content operations, data, machine learning, and creative production."
           >
             <Skills items={skills} />
           </SectionWrapper>
@@ -58,14 +58,7 @@ export default function Home() {
             <Experience items={experiences} />
           </SectionWrapper>
 
-          <SectionWrapper
-            id="projects"
-            eyebrow="Selected work"
-            title="Projects"
-            subtitle="Flying Higher and Infinity — the rocket is ready."
-          >
-            <Projects items={projects} />
-          </SectionWrapper>
+          <Projects items={projects} />
 
           <CreativeVideos items={videos} />
 
