@@ -649,7 +649,7 @@ export const videos: VideoItem[] = [
     platform: "Instagram Reels",
   },
   {
-    title: "Christope C — Reels — Dygtal",
+    title: "Christope C Hairsalon — Reels — Dygtal",
     description:
       "Social media Reels content for Christope C Hairsalon, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
     category: "Short-form",
@@ -668,7 +668,7 @@ export const videos: VideoItem[] = [
     platform: "Instagram Reels",
   },
   {
-    title: "Christope C — Reels — Dygtal",
+    title: "Christope C Hairsalon — Reels — Dygtal",
     description:
       "Social media Reels content for Christope C Hairsalon, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
     category: "Short-form",

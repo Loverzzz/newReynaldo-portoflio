@@ -48,6 +48,39 @@
   --duration-slower: 700ms;
 }
 
+/* ── Semantic color tokens → Tailwind v4 utilities ──
+   CRITICAL: Maps --color-* to the dynamic CSS variables so that
+   bg-background, text-foreground, bg-card, border-border, text-muted-foreground,
+   bg-muted, bg-accent, bg-input, etc. generate valid CSS and respond to
+   :root (light) / .dark (dark) overrides. Uses `inline` so utilities emit
+   var(--background) directly (stays dynamic across themes). */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
 /* ═══════════════════════════════════════════════════
    BASE STYLES
 ═══════════════════════════════════════════════════ */
@@ -96,31 +129,49 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    overflow-x: hidden;
+    /* `clip` (not `hidden`) prevents horizontal scroll WITHOUT creating a
+       scroll container — `overflow-x: hidden` would force `overflow-y: auto`
+       and break `position: sticky` for the 3D labyrinth gallery. */
+    overflow-x: clip;
     font-family: 'Space Grotesk', system-ui, sans-serif;
   }
 
-  /* ── Color tokens — Light mode ── */
+  /* ── Color tokens — Light mode (high-contrast, readable) ── */
   :root {
-    --background: oklch(0.985 0.002 240);
-    --foreground: oklch(0.10 0.010 240);
-    --card:        oklch(0.99 0.001 240);
-    --card-foreground: oklch(0.10 0.010 240);
-    --border:      oklch(0.88 0.004 240);
-    --muted:       oklch(0.96 0.003 240);
-    --muted-foreground: oklch(0.48 0.012 240);
-    --accent:      oklch(0.94 0.005 240);
-    --accent-foreground: oklch(0.10 0.010 240);
-    --input:       oklch(0.88 0.004 240);
-    --ring:        oklch(0.65 0.17 160);
+    --background: oklch(0.975 0.004 200);
+    --foreground: oklch(0.16 0.012 240);
+    --card:        oklch(1 0 0);
+    --card-foreground: oklch(0.16 0.012 240);
+    --popover:        oklch(1 0 0);
+    --popover-foreground: oklch(0.16 0.012 240);
+    --primary:        oklch(0.55 0.17 160);
+    --primary-foreground: oklch(0.99 0 0);
+    --secondary:      oklch(0.95 0.005 240);
+    --secondary-foreground: oklch(0.20 0.010 240);
+    --border:      oklch(0.90 0.005 240);
+    --muted:       oklch(0.96 0.004 240);
+    --muted-foreground: oklch(0.42 0.014 240);
+    --accent:      oklch(0.93 0.02 160);
+    --accent-foreground: oklch(0.22 0.04 160);
+    --destructive: oklch(0.58 0.22 25);
+    --destructive-foreground: oklch(0.99 0 0);
+    --input:       oklch(0.90 0.005 240);
+    --ring:        oklch(0.55 0.17 160);
     --radius: 0.75rem;
 
+    /* Chart palette */
+    --chart-1: oklch(0.65 0.17 160);
+    --chart-2: oklch(0.60 0.20 200);
+    --chart-3: oklch(0.70 0.15 140);
+    --chart-4: oklch(0.62 0.18 250);
+    --chart-5: oklch(0.72 0.16 30);
+
     /* ── Depth shadows — light mode ── */
-    --shadow-sm:  0 1px 2px 0 oklch(0 0 0 / 0.04);
-    --shadow-md:  0 4px 12px -2px oklch(0 0 0 / 0.08), 0 2px 4px -1px oklch(0 0 0 / 0.04);
-    --shadow-lg:  0 8px 24px -4px oklch(0 0 0 / 0.10), 0 4px 8px -2px oklch(0 0 0 / 0.05);
-    --shadow-xl:  0 16px 40px -8px oklch(0 0 0 / 0.12), 0 8px 16px -4px oklch(0 0 0 / 0.06);
-    --shadow-2xl: 0 24px 64px -12px oklch(0 0 0 / 0.18), 0 12px 24px -6px oklch(0 0 0 / 0.08);
+    --shadow-sm:  0 1px 2px 0 oklch(0 0 0 / 0.05);
+    --shadow-md:  0 4px 12px -2px oklch(0 0 0 / 0.10), 0 2px 4px -1px oklch(0 0 0 / 0.05);
+    --shadow-lg:  0 8px 24px -4px oklch(0 0 0 / 0.12), 0 4px 8px -2px oklch(0 0 0 / 0.06);
+    --shadow-xl:  0 16px 40px -8px oklch(0 0 0 / 0.15), 0 8px 16px -4px oklch(0 0 0 / 0.07);
+    --shadow-2xl: 0 24px 64px -12px oklch(0 0 0 / 0.20), 0 12px 24px -6px oklch(0 0 0 / 0.09);
   }
 
   .dark {
@@ -128,13 +179,28 @@
     --foreground: oklch(0.96 0.003 240);
     --card:        oklch(0.115 0.010 240);
     --card-foreground: oklch(0.96 0.003 240);
+    --popover:        oklch(0.115 0.010 240);
+    --popover-foreground: oklch(0.96 0.003 240);
+    --primary:        oklch(0.65 0.17 160);
+    --primary-foreground: oklch(0.99 0 0);
+    --secondary:      oklch(0.175 0.012 240);
+    --secondary-foreground: oklch(0.96 0.003 240);
     --border:      oklch(0.20 0.010 240);
     --muted:       oklch(0.155 0.008 240);
     --muted-foreground: oklch(0.60 0.010 240);
     --accent:      oklch(0.175 0.012 240);
     --accent-foreground: oklch(0.96 0.003 240);
+    --destructive: oklch(0.62 0.22 25);
+    --destructive-foreground: oklch(0.99 0 0);
     --input:       oklch(0.20 0.010 240);
     --ring:        oklch(0.65 0.17 160);
+
+    /* Chart palette */
+    --chart-1: oklch(0.65 0.17 160);
+    --chart-2: oklch(0.60 0.20 200);
+    --chart-3: oklch(0.70 0.15 140);
+    --chart-4: oklch(0.62 0.18 250);
+    --chart-5: oklch(0.72 0.16 30);
 
     /* ── Depth shadows — dark mode ── */
     --shadow-sm:  0 1px 2px 0 oklch(0 0 0 / 0.30);
@@ -172,14 +238,14 @@
   .font-display { font-family: 'Archivo', system-ui, sans-serif; }
   .font-body    { font-family: 'Space Grotesk', system-ui, sans-serif; }
 
-  /* ── Gradient texts ── */
+  /* ── Gradient texts (dark mode — bright greens) ── */
   .gradient-text {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(
       135deg,
-      oklch(0.65 0.17 160) 0%,
-      oklch(0.70 0.15 140) 40%,
-      oklch(0.60 0.20 200) 100%
+      oklch(0.50 0.17 160) 0%,
+      oklch(0.48 0.16 150) 40%,
+      oklch(0.45 0.18 200) 100%
     );
   }
 
@@ -187,21 +253,40 @@
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(
       90deg,
-      oklch(0.65 0.17 160),
-      oklch(0.72 0.16 150),
-      oklch(0.60 0.20 200),
-      oklch(0.65 0.17 160)
+      oklch(0.50 0.17 160),
+      oklch(0.48 0.16 150),
+      oklch(0.45 0.18 200),
+      oklch(0.50 0.17 160)
     );
     background-size: 300% 100%;
     animation: gradient-shift 4s linear infinite;
   }
 
+  /* Dark mode: brighter greens pop on dark bg */
+  .dark .gradient-text {
+    background-image: linear-gradient(
+      135deg,
+      oklch(0.72 0.17 160) 0%,
+      oklch(0.74 0.15 140) 40%,
+      oklch(0.68 0.20 200) 100%
+    );
+  }
+  .dark .gradient-text-animated {
+    background-image: linear-gradient(
+      90deg,
+      oklch(0.72 0.17 160),
+      oklch(0.76 0.16 150),
+      oklch(0.68 0.20 200),
+      oklch(0.72 0.17 160)
+    );
+  }
+
   /* ── Glass morphism — enhanced depth ── */
   .glass {
     @apply backdrop-blur-xl;
-    background: oklch(0.99 0 0 / 0.07);
-    border: 1px solid oklch(0.99 0 0 / 0.10);
-    box-shadow: 0 8px 32px oklch(0 0 0 / 0.06), inset 0 1px 0 oklch(0.99 0 0 / 0.12);
+    background: oklch(1 0 0 / 0.78);
+    border: 1px solid oklch(0.65 0.17 160 / 0.18);
+    box-shadow: 0 8px 32px oklch(0 0 0 / 0.08), inset 0 1px 0 oklch(1 0 0 / 0.6);
   }
   .dark .glass {
     background: oklch(0.13 0.008 240 / 0.55);
@@ -212,13 +297,13 @@
   /* ── Dimensional glass — deeper layering ── */
   .glass-deep {
     @apply backdrop-blur-2xl;
-    background: oklch(0.99 0 0 / 0.05);
-    border: 1px solid oklch(0.99 0 0 / 0.08);
+    background: oklch(1 0 0 / 0.72);
+    border: 1px solid oklch(0.65 0.17 160 / 0.16);
     box-shadow:
-      0 2px 4px oklch(0 0 0 / 0.04),
-      0 8px 24px oklch(0 0 0 / 0.06),
-      0 24px 48px oklch(0 0 0 / 0.04),
-      inset 0 1px 0 oklch(0.99 0 0 / 0.15);
+      0 2px 4px oklch(0 0 0 / 0.05),
+      0 8px 24px oklch(0 0 0 / 0.08),
+      0 24px 48px oklch(0 0 0 / 0.06),
+      inset 0 1px 0 oklch(1 0 0 / 0.65);
   }
   .dark .glass-deep {
     background: oklch(0.11 0.010 240 / 0.70);

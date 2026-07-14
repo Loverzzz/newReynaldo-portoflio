@@ -276,6 +276,26 @@ export default function Hero() {
   const tilt = useTilt({ strength: 10, stiffness: 200, damping: 25 });
   const spotlight = usePhotoSpotlight();
 
+  // Measure the photo card so the floating animated icons can sit *just
+  // outside* the frame on every breakpoint — previously they used a fixed
+  // radius (rx=175) which overlapped the image on larger screens where the
+  // card is wider (w-80 → 160px half-width > 151px offset).
+  const cardFrameRef = useRef<HTMLDivElement>(null);
+  const [cardSize, setCardSize] = useState({ w: 280, h: 373 });
+
+  useEffect(() => {
+    const el = cardFrameRef.current;
+    if (!el) return;
+    const update = () => {
+      const r = el.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) setCardSize({ w: r.width, h: r.height });
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
@@ -443,6 +463,7 @@ export default function Hero() {
               >
                 {/* Gradient border frame — tall card for full body */}
                 <div
+                  ref={cardFrameRef}
                   className="relative w-56 sm:w-72 lg:w-80 overflow-hidden shadow-2xl"
                   style={{
                     aspectRatio: "3/4",
@@ -542,14 +563,37 @@ export default function Hero() {
                   </div>
                 </div>
 
-                {/* Floating icon badges — positioned around the card */}
+                {/* Floating icon badges — positioned around the card.
+                    Icons are anchored to the card centre (left/top 50%) and
+                    translated outward by a radius derived from the MEASURED
+                    card size, so they always sit *outside* the photo frame on
+                    every breakpoint (mobile → lg). The old fixed radius (175px)
+                    was smaller than the lg card's half-width (160px), causing
+                    the icons to overlap/timpa the image. */}
                 {floatingIcons.map(({ Icon, delay, label }, idx) => {
-                  const angles = [-30, 30, 150, 210];
+                  // Four corners: upper-right, lower-right, lower-left, upper-left.
+                  const angles = [-35, 35, 145, 215];
                   const angle = (angles[idx] ?? 0) * (Math.PI / 180);
-                  const rx = 175;
-                  const ry = 200;
+                  // Horizontal gap between the card edge and the icon CENTRE.
+                  // Generous so the whole icon badge (and its float drift) stays
+                  // clearly OUTSIDE the photo frame — the old 30px gap left the
+                  // icon's inner edge only ~8px clear, so during the paint/
+                  // spotlight interaction the icons looked stacked on the photo.
+                  const gap = 58;
+                  // |cx| = halfWidth + gap  → icon centre sits `gap` px beyond
+                  // the card edge, guaranteed outside the frame on every break.
+                  const rx = (cardSize.w / 2 + gap) / Math.abs(Math.cos(angle));
+                  // Vertical spread — kept within the card's tall height so the
+                  // icons float BESIDE the photo (not above the badge / below the
+                  // name), avoiding any overlap with other Hero content.
+                  const ry = cardSize.h * 0.34;
                   const cx = Math.cos(angle) * rx;
                   const cy = Math.sin(angle) * ry;
+                  // Centre the ~44px icon badge on the computed point.
+                  const half = 22;
+                  // Small float amplitude (±3px) — enough to feel alive without
+                  // drifting back over the frame edge.
+                  const drift = 3;
                   return (
                     <motion.div
                       key={label}
@@ -557,14 +601,17 @@ export default function Hero() {
                       style={{
                         left: "50%",
                         top: "50%",
+                        // Always above the photo + paint-reveal overlays so the
+                        // icons stay crisp and never get obscured during hover.
+                        zIndex: 20,
                       }}
                       // Always visible — NO fade in/out. Only floating motion + entrance scale.
                       initial={{ opacity: 1, scale: 0 }}
                       animate={{
                         opacity: 1,
                         scale: 1,
-                        x: [cx - 22, cx - 18, cx - 22],
-                        y: [cy - 22, cy - 28, cy - 22],
+                        x: [cx - half, cx - half + drift, cx - half],
+                        y: [cy - half, cy - half - drift, cy - half],
                       }}
                       transition={{
                         opacity: { duration: 0 },
@@ -574,21 +621,21 @@ export default function Hero() {
                           delay,
                         },
                         x: {
-                          duration: 8,
+                          duration: 9,
                           repeat: Infinity,
                           ease: "easeInOut",
                           delay,
                         },
                         y: {
-                          duration: 8,
+                          duration: 9,
                           repeat: Infinity,
                           ease: "easeInOut",
                           delay,
                         },
                       }}
-                      whileHover={{ scale: 1.3, zIndex: 10 }}
+                      whileHover={{ scale: 1.3, zIndex: 30 }}
                     >
-                      <div className="p-2.5 rounded-xl bg-card/90 backdrop-blur-md border border-brand/30 shadow-lg shadow-brand/10 cursor-default">
+                      <div className="p-2.5 rounded-xl bg-card/95 backdrop-blur-md border border-brand/40 shadow-lg shadow-brand/15 cursor-default">
                         <Icon className="size-4 text-brand" />
                       </div>
                     </motion.div>

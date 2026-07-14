@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTilt } from "@/hooks/use-tilt";
 import { useTheme } from "next-themes";
@@ -597,144 +597,6 @@ function VideoCard({
   );
 }
 
-// ─── Featured Video ───────────────────────────────────────────────────────────
-function FeaturedVideo({
-  video,
-  onPlay,
-}: {
-  video: VideoItem;
-  onPlay: () => void;
-}) {
-  const thumbUrl = getThumbnailUrl(video);
-  const [imgError, setImgError] = useState(false);
-  const accentColor = categoryColors[video.category] || categoryColors.All;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="relative rounded-3xl overflow-hidden cursor-pointer group mb-12"
-      onClick={onPlay}
-    >
-      {/* Glow ring */}
-      <div
-        className="absolute -inset-1 rounded-3xl blur-xl opacity-40 pointer-events-none"
-        style={{
-          background: `linear-gradient(135deg, ${accentColor}, transparent 60%)`,
-        }}
-      />
-
-      <div className="relative aspect-[21/9] min-h-[240px] bg-zinc-900 rounded-3xl overflow-hidden border border-white/10">
-        {thumbUrl && !imgError ? (
-          <img
-            src={thumbUrl}
-            alt={video.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            onError={() => setImgError(true)}
-          />
-        ) : (
-          <div
-            className="w-full h-full flex items-center justify-center"
-            style={{
-              background: `linear-gradient(135deg, ${accentColor}33, ${accentColor}11)`,
-            }}
-          >
-            <Film className="w-24 h-24 opacity-20" />
-          </div>
-        )}
-
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
-
-        {/* Play button */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border-2 border-white/40 flex items-center justify-center shadow-2xl transition-all group-hover:bg-white/30"
-          >
-            <Play className="w-9 h-9 text-white fill-white ml-1" />
-          </motion.div>
-        </div>
-
-
-        {/* Info overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-8">
-          {/* Mobile: emoji-only awards */}
-          <div className="flex items-center gap-1 mb-1 md:hidden">
-            <span
-              className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white whitespace-nowrap"
-              style={{ background: accentColor }}
-            >
-              ✦ FEATURED
-            </span>
-            {video.awards && video.awards.length > 0
-              ? video.awards.map((aw) => (
-                  <span key={aw.label} title={aw.label} className="text-base">
-                    {aw.icon}
-                  </span>
-                ))
-              : video.award && <span className="text-base">🏆</span>}
-          </div>
-          {/* Desktop: full awards with labels */}
-          <div className="hidden md:flex flex-wrap items-center gap-2 mb-2">
-            <span
-              className="text-xs font-bold px-3 py-1 rounded-full text-white"
-              style={{ background: accentColor }}
-            >
-              ✦ FEATURED
-            </span>
-            {video.awards && video.awards.length > 0
-              ? video.awards.map((aw) => (
-                  <span
-                    key={aw.label}
-                    className="flex items-center gap-1 text-xs font-semibold text-yellow-400 bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm"
-                  >
-                    {aw.icon} {aw.label}
-                  </span>
-                ))
-              : video.award && (
-                  <span className="flex items-center gap-1 text-xs font-semibold text-yellow-400 bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm">
-                    <Trophy className="w-3 h-3" />
-                    {video.award}
-                  </span>
-                )}
-          </div>
-          <h2 className="text-white text-sm md:text-3xl font-bold leading-tight mb-0.5 md:mb-1 drop-shadow-lg line-clamp-2">
-            {video.title}
-          </h2>
-          {video.role && (
-            <p className="text-white/60 text-[10px] md:text-xs mb-0.5">
-              Role:{' '}
-              <span className="text-white/90 font-semibold">{video.role}</span>
-              {video.platform && (
-                <span className="ml-1">· {video.platform}</span>
-              )}
-            </p>
-          )}
-          <p className="hidden md:block text-white/70 text-base max-w-2xl line-clamp-2">
-            {video.description}
-          </p>
-          <div className="flex items-center gap-2 mt-1 md:mt-3">
-            <span className="text-white/50 text-[10px] md:text-xs flex items-center gap-1">
-              <Calendar className="w-2.5 h-2.5 md:w-3 md:h-3" /> {video.year}
-            </span>
-            <span className="hidden md:inline text-white/30">·</span>
-            <div className="hidden md:flex flex-wrap gap-1">
-              {video.tags.slice(0, 3).map((t) => (
-                <span key={t} className="text-white/60 text-xs bg-white/10 px-2 py-0.5 rounded-full">
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 // ─── Stats Bar ────────────────────────────────────────────────────────────────
 function StatsBar({ items }: { items: VideoItem[] }) {
   const stats = [
@@ -778,12 +640,32 @@ export default function CreativeVideos({ items }: CreativeVideosProps) {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null);
 
-  const featuredVideo = items.find((v) => v.featured) ?? items[0];
+  // Attach stable ids (original index) so duplicate titles get unique React keys.
+  const itemsWithId = useMemo(
+    () => items.map((v, i) => ({ ...v, _id: i })),
+    [items],
+  );
 
-  const filtered =
-    activeCategory === "All"
-      ? items
-      : items.filter((v) => v.category === activeCategory);
+  const filtered = useMemo(
+    () =>
+      activeCategory === "All"
+        ? itemsWithId
+        : itemsWithId.filter((v) => v.category === activeCategory),
+    [activeCategory, itemsWithId],
+  );
+
+  // Order: Di Balik Kemudi (featured) first at the top-left of the grid,
+  // then the rest sorted newest → oldest by year (2026 → 2022).
+  const sortedFiltered = useMemo(() => {
+    const featured = filtered.find((v) => v.featured);
+    const rest = filtered.filter((v) => !v.featured);
+    rest.sort((a, b) => {
+      const ya = parseInt(a.year ?? "0", 10) || 0;
+      const yb = parseInt(b.year ?? "0", 10) || 0;
+      return yb - ya; // descending (newest first)
+    });
+    return featured ? [featured, ...rest] : rest;
+  }, [filtered]);
 
   const handleOpen = useCallback((video: VideoItem) => {
     setSelectedVideo(video);
@@ -838,14 +720,6 @@ export default function CreativeVideos({ items }: CreativeVideosProps) {
         {/* Stats */}
         <StatsBar items={items} />
 
-        {/* Featured video */}
-        {featuredVideo && (
-          <FeaturedVideo
-            video={featuredVideo}
-            onPlay={() => handleOpen(featuredVideo)}
-          />
-        )}
-
         {/* Filter pills */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -883,9 +757,9 @@ export default function CreativeVideos({ items }: CreativeVideosProps) {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           <AnimatePresence mode="popLayout">
-            {filtered.map((video, i) => (
+            {sortedFiltered.map((video, i) => (
               <VideoCard
-                key={video.title}
+                key={video._id}
                 video={video}
                 index={i}
                 onClick={() => handleOpen(video)}
@@ -894,7 +768,7 @@ export default function CreativeVideos({ items }: CreativeVideosProps) {
           </AnimatePresence>
         </motion.div>
 
-        {filtered.length === 0 && (
+        {sortedFiltered.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

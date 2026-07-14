@@ -63,11 +63,12 @@ export default function Home() {
             eyebrow="Selected work"
             title="Projects"
             subtitle="Flying Higher and Infinity — the rocket is ready."
+            className="overflow-clip"
           >
             <Projects items={projects} />
           </SectionWrapper>
 
-          <CreativeVideos items={videos} />
+        <CreativeVideos items={videos} />
 
           <SectionWrapper
             id="contact"

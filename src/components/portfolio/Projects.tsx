@@ -1,12 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTilt } from '@/hooks/use-tilt';
-import { useTheme } from 'next-themes';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ExternalLink, ArrowUpRight, Sparkles, Filter } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { ExternalLink, ArrowUpRight, ChevronLeft, ChevronRight, Sparkles, Filter, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { ProjectItem } from '@/data/portfolio';
 import { projectCategories } from '@/data/portfolio';
@@ -15,154 +11,223 @@ interface ProjectsProps {
   items: ProjectItem[];
 }
 
-/* 3D tilt card */
-function ProjectCard({ project, index }: { project: ProjectItem; index: number }) {
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
-  const tilt = useTilt({ strength: 6, stiffness: 250, damping: 28 });
+/* ── 3D tunnel constants ── */
+const F = 850; // focal length (also z-spacing baseline)
+const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+
+/* ───────────────────────────────────────────────────
+   GalleryCard — each card lives at a depth in z-space.
+   As the camera (driven by scroll) moves forward, the card
+   approaches the screen plane (relZ → F), zooms to scale 1,
+   then swings to its side and fades as it passes by — like
+   walking through a 3D labyrinth corridor.
+─────────────────────────────────────────────────── */
+function GalleryCard({
+  project,
+  index,
+  total,
+  progress,
+  cameraMax,
+  mult,
+}: {
+  project: ProjectItem;
+  index: number;
+  total: number;
+  progress: ReturnType<typeof useScroll>['scrollYProgress'];
+  cameraMax: number;
+  mult: number;
+}) {
+  const baseZ = (index + 1) * F;
+  const side = index % 2 === 0 ? -1 : 1; // alternate left / right
+  const sideY = (index % 2 === 0 ? -1 : 1) * 0.3;
+
+  const cameraZ = useTransform(progress, [0, 1], [0, cameraMax]);
+  const relZ = useTransform(cameraZ, (cz) => baseZ - cz);
+
+  const scale = useTransform(relZ, (z) => clamp(F / Math.max(z, 60), 0.18, 2.4));
+  const x = useTransform(relZ, (z) => side * (z - F) * mult);
+  const y = useTransform(relZ, (z) => sideY * (z - F) * 0.16);
+  const rotateY = useTransform(relZ, (z) => side * 22 * ((z - F) / F));
+  const opacity = useTransform(
+    relZ,
+    [0, F * 0.22, F * 0.55, F * 2.0, F * 2.8],
+    [0, 0, 1, 1, 0],
+  );
+  const blur = useTransform(relZ, [F * 1.6, F * 2.8], [0, 3]);
+  const filter = useTransform(blur, (b) => `blur(${b}px)`);
+  const zIndex = useTransform(relZ, (z) => Math.round(3000 - z));
+
+  const Wrapper: React.ElementType = project.link ? 'a' : 'div';
+  const wrapperProps = project.link
+    ? {
+        href: project.link,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        'aria-label': `View project: ${project.title}`,
+      }
+    : {};
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -10, scale: 0.95 }}
-      transition={{ duration: 0.35, delay: index * 0.03, ease: [0.22, 1, 0.36, 1] }}
-      ref={tilt.ref}
-      onMouseMove={tilt.handleMouse}
-      onMouseLeave={tilt.handleLeave}
-      style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformStyle: 'preserve-3d' }}
-      className="relative group will-change-transform"
-    >
-      {/* Glow behind card */}
-      <div
-        className="absolute -inset-0.5 rounded-2xl opacity-0 group-hover:opacity-50 blur-lg transition-opacity duration-500 pointer-events-none"
-        style={{ background: 'linear-gradient(135deg, oklch(0.65 0.17 160 / 0.4), oklch(0.60 0.20 200 / 0.3))' }}
-      />
-
-      <Card
-        className={`relative h-full overflow-hidden border transition-all duration-500 holographic
-          ${isDark
-            ? 'bg-card/80 border-border/50 hover:border-brand/40'
-            : 'bg-card/90 border-border/50 hover:border-brand/40'}
-          hover:shadow-2xl hover:shadow-brand/10`}
-        style={{ transformStyle: 'preserve-3d' }}
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <motion.div
+        style={{
+          x,
+          y,
+          scale,
+          rotateY,
+          opacity,
+          zIndex,
+          filter,
+          transformPerspective: 1000,
+          transformStyle: 'preserve-3d',
+          willChange: 'transform, opacity',
+        }}
+        className="pointer-events-auto relative"
       >
-        {/* Top gradient accent line */}
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-brand/40 via-brand to-brand/40 opacity-30 group-hover:opacity-100 transition-opacity duration-500" />
+        <Wrapper
+          {...wrapperProps}
+          className="group block w-[80vw] max-w-[440px] sm:w-[440px] rounded-3xl overflow-hidden
+                     border border-border/60 bg-card/90 backdrop-blur-md
+                     shadow-2xl shadow-black/30 hover:border-brand/50
+                     transition-colors duration-500 focus:outline-none
+                     focus-visible:ring-2 focus-visible:ring-brand"
+        >
+          {/* Image */}
+          <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+            {project.image ? (
+              <motion.img
+                src={project.image}
+                alt={project.title}
+                className="w-full h-full object-cover"
+                whileHover={{ scale: 1.06 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-brand/15 to-brand/5">
+                <Sparkles className="size-10 text-brand/50" />
+              </div>
+            )}
 
-        {/* Image / thumbnail */}
-        {project.image && (
-          <div className="relative overflow-hidden h-44" style={{ transform: 'translateZ(4px)' }}>
-            <motion.img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover"
-              whileHover={{ scale: 1.08 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            />
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+            {/* Gradient + vignette */}
+            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/15 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
 
-            {/* Category chip — fixed dark scrim + white text (theme-independent)
-                so it stays legible over white/light images like "Music Recommendation". */}
+            {/* Category chip (theme-independent scrim) */}
             <div className="absolute top-3 right-3">
-              <span
-                className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full
-                           bg-black/55 text-white backdrop-blur-md border border-white/20 shadow-sm"
-              >
+              <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/55 text-white backdrop-blur-md border border-white/20 shadow-sm">
                 {project.category}
               </span>
             </div>
 
-            {/* Sparkle icon on hover */}
-            <motion.div
-              className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-            >
-              <Sparkles className="size-4 text-brand" />
-            </motion.div>
-          </div>
-        )}
+            {/* Title overlay */}
+            <div className="absolute bottom-0 inset-x-0 p-4">
+              <h3 className="font-display font-bold text-base sm:text-lg text-foreground leading-tight line-clamp-2 group-hover:text-brand transition-colors duration-300">
+                {project.title}
+              </h3>
+            </div>
 
-        <CardContent className="p-5 space-y-4" style={{ transformStyle: 'preserve-3d' }}>
-          {/* Category badge when no image */}
-          {!project.image && (
-            <Badge variant="secondary" className="text-[10px] font-bold bg-brand/10 text-brand border-brand/20">
-              {project.category}
-            </Badge>
-          )}
-
-          {/* Title */}
-          <h3
-            className="font-bold text-base md:text-lg text-foreground group-hover:text-brand transition-colors duration-300 leading-tight"
-            style={{ transform: 'translateZ(6px)' }}
-          >
-            {project.title}
-          </h3>
-
-          {/* Description */}
-          <p
-            className="text-sm text-muted-foreground leading-relaxed line-clamp-3"
-            style={{ transform: 'translateZ(4px)' }}
-          >
-            {project.description}
-          </p>
-
-          {/* Tags / tech stack */}
-          <div className="flex flex-wrap gap-1.5" style={{ transform: 'translateZ(3px)' }}>
-            {project.tags.slice(0, 5).map((tag) => (
-              <motion.span
-                key={tag}
-                whileHover={{ scale: 1.08, y: -1 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                className="px-2 py-0.5 text-[10px] font-semibold rounded-full border border-brand/20 bg-brand/5 text-brand hover:bg-brand/15 transition-colors duration-300 cursor-default"
-              >
-                {tag}
-              </motion.span>
-            ))}
-            {project.tags.length > 5 && (
-              <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full border border-border/50 bg-muted text-muted-foreground cursor-default">
-                +{project.tags.length - 5}
-              </span>
+            {/* Hover link affordance */}
+            {project.link && (
+              <div className="absolute top-3 left-3 p-1.5 rounded-lg bg-black/45 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-400 backdrop-blur-sm">
+                <ExternalLink className="size-3.5" />
+              </div>
             )}
           </div>
 
-          {/* Link */}
-          {project.link && (
-            <div style={{ transform: 'translateZ(8px)' }}>
-              <motion.a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand/80 transition-colors duration-300 group/link"
-                whileHover={{ x: 2 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+          {/* Tags */}
+          <div className="p-3.5 flex flex-wrap gap-1.5">
+            {project.tags.slice(0, 4).map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-0.5 text-[10px] font-semibold rounded-full border border-brand/20 bg-brand/5 text-brand"
               >
-                <ExternalLink className="size-3.5 group-hover/link:scale-110 transition-transform" />
-                View Project
-                <ArrowUpRight className="size-3 opacity-0 group-hover/link:opacity-100 transition-opacity" />
-              </motion.a>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </motion.div>
+                {tag}
+              </span>
+            ))}
+            {project.tags.length > 4 && (
+              <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full border border-border/50 bg-muted text-muted-foreground">
+                +{project.tags.length - 4}
+              </span>
+            )}
+          </div>
+        </Wrapper>
+      </motion.div>
+    </div>
   );
 }
 
+/* ───────────────────────────────────────────────────
+   Projects — 3D labyrinth scroll gallery
+─────────────────────────────────────────────────── */
 export default function Projects({ items }: ProjectsProps) {
   const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [active, setActive] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const filtered = activeCategory === 'All'
     ? items
     : items.filter((p) => p.category === activeCategory);
 
-  const categories = projectCategories;
+  const total = filtered.length;
+  const cameraMax = total > 1 ? (total - 1) * F : 0;
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  // Track active card from scroll progress.
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    const idx = total > 1 ? Math.round(v * (total - 1)) : 0;
+    setActive(clamp(idx, 0, Math.max(0, total - 1)));
+  });
+
+  // Responsive multiplier for side swing.
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  const mult = isMobile ? 0.34 : 0.5;
+
+  const goTo = useCallback(
+    (idx: number) => {
+      const el = containerRef.current;
+      if (!el) return;
+      const p = total > 1 ? idx / (total - 1) : 0;
+      const rect = el.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const distance = el.offsetHeight - window.innerHeight;
+      window.scrollTo({ top: top + p * distance, behavior: 'smooth' });
+    },
+    [total],
+  );
+
+  const goNext = () => goTo(Math.min(active + 1, total - 1));
+  const goPrev = () => goTo(Math.max(active - 1, 0));
+
+  // Keyboard nav when the gallery viewport is on screen.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const el = containerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const inView = rect.top <= window.innerHeight * 0.6 && rect.bottom >= window.innerHeight * 0.4;
+      if (!inView) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); goNext(); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); goPrev(); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [active, total, goNext, goPrev]);
+
+  const activeProject = filtered[active];
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       {/* ── Filter pills ── */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -172,7 +237,7 @@ export default function Projects({ items }: ProjectsProps) {
         className="flex flex-wrap justify-center gap-2"
       >
         <Filter className="size-4 text-muted-foreground self-center mr-1" />
-        {categories.map((cat, idx) => {
+        {projectCategories.map((cat, idx) => {
           const isActive = cat === activeCategory;
           return (
             <motion.div
@@ -207,28 +272,138 @@ export default function Projects({ items }: ProjectsProps) {
         })}
       </motion.div>
 
-      {/* ── Project grid ── */}
-      <div
-        className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        style={{ perspective: '1200px' }}
-      >
-        <AnimatePresence mode="popLayout">
-          {filtered.map((project, index) => (
-            <ProjectCard key={project.title} project={project} index={index} />
-          ))}
-        </AnimatePresence>
-      </div>
-
       {/* Empty state */}
-      {filtered.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-16 text-muted-foreground"
-        >
+      {total === 0 && (
+        <div className="text-center py-16 text-muted-foreground">
           <Sparkles className="size-8 mx-auto mb-3 opacity-30" />
           <p className="text-sm">No projects in this category yet.</p>
-        </motion.div>
+        </div>
+      )}
+
+      {/* ── 3D labyrinth scroll gallery ── */}
+      {total > 0 && (
+        <div
+          ref={containerRef}
+          className="relative"
+          style={{ height: `${Math.max(total, 3) * 100}vh` }}
+        >
+          <div className="sticky top-0 h-screen overflow-hidden">
+            {/* Perspective stage */}
+            <div
+              className="absolute inset-0"
+              style={{ perspective: '1200px', perspectiveOrigin: 'center 45%' }}
+            >
+              {/* Ambient floor glow following active side */}
+              <div
+                className="absolute inset-x-0 bottom-0 h-1/3 pointer-events-none"
+                style={{
+                  background:
+                    'radial-gradient(ellipse 60% 100% at 50% 120%, oklch(0.65 0.17 160 / 0.10), transparent 70%)',
+                }}
+              />
+
+              {filtered.map((project, index) => (
+                <GalleryCard
+                  key={`${project.title}-${activeCategory}`}
+                  project={project}
+                  index={index}
+                  total={total}
+                  progress={scrollYProgress}
+                  cameraMax={cameraMax}
+                  mult={mult}
+                />
+              ))}
+            </div>
+
+            {/* ── Active project info panel ── */}
+            <AnimatePresence mode="wait">
+              {activeProject && (
+                <motion.div
+                  key={`${activeProject.title}-${active}`}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 16 }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[92vw] max-w-2xl
+                             rounded-2xl border border-border/50 bg-card/85 backdrop-blur-xl
+                             p-4 sm:p-5 shadow-xl shadow-black/20"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="label-xs text-brand mb-1.5">{activeProject.category}</p>
+                      <h3 className="font-display font-bold text-base sm:text-lg text-foreground leading-tight line-clamp-2">
+                        {activeProject.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-2 mt-1.5">
+                        {activeProject.description}
+                      </p>
+                    </div>
+                    {activeProject.link && (
+                      <a
+                        href={activeProject.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="shrink-0 inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand/80 transition-colors"
+                      >
+                        View
+                        <ArrowUpRight className="size-3.5" />
+                      </a>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* ── Navigation controls ── */}
+            <div className="absolute top-1/2 left-3 sm:left-6 -translate-y-1/2 z-50">
+              <button
+                onClick={goPrev}
+                disabled={active <= 0}
+                aria-label="Previous project"
+                className="grid place-items-center size-10 rounded-full border border-border/60 bg-card/70 backdrop-blur-md text-foreground hover:border-brand/50 hover:text-brand disabled:opacity-30 disabled:pointer-events-none transition-all"
+              >
+                <ChevronLeft className="size-5" />
+              </button>
+            </div>
+            <div className="absolute top-1/2 right-3 sm:right-6 -translate-y-1/2 z-50">
+              <button
+                onClick={goNext}
+                disabled={active >= total - 1}
+                aria-label="Next project"
+                className="grid place-items-center size-10 rounded-full border border-border/60 bg-card/70 backdrop-blur-md text-foreground hover:border-brand/50 hover:text-brand disabled:opacity-30 disabled:pointer-events-none transition-all"
+              >
+                <ChevronRight className="size-5" />
+              </button>
+            </div>
+
+            {/* ── Progress dots + counter + hint ── */}
+            <div className="absolute top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                {filtered.map((p, i) => (
+                  <button
+                    key={`${p.title}-dot`}
+                    onClick={() => goTo(i)}
+                    aria-label={`Go to project ${i + 1}`}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === active
+                        ? 'w-6 bg-brand'
+                        : 'w-1.5 bg-border hover:bg-brand/50'
+                    }`}
+                  />
+                ))}
+              </div>
+              <div className="flex items-center gap-2 text-[11px] font-medium text-muted-foreground">
+                <Compass className="size-3.5 text-brand/70" />
+                <span>
+                  {active + 1} / {total}
+                </span>
+                <span className="text-border/70">·</span>
+                <span className="hidden sm:inline">Scroll or use arrows to explore the labyrinth</span>
+                <span className="sm:hidden">Swipe / scroll</span>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
