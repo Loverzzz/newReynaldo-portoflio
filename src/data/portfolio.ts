@@ -1233,6 +1233,42 @@ export const videos: VideoItem[] = [
     featured: false,
     platform: "Instagram Reels",
   },
+  {
+    title: "Tmax Rental Bali — Reels — Dygtal",
+    description:
+      "AI-generated visual content for Tmax Rental Bali brand campaign at Dygtal Marketing Solutions. Produced using generative AI platforms combined with Adobe Premiere Pro and After Effects.",
+    category: "AI Creative",
+    tags: [
+      "AI Video",
+      "Generative AI",
+      "After Effects",
+      "Brand Campaign",
+      "Dygtal",
+    ],
+    thumbnail: "/thumbnail tmax rental bali ai.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=9Z-sXMEDUYg",
+    duration: "0:00",
+    year: "2026",
+    featured: false,
+  },
+  {
+    title: "Tmax Rental Bali — Reels — Dygtal",
+    description:
+      "AI-generated visual content for Tmax Rental Bali brand campaign at Dygtal Marketing Solutions. Produced using generative AI platforms combined with Adobe Premiere Pro and After Effects.",
+    category: "AI Creative",
+    tags: [
+      "AI Video",
+      "Generative AI",
+      "After Effects",
+      "Brand Campaign",
+      "Dygtal",
+    ],
+    thumbnail: "/thumbnail tmax rental bali ai 2.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=0HLjz_OYnVA",
+    duration: "0:00",
+    year: "2026",
+    featured: false,
+  },
 ];
 
 // ─── Video Categories ──────────────────────────────────
