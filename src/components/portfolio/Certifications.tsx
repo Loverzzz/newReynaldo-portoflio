@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTilt } from "@/hooks/use-tilt";
 import {
   ExternalLink,
   ChevronDown,
@@ -94,36 +93,13 @@ function getProviderMeta(provider: string) {
   return providerMeta["default"];
 }
 
-/* 3D tilt certification card */
 function CertCard({ cert, index }: { cert: CertificationItem; index: number }) {
-  const tilt = useTilt({ strength: 6, stiffness: 280, damping: 28 });
   const meta = getProviderMeta(cert.provider);
   const Icon = meta.icon;
 
-  const Wrapper: React.ElementType = cert.link ? "a" : "div";
-  const wrapperProps = cert.link
-    ? {
-        href: cert.link,
-        target: "_blank",
-        rel: "noopener noreferrer",
-        "aria-label": `View credential: ${cert.title}`,
-      }
-    : {};
-
   return (
-    <Wrapper
-      {...wrapperProps}
-      className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-2xl"
-    >
+    <div className="block h-full select-text">
       <motion.div
-        ref={tilt.ref}
-        onMouseMove={tilt.handleMouse}
-        onMouseLeave={tilt.handleLeave}
-        style={{
-          rotateX: tilt.rotateX,
-          rotateY: tilt.rotateY,
-          transformStyle: "preserve-3d",
-        }}
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: true, margin: "-40px" }}
@@ -208,15 +184,15 @@ function CertCard({ cert, index }: { cert: CertificationItem; index: number }) {
                 </span>
               )}
               {cert.credentialId && (
-                <span className="text-[10px] font-mono text-muted-foreground/70 truncate max-w-[120px]">
-                  #{cert.credentialId.slice(0, 12)}…
+                <span className="break-all text-[10px] font-mono text-muted-foreground/70">
+                  #{cert.credentialId}
                 </span>
               )}
             </div>
           </div>
         </div>
       </motion.div>
-    </Wrapper>
+    </div>
   );
 }
 
@@ -292,7 +268,10 @@ export default function Certifications({ items }: CertificationsProps) {
           transition={{ duration: 0.4 }}
           className="flex justify-center pt-4"
         >
-          <motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.95 }}>
+          <motion.div
+            whileHover={{ scale: 1.04, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <Button
               variant="outline"
               size="sm"
