@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 const geistSans = Geist({
@@ -14,30 +13,42 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-  export const metadata: Metadata = {
-    title: "Reynaldo Arya | AI VIDEO CREATOR @dygtalmarketing",
-    description:
-      "Portfolio of Reynaldo Arya Budi Trisna — Content Moderator, Robotics & AI Graduate, AI/ML & Data Enthusiast. Explore projects, skills, and experience.",
-    keywords: [
-      "Reynaldo",
-      "Data Scientist",
-      "ML Engineer",
-      "Portfolio",
-      "AI",
-      "Machine Learning",
-      "IoT",
-    ],
-    authors: [{ name: "Reynaldo Arya Budi Trisna" }],
-    icons: {
-      icon: "/favicon.svg",
-    },
-    openGraph: {
-      title: "Reynaldo Arya | AI VIDEO CREATOR @dygtalmarketing",
-      description:
-        "Portfolio of Reynaldo — Content Moderator, Robotics & AI Graduate, AI/ML & Data Enthusiast.",
-      type: "website",
-    },
-  };
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+});
+
+const description =
+  "Reynaldo Arya Budi Trisna — AI video editor and social media data analyst based in Bali. Award-winning short film editor with a B.Eng in Robotics & AI.";
+
+export const metadata: Metadata = {
+  title: "Reynaldo Arya — AI Video Editor & Data Analyst",
+  description,
+  keywords: [
+    "Reynaldo Arya",
+    "AI Video Editor",
+    "Video Editor Bali",
+    "Social Media Analyst",
+    "Data Analyst",
+    "Portfolio",
+  ],
+  authors: [{ name: "Reynaldo Arya Budi Trisna" }],
+  icons: {
+    icon: "/favicon.svg",
+  },
+  openGraph: {
+    title: "Reynaldo Arya — AI Video Editor & Data Analyst",
+    description,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Reynaldo Arya — AI Video Editor & Data Analyst",
+    description,
+  },
+};
 
 export default function RootLayout({
   children,
@@ -47,12 +58,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} font-sans antialiased`}
       >
-        <ThemeProvider>
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

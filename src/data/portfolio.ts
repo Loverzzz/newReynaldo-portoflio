@@ -3,12 +3,16 @@ export type Highlight = { label: string; value: string };
 
 export type Profile = {
   name: string;
+  shortName: string;
+  role: string;
   location: string;
   email: string;
   phone: string;
   linkedin: string;
-  headline: string;
+  github: string;
+  intro: string;
   summary: string;
+  availability: string;
   highlights: Highlight[];
 };
 
@@ -38,21 +42,28 @@ export type CertificationItem = {
   issued?: string;
 };
 
+export type SkillGroup = { title: string; items: string[] };
+
 // ─── Profile ────────────────────────────────────────────
 export const profile: Profile = {
   name: "Reynaldo Arya Budi Trisna",
+  shortName: "Reynaldo Arya",
+  role: "AI Video Editor & Social Media Data Analyst",
   location: "Denpasar, Bali, Indonesia",
   email: "reynaldstar@gmail.com",
   phone: "+6281915967694",
   linkedin: "https://www.linkedin.com/in/reynaldoabt/",
-  headline:
-    "AI Video Editor | B.Eng Robotics & AI | AI & Data Enthusiast | ex-Content Moderator",
+  github: "https://github.com/Loverzzz",
+  intro:
+    "I edit video — short films, brand ads and social content — and I use data to find out what actually works. Currently making AI-assisted campaigns at Dygtal Marketing Solutions in Bali.",
   summary:
-    "Versatile professional with a Bachelor's degree in Robotics and AI Engineering. Combining expertise in AI-driven content production, social media analytics, data science, and content moderation — with a proven track record across high-volume content review, AI-assisted visual production, and data-driven social media strategy. Seeking roles where technical depth and creative capability drive measurable impact.",
+    "I hold a Bachelor's degree in Robotics & AI Engineering, but most of my work happens on an editing timeline. I edited the short film Di Balik Kemudi, which won 1st place at Driyakarya Film Festival 2021 and is now on Bioskop Online. I've edited podcasts and educational series for Airlangga Executive Education, spent a year in content moderation at Gear Inc / Telus Digital with 93% accuracy, and now produce AI-assisted video for hospitality, F&B and real-estate brands — while tracking how each post performs.",
+  availability: "Open to full-time roles in video, creative or data",
   highlights: [
-    { label: "Accuracy (Moderation)", value: "93%" },
-    { label: "Exposure Growth (AEEC)", value: "+20%" },
-    { label: "IoT Monitoring (Aria Agri)", value: "+60%" },
+    { value: "1st", label: "Place, Driyakarya Film Festival 2021" },
+    { value: "93%", label: "Moderation accuracy at Gear Inc" },
+    { value: "+20%", label: "Social exposure growth at AEEC Unair" },
+    { value: "B.Eng", label: "Robotics & AI Engineering" },
   ],
 };
 
@@ -67,21 +78,39 @@ export const achievements: string[] = [
 ];
 
 // ─── Skills ────────────────────────────────────────────
-export const skills: string[] = [
-  "Content Moderation & Policy",
-  "Data Analysis (Python, Pandas)",
-  "Machine Learning (scikit-learn)",
-  "Deep Learning (TensorFlow / PyTorch)",
-  "AI Automation",
-  "AI Image and Video Creation",
-  "SQL",
-  "Power BI",
-  "Metabase",
-  "Streamlit",
-  "React + TypeScript",
-  "IoT / Embedded (Arduino, C/C++)",
-  "Video Editing (Premiere, After Effects)",
-  "Design (Photoshop, Illustrator)",
+export const skillGroups: SkillGroup[] = [
+  {
+    title: "Video & Creative",
+    items: [
+      "Adobe Premiere Pro",
+      "Adobe After Effects",
+      "Color grading & audio design",
+      "AI image & video generation",
+      "Short-form (Reels, TikTok, Shorts)",
+      "Photoshop & Illustrator",
+    ],
+  },
+  {
+    title: "Data & AI",
+    items: [
+      "Python (Pandas, scikit-learn)",
+      "TensorFlow / PyTorch",
+      "SQL",
+      "Power BI, Metabase, Streamlit",
+      "Social media analytics",
+      "AI automation",
+    ],
+  },
+  {
+    title: "Operations & Engineering",
+    items: [
+      "Content moderation & policy",
+      "Quality review & reporting",
+      "React + TypeScript",
+      "IoT / Embedded (Arduino, C/C++)",
+      "English — EF SET certified",
+    ],
+  },
 ];
 
 // ─── Experience ────────────────────────────────────────
@@ -436,12 +465,10 @@ export const certifications: CertificationItem[] = [
 
 // ─── Navigation ────────────────────────────────────────
 export const navItems = [
-  { id: "about", label: "About" },
-  { id: "skills", label: "Skills" },
-  { id: "certifications", label: "Certifications" },
+  { id: "work", label: "Work" },
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
-  { id: "creative", label: "Creative" },
+  { id: "about", label: "About" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -456,48 +483,56 @@ export const projectCategories = [
 // ─── Video Types ────────────────────────────────────────
 export type VideoItem = {
   title: string;
-  description: string;
+  /** Brand / organisation the video was made for or with. */
+  client?: string;
+  description?: string;
   category: string;
-  tags: string[];
+  tags?: string[];
+  /** Optional custom thumbnail. YouTube links get one automatically. */
   thumbnail?: string | null;
+  /** YouTube (watch, youtu.be, shorts) or Instagram link. */
   videoUrl: string;
-  duration?: string;
   year?: string;
   featured?: boolean;
-  award?: string;
-  awards?: { label: string; icon?: string }[];
+  awards?: string[];
   role?: string;
-  platform?: string;
   galleryImages?: string[];
 };
 
 // ─── Videos ─────────────────────────────────────────────
+//
+// HOW TO ADD A NEW VIDEO
+// Copy this block into the list below and fill it in. For YouTube links the
+// thumbnail is pulled automatically, so `thumbnail` can be left out.
+// Shorts links (youtube.com/shorts/...) open in a vertical player.
+//
+//   {
+//     title: "Video title",
+//     client: "Brand name",
+//     category: "AI Creative",   // Cinematic | AI Creative | Short-form | Corporate
+//     videoUrl: "https://youtu.be/XXXXXXXXXXX",
+//     year: "2026",
+//     role: "Editor",            // optional
+//     description: "One or two sentences about what you did.", // optional
+//   },
+//
 export const videos: VideoItem[] = [
   {
     title: "Di Balik Kemudi",
+    client: "Short film",
     description:
-      "Award-winning short film that received multiple prestigious festival recognitions. Worked as Editor — handling full editing, color grading, and audio design from start to finish. Available on Bioskop Online.",
+      "A short film I edited from rough cut to final delivery — picture edit, color grading and audio design. It won 1st place at Driyakarya Film Festival 2021, was an official selection at Lampung Film Festival 2022, featured in Jelajah Sinema Indonesia 2023, and is available on Bioskop Online.",
     category: "Cinematic",
-    tags: [
-      "Short Film",
-      "Color Grading",
-      "Audio Design",
-      "Premiere Pro",
-      "After Effects",
-    ],
-    thumbnail: null,
+    tags: ["Short film", "Color grading", "Audio design", "Premiere Pro"],
     videoUrl: "https://youtu.be/T9x1gljnHE4",
-    duration: "0:00",
     year: "2021",
     featured: true,
     role: "Editor",
-    platform: "Short-Film",
-    award: "🏆 1st Place — Driyakarya Film Festival 2021",
     awards: [
-      { label: "1st Place — Driyakarya Film Festival 2021", icon: "🏆" },
-      { label: "Official Selection — Lampung Film Festival 2022", icon: "🎖️" },
-      { label: "Featured Film — Jelajah Sinema Indonesia 2023", icon: "⭐" },
-      { label: "Bioskop Online", icon: "🎬" },
+      "1st Place — Driyakarya Film Festival 2021",
+      "Official Selection — Lampung Film Festival 2022",
+      "Featured — Jelajah Sinema Indonesia 2023",
+      "Streaming on Bioskop Online",
     ],
     galleryImages: [
       "/images/videos/dibalik-kemudi-1.png",
@@ -505,777 +540,427 @@ export const videos: VideoItem[] = [
       "/images/videos/dibalik-kemudi-3.png",
     ],
   },
+
+  // ── NEW YOUTUBE VIDEOS — paste new entries here ──
+
+  // ── AI Creative · Dygtal Marketing Solutions ──
   {
-    title:
-      "Knowledge Discovery Ep. 1 - Disruptive Innovation: a chance or a challenge?",
+    title: "AI campaign no. 1",
+    client: "Tmax Rental Bali",
     description:
-      "Podcast video for Knowledge Discovery Episode 1 at Airlangga Executive Education Center. Discussing Disruptive Innovation — opportunity or challenge? Handled editing, color grading, and audio design.",
-    category: "Corporate",
-    tags: [
-      "Podcast",
-      "Video Editing",
-      "Color Grading",
-      "Corporate",
-      "Premiere Pro",
-    ],
-    thumbnail: null,
-    videoUrl: "https://www.youtube.com/watch?v=VgtTa_HbKM4&t=67s",
-    duration: "0:00",
-    year: "2022",
-    featured: false,
-  },
-  {
-    title: "Knowledge Discovery Ep. 2 - Penerapan BLUD Puskesmas",
-    description:
-      "Podcast video for Knowledge Discovery Episode 2 at Airlangga Executive Education Center. Discussing the Implementation of BLUD Puskesmas. Curated by Dr. Zaenal Fanani SE., MSA., Ak., CA., ACPA. from Universitas Airlangga. Handled editing, color grading, and audio design.",
-    category: "Corporate",
-    tags: [
-      "Podcast",
-      "Video Editing",
-      "Color Grading",
-      "Corporate",
-      "Premiere Pro",
-    ],
-    thumbnail: null,
-    videoUrl: "https://www.youtube.com/watch?v=LDzg5sSzWmY&t=125s",
-    duration: "0:00",
-    year: "2022",
-    featured: false,
-  },
-  {
-    title: "MEI HIGHLIGHT — AEEC Unair",
-    description:
-      "Monthly highlight video for May at Airlangga Executive Education Center (AEEC) Universitas Airlangga. Included video editing, color grading, and audio design for social media content.",
-    category: "Short-form",
-    tags: ["Reels", "Highlight", "Social Media", "AEEC", "Premiere Pro"],
-    thumbnail: "/thumbnail mei highlight.jpg",
-    videoUrl: "https://www.instagram.com/reel/CePz6XnpyqP/",
-    duration: "0:00",
-    year: "2022",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "AI Generated Content (Beam and Bare) — Dygtal",
-    description:
-      "AI-generated visual content for Beam and Bare brand campaign at Dygtal Marketing Solutions. Produced using generative AI platforms combined with Adobe Premiere Pro and After Effects.",
+      "AI-generated visuals for a Tmax Rental Bali campaign, finished in Premiere Pro and After Effects.",
     category: "AI Creative",
-    tags: [
-      "AI Video",
-      "Generative AI",
-      "After Effects",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail beam and bare.png",
-    videoUrl: "https://www.youtube.com/watch?v=8-jxbGppTRU",
-    duration: "0:00",
+    tags: ["AI video", "Automotive"],
+    thumbnail: "/thumbnail tmax rental bali ai.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=9Z-sXMEDUYg",
     year: "2026",
-    featured: false,
   },
   {
-    title: "Gusto AI Transition Creation — Dygtal",
+    title: "AI campaign no. 2",
+    client: "Tmax Rental Bali",
     description:
-      "AI-generated transition video content created for Gusto brand at Dygtal Marketing Solutions. Produced using generative AI platforms combined with Adobe Premiere Pro and After Effects.",
+      "AI-generated visuals for a Tmax Rental Bali campaign, finished in Premiere Pro and After Effects.",
     category: "AI Creative",
-    tags: [
-      "AI Video",
-      "Generative AI",
-      "Transitions",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: null,
-    videoUrl: "https://www.youtube.com/watch?v=rRYL0Bo-c48",
-    duration: "0:00",
+    tags: ["AI video", "Automotive"],
+    thumbnail: "/thumbnail tmax rental bali ai 2.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=0HLjz_OYnVA",
     year: "2026",
-    featured: false,
   },
   {
-    title: "Cook and Baker — Reels — Dygtal",
+    title: "The Cube and The Wing",
+    client: "Bonum Living Villas",
     description:
-      "Social media Reels content for Cook and Baker, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reels",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail cook and baker.jpg",
-    videoUrl: "https://www.instagram.com/reel/DYmeo3kPnXs/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Feast — Reels — Dygtal",
-    description:
-      "Social media Reels content for Feast, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reels",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail feast.jpg",
-    videoUrl: "https://www.instagram.com/reel/DYoW-ioiEqg/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Feast — Reels — Dygtal",
-    description:
-      "Social media Reels content for Feast, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reels",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail feast 2.jpg",
-    videoUrl: "https://www.instagram.com/reel/DZBsvKvTsNb/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Christope C Hairsalon — Reels — Dygtal",
-    description:
-      "Social media Reels content for Christope C Hairsalon, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reels",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail christope 2.jpg",
-    videoUrl: "https://www.youtube.com/watch?v=bZZHYcLLzXY",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Christope C Hairsalon — Reels — Dygtal",
-    description:
-      "Social media Reels content for Christope C Hairsalon, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reels",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail christope 3.jpg",
-    videoUrl: "https://www.instagram.com/p/DaCuQ_qJ65v/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Christope C Hairsalon — Reels — Dygtal",
-    description:
-      "Social media Reels content for Christope C Hairsalon, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reels",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail christope.jpg",
-    videoUrl: "https://www.instagram.com/p/DZG0AELJofc/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Laci Asmara — Reels — Dygtal",
-    description:
-      "Social media Reels content for Laci Asmara, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reels",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail laci.jpg",
-    videoUrl: "https://www.instagram.com/p/DY8m0nFS5gz/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Cook and Baker — Reels — Dygtal",
-    description:
-      "Social media Reels content for Cook and Baker, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reels",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail cook and baker 2.jpg",
-    videoUrl: "https://www.instagram.com/reel/DY11qUPvaO0/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Arya Ubud — Reels — Dygtal",
-    description:
-      "Social media Reels content for Arya Ubud, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reels",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail arya ubud.jpg",
-    videoUrl: "https://www.instagram.com/reel/DYvg-nfCVAd/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "The Cube and The Wing by Bonum Living Villas — Dygtal",
-    description:
-      "The Cube and The Wing by Bonum Living Villas bring together quiet architecture, open space, and the slower rhythm of Ubud. AI-generated visual content produced at Dygtal Marketing Solutions.",
+      "Quiet architecture, open space and the slower rhythm of Ubud. AI-generated visuals finished in Premiere Pro and After Effects.",
     category: "AI Creative",
-    tags: [
-      "AI Video",
-      "Generative AI",
-      "Real Estate",
-      "Brand Campaign",
-      "Dygtal",
-    ],
+    tags: ["AI video", "Real estate", "After Effects"],
     thumbnail: "/thumbnail bonum.png",
     videoUrl: "https://www.instagram.com/p/DYOWvX5xnYD/",
-    duration: "0:00",
     year: "2026",
-    featured: false,
-    platform: "Instagram",
   },
   {
-    title: "The Wing Villa by Bonum Living Villas — Dygtal",
+    title: "The Wing Villa",
+    client: "Bonum Living Villas",
     description:
-      "The Wing Villa by Bonum Living Villas feels intimate in a way that's hard to explain, soft mornings, quiet corners, and a space that naturally slows everything down. A different side of staying in Ubud. AI-generated visual content produced at Dygtal Marketing Solutions.",
+      "Soft mornings and quiet corners — a slower side of staying in Ubud. AI-generated visuals finished in Premiere Pro and After Effects.",
     category: "AI Creative",
-    tags: [
-      "AI Video",
-      "Generative AI",
-      "Real Estate",
-      "Brand Campaign",
-      "Dygtal",
-    ],
+    tags: ["AI video", "Real estate"],
     thumbnail: "/thumbnail bonum 2.png",
     videoUrl: "https://www.instagram.com/p/DYYV2yGDbDb/",
-    duration: "0:00",
     year: "2026",
-    featured: false,
-    platform: "Instagram",
   },
   {
-    title: "Island Of Durian — AI Creation",
+    title: "Brand campaign",
+    client: "Beam and Bare",
     description:
-      "AI-generated visual content for Island Of Durian. Produced using generative AI platforms combined with Adobe Premiere Pro and After Effects at Dygtal Marketing Solutions.",
+      "AI-generated visuals for a Beam and Bare campaign, composited and finished in After Effects.",
     category: "AI Creative",
-    tags: [
-      "AI Video",
-      "Generative AI",
-      "After Effects",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: null,
-    videoUrl: "https://youtu.be/PbU7NeCXZJA",
-    duration: "0:00",
+    tags: ["AI video", "Brand campaign"],
+    thumbnail: "/thumbnail beam and bare.png",
+    videoUrl: "https://www.youtube.com/watch?v=8-jxbGppTRU",
     year: "2026",
-    featured: false,
   },
   {
-    title: "Finance and Accounting 101 - Eps. 5: Perencanaan dan Pengendalian",
+    title: "AI transition piece",
+    client: "Gusto",
     description:
-      "Planning is the process of designing goals and determining the best way to achieve them. The goal is to identify specific outcomes that individuals or organizations want to achieve. Educational content for Airlangga Executive Education Center.",
+      "A transition-driven AI video for Gusto, built from generated shots and cut in Premiere Pro.",
+    category: "AI Creative",
+    tags: ["AI video", "Transitions"],
+    videoUrl: "https://www.youtube.com/watch?v=rRYL0Bo-c48",
+    year: "2026",
+  },
+  {
+    title: "Island of Durian",
+    client: "Island of Durian",
+    description:
+      "AI-generated product visuals for Island of Durian, finished in Premiere Pro and After Effects.",
+    category: "AI Creative",
+    tags: ["AI video", "F&B"],
+    videoUrl: "https://youtu.be/PbU7NeCXZJA",
+    year: "2026",
+  },
+  {
+    title: "Agency ad — May",
+    client: "Dygtal Marketing Solutions",
+    description: "Monthly ad compilation for Dygtal's own channels.",
+    category: "AI Creative",
+    tags: ["AI video", "Ads"],
+    videoUrl: "https://www.youtube.com/watch?v=ciaVPaBaM5c",
+    year: "2026",
+  },
+  {
+    title: "Agency ad — June",
+    client: "Dygtal Marketing Solutions",
+    description: "Monthly ad for Dygtal's social media campaign.",
+    category: "AI Creative",
+    tags: ["AI video", "Ads"],
+    thumbnail: "/thumbnail dygtal ads june.jpg",
+    videoUrl: "https://www.instagram.com/p/DZJtDFWvsGp/",
+    year: "2026",
+  },
+  {
+    title: "Service ad — Social Media",
+    client: "Dygtal Marketing Solutions",
+    description: "Ad promoting Dygtal's social media management service.",
+    category: "AI Creative",
+    tags: ["AI video", "Ads"],
+    videoUrl: "https://www.youtube.com/watch?v=Z60yqJHuQgE",
+    year: "2026",
+  },
+  {
+    title: "Service ad — Ads Management",
+    client: "Dygtal Marketing Solutions",
+    description: "Ad promoting Dygtal's ads management service.",
+    category: "AI Creative",
+    tags: ["AI video", "Ads"],
+    videoUrl: "https://www.youtube.com/watch?v=DHId2ZMHjTM",
+    year: "2026",
+  },
+  {
+    title: "Service ad — Photo & Video",
+    client: "Dygtal Marketing Solutions",
+    description: "Ad promoting Dygtal's photography and videography service.",
+    category: "AI Creative",
+    tags: ["AI video", "Ads"],
+    videoUrl: "https://www.youtube.com/watch?v=2VFNObyaSd8",
+    year: "2026",
+  },
+
+  // ── Short-form · Reels ──
+  {
+    title: "Resort reel no. 1",
+    client: "Astagina Resort",
+    category: "Short-form",
+    tags: ["Reels", "Hospitality"],
+    thumbnail: "/thumbnail astagina resort.jpg",
+    videoUrl: "https://www.instagram.com/reel/DYO5wHuiIK9/",
+    year: "2026",
+  },
+  {
+    title: "Resort reel no. 2",
+    client: "Astagina Resort",
+    category: "Short-form",
+    tags: ["Reels", "Hospitality"],
+    thumbnail: "/thumbnail astagina resort 2.jpg",
+    videoUrl: "https://www.instagram.com/reel/DY3YySslS9A/",
+    year: "2026",
+  },
+  {
+    title: "Resort reel",
+    client: "Senang Resort",
+    category: "Short-form",
+    tags: ["Reels", "Hospitality"],
+    thumbnail: "/thumbnail senang resort.jpg",
+    videoUrl: "https://www.instagram.com/p/DaoiYh9CJ79/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 1",
+    client: "DEI",
+    category: "Short-form",
+    tags: ["Reels"],
+    thumbnail: "/thumbnail dei.jpg",
+    videoUrl: "https://www.instagram.com/p/DYbaid5iihK/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 2",
+    client: "DEI",
+    category: "Short-form",
+    tags: ["Reels"],
+    thumbnail: "/thumbnail dei 2.jpg",
+    videoUrl: "https://www.instagram.com/p/DZBaoYBil5q/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 3",
+    client: "DEI",
+    category: "Short-form",
+    tags: ["Reels"],
+    thumbnail: "/thumbnail dei 3.jpg",
+    videoUrl: "https://www.instagram.com/p/DZllxvsjHPA/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 4",
+    client: "DEI",
+    category: "Short-form",
+    tags: ["Reels"],
+    thumbnail: "/thumbnail dei 4.jpg",
+    videoUrl: "https://www.instagram.com/p/DaEbx-hlElc/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 5",
+    client: "DEI",
+    category: "Short-form",
+    tags: ["Reels"],
+    thumbnail: "/thumbnail dei 5.jpg",
+    videoUrl: "https://www.instagram.com/p/DajhkCrAKIl/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 6",
+    client: "DEI",
+    category: "Short-form",
+    tags: ["Reels"],
+    thumbnail: "/thumbnail dei 6.jpg",
+    videoUrl: "https://www.instagram.com/p/Da6j7Abjjiv/",
+    year: "2026",
+  },
+  {
+    title: "Brand reel",
+    client: "Chanting",
+    category: "Short-form",
+    tags: ["Reels"],
+    thumbnail: "/thumbnail chanting.jpg",
+    videoUrl: "https://www.instagram.com/reel/Dapx-U3EZJA/",
+    year: "2026",
+  },
+  {
+    title: "Rental reel",
+    client: "Tmax Rental Bali",
+    category: "Short-form",
+    tags: ["Reels"],
+    thumbnail: "/thumbnail tmax rental bali.jpg",
+    videoUrl: "https://www.instagram.com/p/DXai1-OgqJP/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 1",
+    client: "Cook and Baker Bali",
+    category: "Short-form",
+    tags: ["Reels", "F&B"],
+    thumbnail: "/thumbnail cook and baker.jpg",
+    videoUrl: "https://www.instagram.com/reel/DYmeo3kPnXs/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 2",
+    client: "Cook and Baker Bali",
+    category: "Short-form",
+    tags: ["Reels", "F&B"],
+    thumbnail: "/thumbnail cook and baker 2.jpg",
+    videoUrl: "https://www.instagram.com/reel/DY11qUPvaO0/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 3",
+    client: "Cook and Baker Bali",
+    category: "Short-form",
+    tags: ["Reels", "F&B"],
+    thumbnail: "/thumbnail cook and baker 3.jpg",
+    videoUrl: "https://www.instagram.com/p/DaZO7rNvWbs/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 1",
+    client: "Feast",
+    category: "Short-form",
+    tags: ["Reels", "F&B"],
+    thumbnail: "/thumbnail feast.jpg",
+    videoUrl: "https://www.instagram.com/reel/DYoW-ioiEqg/",
+    year: "2026",
+  },
+  {
+    title: "Reel no. 2",
+    client: "Feast",
+    category: "Short-form",
+    tags: ["Reels", "F&B"],
+    thumbnail: "/thumbnail feast 2.jpg",
+    videoUrl: "https://www.instagram.com/reel/DZBsvKvTsNb/",
+    year: "2026",
+  },
+  {
+    title: "Salon reel no. 1",
+    client: "Christope C Hairsalon",
+    category: "Short-form",
+    tags: ["Reels", "Beauty"],
+    thumbnail: "/thumbnail christope.jpg",
+    videoUrl: "https://www.instagram.com/p/DZG0AELJofc/",
+    year: "2026",
+  },
+  {
+    title: "Salon reel no. 2",
+    client: "Christope C Hairsalon",
+    category: "Short-form",
+    tags: ["Reels", "Beauty"],
+    thumbnail: "/thumbnail christope 2.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=bZZHYcLLzXY",
+    year: "2026",
+  },
+  {
+    title: "Salon reel no. 3",
+    client: "Christope C Hairsalon",
+    category: "Short-form",
+    tags: ["Reels", "Beauty"],
+    thumbnail: "/thumbnail christope 3.jpg",
+    videoUrl: "https://www.instagram.com/p/DaCuQ_qJ65v/",
+    year: "2026",
+  },
+  {
+    title: "Salon reel no. 4",
+    client: "Christope C Hairsalon",
+    category: "Short-form",
+    tags: ["Reels", "Beauty"],
+    thumbnail: "/thumbnail christope c hairsalon.jpg",
+    videoUrl: "https://www.instagram.com/p/Da41odwJXqO/",
+    year: "2026",
+  },
+  {
+    title: "Brand reel no. 1",
+    client: "Laci Asmara",
+    category: "Short-form",
+    tags: ["Reels"],
+    thumbnail: "/thumbnail laci.jpg",
+    videoUrl: "https://www.instagram.com/p/DY8m0nFS5gz/",
+    year: "2026",
+  },
+  {
+    title: "Brand reel no. 2",
+    client: "Laci Asmara",
+    category: "Short-form",
+    tags: ["Reels"],
+    thumbnail: "/thumbnail laci asmara 2.jpg",
+    videoUrl: "https://www.instagram.com/p/DaowSORphqM/",
+    year: "2026",
+  },
+  {
+    title: "Brand reel",
+    client: "Arya Ubud",
+    category: "Short-form",
+    tags: ["Reels", "Hospitality"],
+    thumbnail: "/thumbnail arya ubud.jpg",
+    videoUrl: "https://www.instagram.com/reel/DYvg-nfCVAd/",
+    year: "2026",
+  },
+  {
+    title: "May highlight",
+    client: "AEEC Universitas Airlangga",
+    description:
+      "Monthly highlight reel for Airlangga Executive Education Center — edit, color and audio.",
+    category: "Short-form",
+    tags: ["Reels", "Highlight"],
+    thumbnail: "/thumbnail mei highlight.jpg",
+    videoUrl: "https://www.instagram.com/reel/CePz6XnpyqP/",
+    year: "2022",
+  },
+
+  // ── Corporate & education · AEEC Universitas Airlangga ──
+  {
+    title: "Knowledge Discovery Ep. 1 — Disruptive Innovation",
+    client: "AEEC Universitas Airlangga",
+    description:
+      "Video podcast asking whether disruptive innovation is a chance or a challenge. Edit, color grading and audio design.",
     category: "Corporate",
-    tags: ["Reels", "Video Editing", "Corporate", "Education", "AEEC"],
+    tags: ["Podcast", "Color grading"],
+    videoUrl: "https://www.youtube.com/watch?v=VgtTa_HbKM4",
+    year: "2022",
+  },
+  {
+    title: "Knowledge Discovery Ep. 2 — BLUD Puskesmas",
+    client: "AEEC Universitas Airlangga",
+    description:
+      "Video podcast on implementing BLUD at community health centres, curated by Dr. Zaenal Fanani. Edit, color grading and audio design.",
+    category: "Corporate",
+    tags: ["Podcast", "Color grading"],
+    videoUrl: "https://www.youtube.com/watch?v=LDzg5sSzWmY",
+    year: "2022",
+  },
+  {
+    title: "Podcast production",
+    client: "AEEC Universitas Airlangga",
+    description:
+      "Directed and edited a multi-camera video podcast, including audio mixing and full post-production.",
+    category: "Corporate",
+    tags: ["Podcast", "Multi-cam", "Directing"],
+    videoUrl: "https://www.youtube.com/watch?v=Mqol31CDHHI",
+    year: "2022",
+    role: "Director & Editor",
+  },
+  {
+    title: "Export Import 101 Ep. 2 — International Payment Methods",
+    client: "AEEC Universitas Airlangga",
+    category: "Corporate",
+    tags: ["Education", "Podcast"],
+    videoUrl: "https://www.youtube.com/watch?v=I0DyaNrsrw8",
+    year: "2022",
+  },
+  {
+    title: "Export Import & Kepabeanan 101 Ep. 1",
+    client: "AEEC Universitas Airlangga",
+    category: "Corporate",
+    tags: ["Education", "Reels"],
+    thumbnail: "/thumbnail keapabeanan.jpg",
+    videoUrl: "https://www.instagram.com/p/CcSOWpbjrv0/",
+    year: "2022",
+  },
+  {
+    title: "Finance & Accounting 101 Ep. 5 — Planning and Control",
+    client: "AEEC Universitas Airlangga",
+    category: "Corporate",
+    tags: ["Education", "Reels"],
     thumbnail: "/thumbnail finance and accounting.jpg",
     videoUrl:
       "https://www.instagram.com/airlangga_executive_edu/reel/CbeIrf1J_q6/",
-    duration: "0:00",
     year: "2022",
-    featured: false,
-    platform: "Instagram Reels",
   },
   {
-    title: "Finance and Accounting 101 - Eps. 6: Valuasi",
-    description:
-      "Valuation is the process of estimating the economic value of an asset or company. Educational content for Airlangga Executive Education Center.",
+    title: "Finance & Accounting 101 Ep. 6 — Valuation",
+    client: "AEEC Universitas Airlangga",
     category: "Corporate",
-    tags: ["Reels", "Video Editing", "Corporate", "Education", "AEEC"],
+    tags: ["Education", "Reels"],
     thumbnail: "/thumbnail valuation.jpg",
     videoUrl: "https://www.instagram.com/reel/CbhY0CspEgu/",
-    duration: "0:00",
     year: "2022",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Export Import & Kepabeanan 101 - Ep. 1: Kepabeanan",
-    description:
-      "Educational content on Export Import & Customs (Kepabeanan) Episode 1 for Airlangga Executive Education Center. Handled video editing, color grading, and audio design for social media content.",
-    category: "Corporate",
-    tags: ["Reels", "Video Editing", "Corporate", "Education", "AEEC"],
-    thumbnail: "/thumbnail keapabeanan.jpg",
-    videoUrl: "https://www.instagram.com/p/CcSOWpbjrv0/",
-    duration: "0:00",
-    year: "2022",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Export Import 101 - Episode 2: International Payment Method",
-    description:
-      "Educational content on Export Import Episode 2 — International Payment Methods. Produced for Airlangga Executive Education Center. Handled video editing, color grading, and audio design.",
-    category: "Corporate",
-    tags: ["Podcast", "Video Editing", "Corporate", "Education", "AEEC"],
-    thumbnail: null,
-    videoUrl: "https://www.youtube.com/watch?v=I0DyaNrsrw8",
-    duration: "0:00",
-    year: "2022",
-    featured: false,
-  },
-  {
-    title: "Export Import 101 - Episode 3: Persiapan Opening Letter of Credit",
-    description:
-      "Educational content on Export Import Episode 3 — Preparation of Opening Letter of Credit. Produced for Airlangga Executive Education Center. Handled video editing, color grading, and audio design.",
-    category: "Corporate",
-    tags: ["Podcast", "Video Editing", "Corporate", "Education", "AEEC"],
-    thumbnail: null,
-    videoUrl: "https://www.youtube.com/watch?v=I0DyaNrsrw8",
-    duration: "0:00",
-    year: "2022",
-    featured: false,
-  },
-  {
-    title: "Podcast Video Production — AEEC",
-    description:
-      "Directing and editing video podcast for Airlangga Executive Education Center. Includes multi-cam setup, audio mixing, and full post-production.",
-    category: "Corporate",
-    tags: ["Podcast", "Multi-cam", "Audio Mixing", "Directing", "AEEC"],
-    thumbnail: null,
-    videoUrl: "https://www.youtube.com/watch?v=Mqol31CDHHI&t=140s",
-    duration: "0:00",
-    year: "2022",
-    featured: false,
-  },
-  {
-    title: "Dygtal Ads — Ads Management Part",
-    description:
-      "Comprehensive video showcasing Ads Management services at Dygtal Marketing Solutions. Demonstrates expertise in social media advertising, campaign optimization, and data-driven marketing strategies.",
-    category: "Corporate",
-    tags: [
-      "Ads Management",
-      "Video Editing",
-      "Social Media",
-      "Marketing",
-      "Dygtal",
-    ],
-    thumbnail: "https://img.youtube.com/vi/DHId2ZMHjTM/hqdefault.jpg",
-    videoUrl: "https://www.youtube.com/watch?v=DHId2ZMHjTM",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-  },
-  {
-    title: "Dygtal Ads — Photography and Videography Part",
-    description:
-      "Showcasing Photography and Videography services at Dygtal Marketing Solutions. Features professional content production, creative editing, and visual storytelling for brand campaigns.",
-    category: "Corporate",
-    tags: ["Photography", "Videography", "Video Editing", "Creative", "Dygtal"],
-    thumbnail: "https://img.youtube.com/vi/2VFNObyaSd8/hqdefault.jpg",
-    videoUrl: "https://www.youtube.com/watch?v=2VFNObyaSd8",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-  },
-  {
-    title: "Dygtal Ads — Mei (unreleased)",
-    description:
-      "Preview of Dygtal Ads content for May. Showcasing upcoming creative campaigns and promotional materials produced at Dygtal Marketing Solutions.",
-    category: "Corporate",
-    tags: ["Ads", "Video Editing", "Creative", "Marketing", "Dygtal"],
-    thumbnail: "https://img.youtube.com/vi/ciaVPaBaM5c/hqdefault.jpg",
-    videoUrl: "https://www.youtube.com/watch?v=ciaVPaBaM5c",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-  },
-  {
-    title: "Dygtal Ads — Social Media Part",
-    description:
-      "Comprehensive video showcasing Social Media services at Dygtal Marketing Solutions. Features social media strategy, content creation, and engagement optimization for brand campaigns.",
-    category: "Corporate",
-    tags: [
-      "Social Media",
-      "Video Editing",
-      "Marketing",
-      "Content Creation",
-      "Dygtal",
-    ],
-    thumbnail: "https://img.youtube.com/vi/Z60yqJHuQgE/hqdefault.jpg",
-    videoUrl: "https://www.youtube.com/watch?v=Z60yqJHuQgE",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-  },
-  {
-    title: "Cook and Baker — Reels — Dygtal",
-    description:
-      "Social media Reels content for Cook and Baker, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reels",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail cook and baker 3.jpg",
-    videoUrl: "https://www.instagram.com/p/DaZO7rNvWbs/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Dygtal Ads — June (released)",
-    description:
-      "Released video content for June at Dygtal Marketing Solutions. Showcasing creative campaigns, promotional materials, and social media content production.",
-    category: "Corporate",
-    tags: ["Ads", "Video Editing", "Creative", "Marketing", "Dygtal"],
-    thumbnail: "/thumbnail dygtal ads june.jpg",
-    videoUrl: "https://www.instagram.com/dygtalmarketing/reel/DZJtDFWvsGp/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Laci Asmara — Reel — Dygtal",
-    description:
-      "Social media Reel content for Laci Asmara, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail laci asmara 2.jpg",
-    videoUrl: "https://www.instagram.com/p/DaowSORphqM/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "DEI — Reels — Dygtal",
-    description:
-      "Social media Reels content for DEI, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail dei.jpg",
-    videoUrl: "https://www.instagram.com/p/DYbaid5iihK/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "DEI — Reels — Dygtal",
-    description:
-      "Social media Reels content for DEI, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail dei 2.jpg",
-    videoUrl: "https://www.instagram.com/p/DZBaoYBil5q/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "DEI — Reels — Dygtal",
-    description:
-      "Social media Reels content for DEI, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail dei 3.jpg",
-    videoUrl: "https://www.instagram.com/p/DZllxvsjHPA/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "DEI — Reels — Dygtal",
-    description:
-      "Social media Reels content for DEI, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail dei 4.jpg",
-    videoUrl: "https://www.instagram.com/p/DaEbx-hlElc/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "DEI — Reels — Dygtal",
-    description:
-      "Social media Reels content for DEI, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail dei 5.jpg",
-    videoUrl: "https://www.instagram.com/p/DajhkCrAKIl/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "DEI — Reels — Dygtal",
-    description:
-      "Social media Reels content for DEI, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail dei 6.jpg",
-    videoUrl: "https://www.instagram.com/p/Da6j7Abjjiv/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Astagina Resort — Reels — Dygtal",
-    description:
-      "Social media Reels content for Astagina Resort, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Hospitality",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail astagina resort.jpg",
-    videoUrl: "https://www.instagram.com/reel/DYO5wHuiIK9/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Astagina Resort — Reels — Dygtal",
-    description:
-      "Social media Reels content for Astagina Resort, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Hospitality",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail astagina resort 2.jpg",
-    videoUrl: "https://www.instagram.com/reel/DY3YySslS9A/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Chanting — Reels — Dygtal",
-    description:
-      "Social media Reels content for Chanting, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail chanting.jpg",
-    videoUrl: "https://www.instagram.com/reel/Dapx-U3EZJA/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Senang Resort — Reels — Dygtal",
-    description:
-      "Social media Reels content for Senang Resort, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Hospitality",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail senang resort.jpg",
-    videoUrl: "https://www.instagram.com/p/DaoiYh9CJ79/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Tmax Rental Bali — Reels — Dygtal",
-    description:
-      "Social media Reels content for Tmax Rental Bali, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail tmax rental bali.jpg",
-    videoUrl: "https://www.instagram.com/p/DXai1-OgqJP/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Christope C Hairsalon — Reels — Dygtal",
-    description:
-      "Social media Reels content for Christope C Hairsalon, produced at Dygtal Marketing Solutions. Short-form video optimized for Instagram Reels with creative editing and motion design.",
-    category: "Short-form",
-    tags: [
-      "Reel",
-      "Video Editing",
-      "Social Media",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail christope c hairsalon.jpg",
-    videoUrl: "https://www.instagram.com/p/Da41odwJXqO/",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-    platform: "Instagram Reels",
-  },
-  {
-    title: "Tmax Rental Bali — Reels — Dygtal",
-    description:
-      "AI-generated visual content for Tmax Rental Bali brand campaign at Dygtal Marketing Solutions. Produced using generative AI platforms combined with Adobe Premiere Pro and After Effects.",
-    category: "AI Creative",
-    tags: [
-      "AI Video",
-      "Generative AI",
-      "After Effects",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail tmax rental bali ai.jpg",
-    videoUrl: "https://www.youtube.com/watch?v=9Z-sXMEDUYg",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
-  },
-  {
-    title: "Tmax Rental Bali — Reels — Dygtal",
-    description:
-      "AI-generated visual content for Tmax Rental Bali brand campaign at Dygtal Marketing Solutions. Produced using generative AI platforms combined with Adobe Premiere Pro and After Effects.",
-    category: "AI Creative",
-    tags: [
-      "AI Video",
-      "Generative AI",
-      "After Effects",
-      "Brand Campaign",
-      "Dygtal",
-    ],
-    thumbnail: "/thumbnail tmax rental bali ai 2.jpg",
-    videoUrl: "https://www.youtube.com/watch?v=0HLjz_OYnVA",
-    duration: "0:00",
-    year: "2026",
-    featured: false,
   },
 ];
 
 // ─── Video Categories ──────────────────────────────────
 export const videoCategories = [
   "All",
-  "Cinematic",
+  "AI Creative",
   "Short-form",
   "Corporate",
-  "AI Creative",
+  "Cinematic",
 ];

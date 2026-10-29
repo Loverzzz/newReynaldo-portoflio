@@ -1,19 +1,12 @@
-"use client";
-
 import Navbar from "@/components/portfolio/Navbar";
 import Hero from "@/components/portfolio/Hero";
-import ParticleBackground from "@/components/portfolio/ParticleBackground";
-import SectionWrapper from "@/components/portfolio/SectionWrapper";
-import Skills from "@/components/portfolio/Skills";
-import Certifications from "@/components/portfolio/Certifications";
+import Work from "@/components/portfolio/Work";
 import Experience from "@/components/portfolio/Experience";
 import Projects from "@/components/portfolio/Projects";
-import CreativeVideos from "@/components/portfolio/CreativeVideos";
+import About from "@/components/portfolio/About";
 import Contact from "@/components/portfolio/Contact";
-import Footer from "@/components/portfolio/Footer";
-import ScrollToTop from "@/components/portfolio/ScrollToTop";
 import {
-  skills,
+  skillGroups,
   certifications,
   experiences,
   projects,
@@ -22,66 +15,16 @@ import {
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col relative">
-      {/* Animated particle background */}
-      <ParticleBackground />
-      
+    <>
       <Navbar />
-
-      <main className="flex-1 relative z-10">
+      <main>
         <Hero />
-
-          <SectionWrapper
-            id="skills"
-            eyebrow="What I use"
-            title="Skills"
-            subtitle="A blend of content operations, data, ML, and creative production."
-          >
-            <Skills items={skills} />
-          </SectionWrapper>
-
-          <SectionWrapper
-            id="certifications"
-            eyebrow="Credentials"
-            title="Certifications"
-            subtitle="Continuous learning and professional competency."
-          >
-            <Certifications items={certifications} />
-          </SectionWrapper>
-
-          <SectionWrapper
-            id="experience"
-            eyebrow="Timeline"
-            title="Experience"
-            subtitle="Roles and impact-focused contributions."
-          >
-            <Experience items={experiences} />
-          </SectionWrapper>
-
-          <SectionWrapper
-            id="projects"
-            eyebrow="Selected work"
-            title="Projects"
-            subtitle="Flying Higher and Infinity — the rocket is ready."
-            className="overflow-clip"
-          >
-            <Projects items={projects} />
-          </SectionWrapper>
-
-        <CreativeVideos items={videos} />
-
-          <SectionWrapper
-            id="contact"
-            eyebrow="Let's talk"
-            title="Contact"
-            subtitle="Open for opportunities and collaborations."
-          >
-            <Contact />
-          </SectionWrapper>
+        <Work items={videos} />
+        <Experience items={experiences} />
+        <Projects items={projects} />
+        <About skills={skillGroups} certifications={certifications} />
+        <Contact />
       </main>
-
-      <Footer />
-      <ScrollToTop />
-    </div>
+    </>
   );
 }
